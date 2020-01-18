@@ -8,7 +8,7 @@ Just fill in your robot Parameters in the config.py file and everything else lik
 
 #### What you can already do:
 - Steer a NORMAL type Robot with gearing via [number codes](https://docs.google.com/spreadsheets/d/1DmdYeWCkykAH5O6e8qv4fGR5aR4e66AjW1zxPTqASJo/edit?usp=sharing)
-- partial control for ALWHEEL robot Type with number codes
+- partial control for ALLWHEEL robot Type with number codes
 
 #### What you will be able to do:
 - Control your robot, no matter how it is constructed and driven through the number codes
