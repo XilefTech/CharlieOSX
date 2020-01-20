@@ -75,7 +75,10 @@ def execute(params, *args):
     
         #gearing
         elif mode == 5:
-            gearing(arg1, arg2, arg3)
+            if config.useGearing():
+                gearing(arg1, arg2, arg3)
+            else:
+                actionMotors(arg1, arg2, arg3)
     
         #straight
         elif mode == 7:
@@ -395,23 +398,48 @@ def toColor(speed, color, side, *args):
         #if drive to color black drive until back after white to not recognize colors on the field as lines
         if color == Color.BLACK:
             while lLight.color() != Color.WHITE and not any(charlie.buttons()):
-                drive[config.robotType](speed)
+                if robotType == 'NORMAL':
+                    rMotor.dc(speed)
+                    lMotor.dc(speed)
+                else: 
+                    fRMotor.dc(speed)
+                    bRMotor.dc(speed)
+                    fLMotor.dc(speed)
+                    bLMotor.dc(speed)
 
         while lLight.color() != color and not any(charlie.buttons()):
-            rMotor.dc(speed)
-            lMotor.dc(speed)
+            if robotType == 'NORMAL':
+                rMotor.dc(speed)
+                lMotor.dc(speed)
+            else: 
+                fRMotor.dc(speed)
+                bRMotor.dc(speed)
+                fLMotor.dc(speed)
+                bLMotor.dc(speed)
         
     #only drive till right colorSensor 
     elif side == 3:
         #if drive to color black drive until back after white to not recognize colors on the field as lines
         if color == Color.BLACK:
             while rLight.color() != Color.WHITE and not any(charlie.buttons()):
-                rMotor.dc(speed)
-                lMotor.dc(speed)
+                if robotType == 'NORMAL':
+                    rMotor.dc(speed)
+                    lMotor.dc(speed)
+                else: 
+                    fRMotor.dc(speed)
+                    bRMotor.dc(speed)
+                    fLMotor.dc(speed)
+                    bLMotor.dc(speed)
             
         while rLight.color() != color and not any(charlie.buttons()):
-            rMotor.dc(speed)
-            lMotor.dc(speed)
+            if robotType == 'NORMAL':
+                rMotor.dc(speed)
+                lMotor.dc(speed)
+            else: 
+                fRMotor.dc(speed)
+                bRMotor.dc(speed)
+                fLMotor.dc(speed)
+                bLMotor.dc(speed)
         
     #drive untill both colorSensors
     elif side == 23:
@@ -437,13 +465,17 @@ def toColor(speed, color, side, *args):
             if lLight.color() == color and lWhite:
                 lSpeed = 0
 
-#finished
 def toWall(speed, *args):
     """drives backwards with speed until it reaches a wall"""
     while not touch.pressed():
-        rMotor.dc(abs(speed) * -1)
-        lMotor.dc(abs(speed)
-         * -1)
+        if config.robotType == 'NORMAL':
+            rMotor.dc(- abs(speed))
+            lMotor.dc(- abs(speed))
+        else:
+            fRMotor.dc(- abs(speed))
+            bRMotor.dc(- abs(speed))
+            fLMotor.dc(- abs(speed))
+            bLMotor.dc(- abs(speed))
 
         if any(charlie.buttons()):
             break
@@ -451,7 +483,6 @@ def toWall(speed, *args):
     lMotor.dc(0)
     rMotor.dc(0)
 
-# finished
 def gearing(speed, revs, port, *args):
     """rotates the port for revs revulutions with a speed of speed"""
     speed = speed * 1.7 * 6 #speed to deg/s from %
@@ -469,6 +500,37 @@ def gearing(speed, revs, port, *args):
             if any(charlie.buttons()):
                 gearingTurnMotor.dc(0)
                 return
+
+def actionMotors(speed, revs, port, *args):
+    # turn motor 1
+    if port == 1:
+        aMotor1.run_angle(speed, revs * 360, Stop.BRAKE, False)
+
+        if revs > 0:
+            while aMotor1.angle() < revs * 360 - ang:
+                if any(charlie.buttons()):
+                    aMotor1.dc(0)
+                    return
+        else:
+            while aMotor1.angle() > revs * 360 + ang:
+                if any(charlie.buttons()):
+                    aMotor1.dc(0)
+                    return
+    # turm motor 2
+    elif port == 2:
+        aMotor2.run_angle(speed, revs * 360, Stop.BRAKE, False)
+
+        if revs > 0:
+            while aMotor2.angle() < revs * 360 - ang:
+                if any(charlie.buttons()):
+                    aMotor2.dc(0)
+                    return
+        else:
+            while aMotor2.angle() > revs * 360 + ang:
+                if any(charlie.buttons()):
+                    aMotor2.dc(0)
+                    return
+    
 
 charlie.sound.beep()
 
@@ -488,6 +550,6 @@ charlie.sound.beep()
         7, 100, -20, 0, 4, 50, -50, 23, 15, 100, 0, 0]) # back home'''
 
 
-#while True:
+# while True:
 #    print(gyro.angle())
 
