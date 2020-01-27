@@ -15,10 +15,10 @@ from pybricks.robotics import DriveBase
 import config
 
 # sensor initialisation
-gyro = GyroSensor(config.gyroSensorPort)
+'''gyro = GyroSensor(config.gyroSensorPort)
 rLight = ColorSensor(config.rightLightSensorPort) if (config.rightLightSensorPort != 0) else 0
 lLight = ColorSensor(config.leftLightSensorPort) if (config.leftLightSensorPort != 0) else 0  
-touch = TouchSensor(config.touchSensorPort) if (config.touchSensorPort != 0) else 0
+touch = TouchSensor(config.touchSensorPort) if (config.touchSensorPort != 0) else 0'''
 
 # motor initialisation
 if config.robotType == 'NORMAL':
@@ -37,28 +37,23 @@ else:
     fRMotor = Motor(config.frontRightMotorPort, Direction.CLOCKWISE if (not config.frontRightMotorInverted) else Direction.COUNTERCLOCKWISE) if (config.frontRightMotorPort != 0) else 0
     bRMotor = Motor(config.backRightMotorPort, Direction.CLOCKWISE if (not config.backRightMotorInverted) else Direction.COUNTERCLOCKWISE) if (config.backRightMotorPort != 0) else 0
     fLMotor = Motor(config.frontLeftMotorPort, Direction.CLOCKWISE if (not config.frontLeftMotorInverted) else Direction.COUNTERCLOCKWISE) if (config.frontLeftMotorPort != 0) else 0
-    bLMotor = Motor(config.backRightMotorPort, Direction.CLOCKWISE if (not config.backRightMotorInverted) else Direction.COUNTERCLOCKWISE) if (config.backRightMotorPort != 0) else 0
+    bLMotor = Motor(config.backLeftMotorPort, Direction.CLOCKWISE if (not config.backLeftMotorInverted) else Direction.COUNTERCLOCKWISE) if (config.backLeftMotorPort != 0) else 0
 
 
-
-def driveNormal(speed):
-    rMotor.speed(speed)
-    lMotor.speed(speed)
-def driveALL(speed):
-    fRMotor.dc(speed)
-    bRMotor.dc(speed)
-    fLMotor.dc(speed)
-    bLMotor.dc(speed)
-drive = {'NORMAL': driveNormal(), 'ALLWHEEL': driveALL()}
 
 gyro.reset_angle(0)
 
-# TODO: gearing homing?
+# TODO?: gearing homing?
 
 def execute(params, *args):
-    """Lol das ist der Fahrinterpreter der das ganze fahren lässt..."""
+    """Starts the different Driving modules according to the given parameters"""
+
     if (charlie.battery.voltage() <= 7500):
-        print('Please Charge the battery', '  only ', charlie.battery.voltage())
+        print('---------------------------------------------------------------------------')
+        print('Please Charge the battery')
+        print('Only ', charlie.battery.voltage(), ' V left')
+        print('You need 7.5V or above to execute your Program because lower Battery Voltages can lead to Inconsistencies')
+        print('---------------------------------------------------------------------------')
         return "Battery too low"
 
     
@@ -82,7 +77,10 @@ def execute(params, *args):
     
         #straight
         elif mode == 7:
-            straight(arg1, arg2, arg3)
+            if config.robotType != 'MECANUM':
+                straight(arg1, arg2, arg3)
+            else:
+                straightMecanum(arg1, arg2, arg3)
         
         #intervall
         elif mode == 9:
@@ -100,14 +98,22 @@ def execute(params, *args):
         elif mode == 15:
             toWall(arg1, arg2, arg3)
         
-    lMotor.dc(0)
-    rMotor.dc(0)
-    gearingPortMotor.run_target(300, 0, Stop.HOLD, True)    #reset gearing
+
+    if config.robotType == 'NORMAL':
+        lMotor.dc(0)
+        rMotor.dc(0)
+    else:
+        fRMotor.dc(0)
+        bRMotor.dc(0)
+        fLMotor.dc(0)
+        bLMotor.dc(0)
+
+    if config.useGearing:
+        gearingPortMotor.run_target(300, 0, Stop.HOLD, True)    #reset gearing
+
     time.sleep(0.3)
 
 
-
-# finished
 def turn(speed, deg, port, *args):
     """turns deg with speed. port indicates with wich motor(s)"""
     startValue = gyro.angle()
@@ -119,7 +125,11 @@ def turn(speed, deg, port, *args):
         #turn the angle
         if deg > 0:
             while gyro.angle() - startValue < deg:
-                lMotor.dc(speed)
+                if config.robotType == 'NORMAL':
+                    lMotor.dc(speed)
+                else:
+                    fLMotor.dc(speed)
+                    bLMotor.dc(speed)
                 #slow down to not overshoot
                 if not gyro.angle() - startValue < deg * 0.6:
                     speed = speed - tools.map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
@@ -129,7 +139,11 @@ def turn(speed, deg, port, *args):
                     return
         else:
             while gyro.angle() - startValue > deg:
-                lMotor.dc(-speed)
+                if config.robotType == 'NORMAL':
+                    lMotor.dc(-speed)
+                else:
+                    fLMotor.dc(-speed)
+                    bLMotor.dc(-speed)
                 #slow down to not overshoot
                 if not gyro.angle() - startValue > deg * 0.6:
                     speed = speed - tools.map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
@@ -145,7 +159,11 @@ def turn(speed, deg, port, *args):
         #turn the angle
         if deg > 0:
             while gyro.angle() - startValue < deg:
-                rMotor.dc(-speed)
+                if config.robotType == 'NORMAL':
+                    rMotor.dc(-speed)
+                else:
+                    fRMotor.dc(-speed)
+                    bRMotor.dc(-speed)
                 #slow down to not overshoot
                 if not gyro.angle() - startValue < deg * 0.6:
                     speed = speed - tools.map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
@@ -155,7 +173,11 @@ def turn(speed, deg, port, *args):
                     return                 
         else:
             while gyro.angle() - startValue > deg:
-                rMotor.dc(speed)
+                if config.robotType == 'NORMAL':
+                    rMotor.dc(speed)
+                else:
+                    fRMotor.dc(speed)
+                    bRMotor.dc(speed)
                 #slow down to not overshoot
                 if not gyro.angle() - startValue > deg * 0.6:
                     speed = speed - tools.map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
@@ -169,8 +191,14 @@ def turn(speed, deg, port, *args):
         #turn the angle
         if deg > 0:
             while gyro.angle() - startValue < deg:
-                rMotor.dc(-speed / 2)
-                lMotor.dc(speed / 2)
+                if config.robotType == 'NORMAL':
+                    rMotor.dc(-speed / 2)
+                    lMotor.dc(speed / 2)
+                else:
+                    fRMotor.dc(-speed / 2)
+                    bRMotor.dc(-speed / 2)
+                    fLMotor.dc(speed / 2)
+                    bLMotor.dc(speed / 2)
                 #slow down to not overshoot
                 if not gyro.angle() - startValue < deg * 0.6:
                     speed = speed - tools.map(deg, 1, 360, 10, 0.01) if speed > 40 else speed
@@ -181,8 +209,14 @@ def turn(speed, deg, port, *args):
                 
         else:
             while gyro.angle() - startValue > deg:
-                rMotor.dc(speed / 2)
-                lMotor.dc(-speed / 2)
+                if config.robotType == 'NORMAL':
+                    rMotor.dc(speed / 2)
+                    lMotor.dc(-speed / 2)
+                else:
+                    fRMotor.dc(speed / 2)
+                    bRMotor.dc(speed / 2)
+                    fLMotor.dc(-speed / 2)
+                    bLMotor.dc(-speed / 2)
                 #slow down to not overshoot
                 if not gyro.angle() - startValue > deg * 0.6:
                     speed = speed - tools.map(deg, 1, 360, 10, 0.01) if speed > 40 else speed
@@ -191,20 +225,18 @@ def turn(speed, deg, port, *args):
                 if any(charlie.buttons()):
                     return
 
-# TODO: MECANUM Part
-def straight(speed, cm, *args):
-    """drives forward with speed in a straight line, corrected by the gyro"""
+def straight(speed, dist, *args):
+    """drives forward with speed in a straight line, corrected by the gyro. Only working for NORMAL and ALLWHEEL Type"""
     correctionStrength = 2 # how strongly the robot will correct. 2 = default, 0 = nothing
     startValue = gyro.angle()
-    rMotor.reset_angle(0)
     
-    revs = cm / (config.wheelDiameter * math.pi) # convert the input (cm) to revs
+    
+    revs = dist / (config.wheelDiameter * math.pi) # convert the input (cm) to revs
     revs = revs / 2
 
-    rSpeed = speed
-    lSpeed = speed
     #drive
     if config.robotType == 'NORMAL':
+        rMotor.reset_angle(0)
         if revs > 0:
             while revs > rMotor.angle() / 360:
                 #if not driving staright correct it
@@ -246,8 +278,9 @@ def straight(speed, cm, *args):
                         return
     
     elif config.robotType == 'ALLWHEEL':
+        fRMotor.reset_angle(0)
         if revs > 0:
-            while revs > rMotor.angle() / 360:
+            while revs > fRMotor.angle() / 360:
                 #if not driving staright correct it
                 if gyro.angle() - startValue > 0:
                     lSpeed = speed - abs(gyro.angle() - startValue) * correctionStrength
@@ -268,8 +301,7 @@ def straight(speed, cm, *args):
                 if any(charlie.buttons()):
                         return
         else:
-            while revs < rMotor.angle() / 360:
-                
+            while revs < fRMotor.angle() / 360:
                 #if not driving staright correct it
                 if gyro.angle() - startValue < 0:
                     rSpeed = speed + abs(gyro.angle() - startValue) * correctionStrength
@@ -290,10 +322,68 @@ def straight(speed, cm, *args):
                 if any(charlie.buttons()):
                         return
 
-    elif config.robotType == 'MECANUM':
-        print('mecanum Robot WIP')
+def straightMecanum(speed, dist, ang, *args):
+    """Driving a straight line of dist cm with speed in ang direction. Only working with MECANUM Type"""
+    fRMotor.reset_angle(0)
 
-# finished
+    revs = dist / (config.wheelDiameter * math.pi) # convert the input (cm) to revs
+    speed = speed * 1.7 * 6 # convert speed form % to deg/min
+
+    # driving the robot into the desired direction
+    if ang >= 0 and ang <= 45:
+        multiplier = tools.map(ang, 0, 45, 1, 0)
+        fRMotor.run_angle(speed, revs * 360, Stop.COAST, False)
+        bRMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
+        fLMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
+        bLMotor.run_angle(speed, revs * 360, Stop.COAST, True)
+    elif ang >= -45 and ang < 0:
+        multiplier = tools.map(ang, -45, 0, 0, 1)
+        fRMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
+        bRMotor.run_angle(speed, revs * 360, Stop.COAST, False)
+        bLMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
+        fLMotor.run_angle(speed, revs * 360, Stop.COAST, True)
+    elif ang > 45 and ang <= 90:
+        multiplier = tools.map(ang, 45, 90, 0, 1)
+        fRMotor.run_angle(speed, revs * 360, Stop.COAST, False)
+        bRMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
+        fLMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
+        bLMotor.run_angle(speed, revs * 360, Stop.COAST, True)
+    elif ang < -45 and ang >= -90:
+        multiplier = tools.map(ang, -45, -90, 0, 1)
+        fRMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
+        bRMotor.run_angle(speed, revs * 360, Stop.COAST, False)
+        bLMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
+        fLMotor.run_angle(speed, revs * 360, Stop.COAST, True)
+    elif ang > 90 and ang <= 135:
+        multiplier = tools.map(ang, 90, 135, 1, 0)
+        fRMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
+        bRMotor.run_angle(speed, revs * -360, Stop.COAST, False)
+        bLMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
+        fLMotor.run_angle(speed, revs * -360, Stop.COAST, True)
+    elif ang < -90 and ang >= -135:
+        multiplier = tools.map(ang, -90, -135, 1, 0)
+        fRMotor.run_angle(speed, revs * -360, Stop.COAST, False)
+        bRMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
+        fLMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
+        bLMotor.run_angle(speed, revs * -360, Stop.COAST, True)
+    elif ang > 135 and ang <= 180:
+        multiplier = tools.map(ang, 135, 180, 0, 1)
+        fRMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
+        bRMotor.run_angle(speed, revs * -360, Stop.COAST, False)
+        bLMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
+        fLMotor.run_angle(speed, revs * -360, Stop.COAST, True)
+    elif ang < -135 and ang >= -180:
+        multiplier = tools.map(ang, -135, -180, 0, 1)
+        fRMotor.run_angle(speed, revs * -360, Stop.COAST, False)
+        bRMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
+        fLMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
+        bLMotor.run_angle(speed, revs * -360, Stop.COAST, True)
+        
+
+    '''while fRMotor.angle() < revs * 360:
+        if any(charlie.buttons()):
+            break'''
+
 def intervall(speed, revs, count, *args):
     """drives revs forward and backward with speed count times"""
     i = 0
@@ -342,7 +432,6 @@ def intervall(speed, revs, count, *args):
 
         i += 1
 
-# TODO: add cancel
 def curveShape(speed, revs1, deg, *args):
     """Drives in a curve deg over revs with speed"""
     speed = speed * 1.7 * 6 #speed to deg/s from %
@@ -383,11 +472,10 @@ def curveShape(speed, revs1, deg, *args):
         #turn
         while gyro.angle() + startValue > deg and not any(charlie.buttons()):
             pass
-            print(lMotor.angle() / 360, gyro.angle() - startValue, relation)
-
-# finished
+            
 def toColor(speed, color, side, *args):
-    #sets color to a value that the colorSensor can work with
+    """Drives until the robot drives to a color line with speed"""
+    # sets color to a value that the colorSensor can work with
     if color == 0:
         color = Color.BLACK
     else:
@@ -534,7 +622,7 @@ def actionMotors(speed, revs, port, *args):
 
 charlie.sound.beep()
 
-
+# examples / for testing
 #execute([15, 50, 0, 0]) #toWall
 #execute([5, 50, 2, 1, 5, 100, -5, 3]) # gearing pos 1 & 3
 #execute([9, 75, 1, 2]) #intervall
@@ -543,13 +631,6 @@ charlie.sound.beep()
 #execute([7, 75, 10, 0]) #straight
 #execute([11, 75, 3, -90]) #curve shaped
 
-#execute([11, 75, 8, -23]) #7, 100, 10, 0, 4, 75, 50, 2, ])
-'''execute([4, 55, -20, 3, 7, 100, 155, 0, # to elevator
-        4, 50, 30, 2, 4, 50, 50, 23, 7, 50, 5, 0, 4, 50, 10, 2, 7, 40, 5, 0, 4, 20, 10, 2, # do the house
-        7, 50, 5, 0, 11, 50, 1, 25, 7, 50, 5, 0, 4, 50, -45, 3, #do the schaukel
-        7, 100, -20, 0, 4, 50, -50, 23, 15, 100, 0, 0]) # back home'''
+#execute([7, 20, 20, 160])
 
-
-# while True:
-#    print(gyro.angle())
 

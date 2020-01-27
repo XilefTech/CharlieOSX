@@ -19,12 +19,12 @@ from pybricks.parameters import Port
 # NORMAL = 2 powered normal wheels
 # MECANUM = 4 powered mecanum wheels
 # ALLWHEEL = 4 powered normal wheels
-robotType = "NORMAL"
+robotType = "MECANUM"
 
 # Robot wheels
 # (currently only affects driving in curve shaped mode)
-wheelDistance = 9.7 # cm
-wheelDiameter = 2.2  # cm
+wheelDistance = 12 # cm
+wheelDiameter = 7.5  # cm
 
 # Robot Sensor Conection:
 # (if not used 0)
@@ -72,17 +72,19 @@ if robotType == "NORMAL":
         secondActionMotorInverted = False
 
 else:
+    useGearing = False
+
     # settings for ALLWHEEL and MECANUM type
-    frontRightMotorPort = Port.A
+    frontRightMotorPort = Port.B
     frontRightMotorInverted = False
 
-    frontLeftMotorPort = Port.B
+    frontLeftMotorPort = Port.A
     frontLeftMotorInverted = False
 
-    backRightMotorPort = Port.C
+    backRightMotorPort = Port.D
     backRightMotorInverted = True
 
-    backLeftMotorPort = Port.D
+    backLeftMotorPort = Port.C
     backLeftMotorInverted = True
 
 
