@@ -2,13 +2,13 @@
 I'm still far away from a findal version.*
 
 # CharlieOSX
+*By XilefTech from the "Lego Spirits"
 
 CharlieOSX is the best choice as a program for your specific robot.
 Just fill in your robot Parameters in the config.py file and everything else like driving and robot handling is set up automatically.
 
 #### What you can already do:
-- Steer a NORMAL type Robot with gearing via [number codes](https://docs.google.com/spreadsheets/d/1DmdYeWCkykAH5O6e8qv4fGR5aR4e66AjW1zxPTqASJo/edit?usp=sharing)
-- partial control for ALLWHEEL robot Type with number codes
+- Steering any of the three Robot types with the Help of the [number codes](https://docs.google.com/spreadsheets/d/1DmdYeWCkykAH5O6e8qv4fGR5aR4e66AjW1zxPTqASJo/edit?usp=sharing)
 
 #### What you will be able to do:
 - Control your robot, no matter how it is constructed and driven through the number codes
