@@ -41,7 +41,7 @@ else:
 
 
 
-gyro.reset_angle(0)
+'''gyro.reset_angle(0)'''
 
 # TODO?: gearing homing?
 
@@ -633,4 +633,7 @@ charlie.sound.beep()
 
 #execute([7, 20, 20, 160])
 
-
+tools.drawRectangle(40, 40, 10, 10)
+tools.drawRectangle(50, 50, 10, 10)
+tools.drawRectangle(60, 60, 10, 10)
+time.sleep(1)
