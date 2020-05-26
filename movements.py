@@ -1,5 +1,7 @@
-if gyro != 0:
-    gyro.reset_angle(0)
+import robot
+
+if robot.gyro != 0:
+    robot.gyro.reset_angle(0)
 
 # TODO?: gearing homing?
 
@@ -71,10 +73,10 @@ def execute(params, *args):
 
     time.sleep(0.3)
 
-if gyro != 0:
+if robot.gyro != 0:
     def turn(speed, deg, port, *args):
         """turns deg with speed. port indicates with wich motor(s)"""
-        startValue = gyro.angle()
+        startValue = robot.gyro.angle()
 
         #turn only with left motor
         if port == 2:
@@ -82,28 +84,28 @@ if gyro != 0:
             rMotor.dc(0)
             #turn the angle
             if deg > 0:
-                while gyro.angle() - startValue < deg:
+                while robot.gyro.angle() - startValue < deg:
                     if config.robotType == 'NORMAL':
                         lMotor.dc(speed)
                     else:
                         fLMotor.dc(speed)
                         bLMotor.dc(speed)
                     #slow down to not overshoot
-                    if not gyro.angle() - startValue < deg * 0.6:
+                    if not robot.gyro.angle() - startValue < deg * 0.6:
                         speed = speed - tools.map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
 
                     #cancel if button pressed
                     if any(charlie.buttons()):
                         return
             else:
-                while gyro.angle() - startValue > deg:
+                while robot.gyro.angle() - startValue > deg:
                     if config.robotType == 'NORMAL':
                         lMotor.dc(-speed)
                     else:
                         fLMotor.dc(-speed)
                         bLMotor.dc(-speed)
                     #slow down to not overshoot
-                    if not gyro.angle() - startValue > deg * 0.6:
+                    if not robot.gyro.angle() - startValue > deg * 0.6:
                         speed = speed - tools.map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
 
                     #cancel if button pressed
@@ -116,28 +118,28 @@ if gyro != 0:
             lMotor.dc(0)
             #turn the angle
             if deg > 0:
-                while gyro.angle() - startValue < deg:
+                while robot.gyro.angle() - startValue < deg:
                     if config.robotType == 'NORMAL':
                         rMotor.dc(-speed)
                     else:
                         fRMotor.dc(-speed)
                         bRMotor.dc(-speed)
                     #slow down to not overshoot
-                    if not gyro.angle() - startValue < deg * 0.6:
+                    if not robot.gyro.angle() - startValue < deg * 0.6:
                         speed = speed - tools.map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
 
                     #cancel if button pressed
                     if any(charlie.buttons()):
                         return                 
             else:
-                while gyro.angle() - startValue > deg:
+                while robot.gyro.angle() - startValue > deg:
                     if config.robotType == 'NORMAL':
                         rMotor.dc(speed)
                     else:
                         fRMotor.dc(speed)
                         bRMotor.dc(speed)
                     #slow down to not overshoot
-                    if not gyro.angle() - startValue > deg * 0.6:
+                    if not robot.gyro.angle() - startValue > deg * 0.6:
                         speed = speed - tools.map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
                     
                     #cancel if button pressed
@@ -148,7 +150,7 @@ if gyro != 0:
         elif port == 23:
             #turn the angle
             if deg > 0:
-                while gyro.angle() - startValue < deg:
+                while robot.gyro.angle() - startValue < deg:
                     if config.robotType == 'NORMAL':
                         rMotor.dc(-speed / 2)
                         lMotor.dc(speed / 2)
@@ -158,7 +160,7 @@ if gyro != 0:
                         fLMotor.dc(speed / 2)
                         bLMotor.dc(speed / 2)
                     #slow down to not overshoot
-                    if not gyro.angle() - startValue < deg * 0.6:
+                    if not robot.gyro.angle() - startValue < deg * 0.6:
                         speed = speed - tools.map(deg, 1, 360, 10, 0.01) if speed > 40 else speed
 
                     #cancel if button pressed
@@ -166,7 +168,7 @@ if gyro != 0:
                         return    
                     
             else:
-                while gyro.angle() - startValue > deg:
+                while robot.gyro.angle() - startValue > deg:
                     if config.robotType == 'NORMAL':
                         rMotor.dc(speed / 2)
                         lMotor.dc(-speed / 2)
@@ -176,7 +178,7 @@ if gyro != 0:
                         fLMotor.dc(-speed / 2)
                         bLMotor.dc(-speed / 2)
                     #slow down to not overshoot
-                    if not gyro.angle() - startValue > deg * 0.6:
+                    if not robot.gyro.angle() - startValue > deg * 0.6:
                         speed = speed - tools.map(deg, 1, 360, 10, 0.01) if speed > 40 else speed
                     
                     #cancel if button pressed
@@ -184,9 +186,9 @@ if gyro != 0:
                         return
 
     def straight(speed, dist, *args):
-        """drives forward with speed in a straight line, corrected by the gyro. Only working for NORMAL and ALLWHEEL Type"""
+        """drives forward with speed in a straight line, corrected by the robot.gyro. Only working for NORMAL and ALLWHEEL Type"""
         correctionStrength = 2 # how strongly the robot will correct. 2 = default, 0 = nothing
-        startValue = gyro.angle()
+        startValue = robot.gyro.angle()
         
         
         revs = dist / (config.wheelDiameter * math.pi) # convert the input (cm) to revs
@@ -198,11 +200,11 @@ if gyro != 0:
             if revs > 0:
                 while revs > rMotor.angle() / 360:
                     #if not driving staright correct it
-                    if gyro.angle() - startValue > 0:
-                        lSpeed = speed - abs(gyro.angle() - startValue) * correctionStrength
+                    if robot.gyro.angle() - startValue > 0:
+                        lSpeed = speed - abs(robot.gyro.angle() - startValue) * correctionStrength
                         rSpeed = speed
-                    elif gyro.angle() - startValue < 0:
-                        rSpeed = speed - abs(gyro.angle() - startValue) * correctionStrength
+                    elif robot.gyro.angle() - startValue < 0:
+                        rSpeed = speed - abs(robot.gyro.angle() - startValue) * correctionStrength
                         lSpeed = speed
                     else:
                         lSpeed = speed
@@ -218,11 +220,11 @@ if gyro != 0:
                 while revs < rMotor.angle() / 360:
                     
                     #if not driving staright correct it
-                    if gyro.angle() - startValue < 0:
-                        rSpeed = speed + abs(gyro.angle() - startValue) * correctionStrength
+                    if robot.gyro.angle() - startValue < 0:
+                        rSpeed = speed + abs(robot.gyro.angle() - startValue) * correctionStrength
                         lSpeed = speed
-                    elif gyro.angle() - startValue > 0:
-                        lSpeed = speed + abs(gyro.angle() - startValue) * correctionStrength
+                    elif robot.gyro.angle() - startValue > 0:
+                        lSpeed = speed + abs(robot.gyro.angle() - startValue) * correctionStrength
                         rSpeed = speed
                     else:
                         lSpeed = speed
@@ -240,11 +242,11 @@ if gyro != 0:
             if revs > 0:
                 while revs > fRMotor.angle() / 360:
                     #if not driving staright correct it
-                    if gyro.angle() - startValue > 0:
-                        lSpeed = speed - abs(gyro.angle() - startValue) * correctionStrength
+                    if robot.gyro.angle() - startValue > 0:
+                        lSpeed = speed - abs(robot.gyro.angle() - startValue) * correctionStrength
                         rSpeed = speed
-                    elif gyro.angle() - startValue < 0:
-                        rSpeed = speed - abs(gyro.angle() - startValue) * correctionStrength
+                    elif robot.gyro.angle() - startValue < 0:
+                        rSpeed = speed - abs(robot.gyro.angle() - startValue) * correctionStrength
                         lSpeed = speed
                     else:
                         lSpeed = speed
@@ -261,11 +263,11 @@ if gyro != 0:
             else:
                 while revs < fRMotor.angle() / 360:
                     #if not driving staright correct it
-                    if gyro.angle() - startValue < 0:
-                        rSpeed = speed + abs(gyro.angle() - startValue) * correctionStrength
+                    if robot.gyro.angle() - startValue < 0:
+                        rSpeed = speed + abs(robot.gyro.angle() - startValue) * correctionStrength
                         lSpeed = speed
-                    elif gyro.angle() - startValue > 0:
-                        lSpeed = speed + abs(gyro.angle() - startValue) * correctionStrength
+                    elif robot.gyro.angle() - startValue > 0:
+                        lSpeed = speed + abs(robot.gyro.angle() - startValue) * correctionStrength
                         rSpeed = speed
                     else:
                         lSpeed = speed
@@ -394,8 +396,8 @@ if gyro != 0:
         """Drives in a curve deg over revs with speed"""
         speed = speed * 1.7 * 6 #speed to deg/s from %
 
-        #gyro starting point
-        startValue = gyro.angle()
+        #robot.gyro starting point
+        startValue = robot.gyro.angle()
         
         #claculate revs for the second wheel
         pathOutside = config.wheelDiameter * 2 * math.pi * revs1
@@ -416,7 +418,7 @@ if gyro != 0:
             rMotor.run_angle(rSpeed, revs2 * 360, Stop.COAST, False)
             lMotor.run_angle(lSpeed, revs1 * 360 + 5, Stop.COAST, False)
             #turn
-            while gyro.angle() - startValue < deg and not any(charlie.buttons()):
+            while robot.gyro.angle() - startValue < deg and not any(charlie.buttons()):
                 pass
 
         else:
@@ -428,7 +430,7 @@ if gyro != 0:
             lMotor.run_angle(lSpeed, revs2 * 360, Stop.COAST, False)
 
             #turn
-            while gyro.angle() + startValue > deg and not any(charlie.buttons()):
+            while robot.gyro.angle() + startValue > deg and not any(charlie.buttons()):
                 pass
                 
     def toColor(speed, color, side, *args):

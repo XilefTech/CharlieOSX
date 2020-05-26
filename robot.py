@@ -10,6 +10,7 @@ if config.gyroSensorPort != 0:
         gyro = 0
         print("Gyro-Sensor not connected to given port ")
 else:
+    gyro = 0
     print('You need a gyro sensor in order to be able to drive properly with your robot')
 
 try:
