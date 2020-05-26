@@ -1,6 +1,7 @@
 '''This method is for outsourcing mathematical and other essential functions that don't interact directly with sensors or motors'''
 from pybricks import ev3brick as charlie
 from pybricks.parameters import Align
+import time
 
 # tested drwaing objects on screen out of single pixels, but very slow.
 def drawRectangle(x, y, width, height, *args):
@@ -32,10 +33,37 @@ def drawMenu(menuState, *args):
     if menuState == 0.0:
         imgPath = 'graphics/menus/mainMenu.jpg'
     elif menuState == 0.1:
+        imgPath = 'graphics/menus/programingMainMenu.jpg'
+    elif menuState == 0.2:
+        imgPath = 'graphics/menus/testingMainMenu.jpg'
+    elif menuState == 0.3:
+        imgPath = 'graphics/menus/remoteMainMenu.jpg'
+    elif menuState == 0.4:
+        imgPath = 'graphics/menus/competitionMainMenu.jpg'
+    elif menuState == 0.5:
+        imgPath = 'graphics/menus/settingsMainMenu.jpg'
+
+    try:
+        charlie.display.image(imgPath, Align.TOP_RIGHT, clear = True)
+    except:
         pass
 
-    charlie.display.image(imgPath, Align.TOP_RIGHT, clear = True)
-
+# method for animating transitions between menus
+def animate(state, *args):
+    print(state)
+    if state == 5:
+        # in Germany we would call it "Pfusch vor dem Herrn" It's as bad as it could get, but it is only to display something and test if the concept works
+        charlie.display.image('graphics/animations/mainSettings/1.jpg', Align.TOP_RIGHT, clear = True)
+        charlie.display.image('graphics/animations/mainSettings/2.jpg', Align.TOP_RIGHT, clear = True)
+        charlie.display.image('graphics/animations/mainSettings/3.jpg', Align.TOP_RIGHT, clear = True)
+        charlie.display.image('graphics/animations/mainSettings/4.jpg', Align.TOP_RIGHT, clear = True)
+        charlie.display.image('graphics/animations/mainSettings/5.jpg', Align.TOP_RIGHT, clear = True)
+        charlie.display.image('graphics/animations/mainSettings/6.jpg', Align.TOP_RIGHT, clear = True)
+        charlie.display.image('graphics/animations/mainSettings/7.jpg', Align.TOP_RIGHT, clear = True)
+        charlie.display.image('graphics/animations/mainSettings/8.jpg', Align.TOP_RIGHT, clear = True)
+        charlie.display.image('graphics/animations/mainSettings/9.jpg', Align.TOP_RIGHT, clear = True)
+        charlie.display.image('graphics/animations/mainSettings/10.jpg', Align.TOP_RIGHT, clear = True)
+        
 
 # method for Linemap calculations and pathfinding, currently not in use
 def doIntersect(lineMap):
