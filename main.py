@@ -16,44 +16,62 @@ import robot
 
 import movements
 
+def drawMenu(menuState, *args):
+    menus = {0: 'graphics/menus/mainMenu.jpg',
+             1: 'graphics/menus/programingMainMenu.jpg',
+             2: 'graphics/menus/testingMainMenu.jpg',
+             3: 'graphics/menus/remoteMainMenu.jpg',
+             4: 'graphics/menus/competitionMainMenu.jpg',
+             5: 'graphics/menus/settingsMainMenu.jpg'
+             }
+
+    try:
+        charlie.display.image(menus[menuState], Align.TOP_RIGHT, clear = True)
+        print("Menu drawn ", menuState, type(menuState), menus[menuState])
+    except:
+        print("[Error] Could not draw menu ", menuState, type(menuState), menus[menuState])
+
 
 def mainLoop():
-    menuState = 0.0
-    oldMenuState = 0.1
+    menuState = 0
+    oldMenuState = 1
     loop = True
     while loop:
         #print(charlie.buttons())
-        if menuState == 0.0:
+        if menuState == 0:
             if charlie.buttons() == [256]:
-                menuState = 0.5
-                time.sleep(0.2)
+                menuState = 5
+                time.sleep(0.3)
             elif charlie.buttons() == [4]:
-                menuState = 0.1
-                time.sleep(0.2)
-        elif menuState > 0.0 and menuState < 0.6:
-            if charlie.buttons() == [256] and menuState > 0.1:
-                menuState = menuState - 0.1
-                time.sleep(0.2)
-            elif charlie.buttons() == [256] and menuState == 0.1:
-                menuState = 0.5
-                time.sleep(0.2)
-            if charlie.buttons() == [4] and menuState < 0.5:
-                menuState = menuState + 0.1
-                time.sleep(0.2)
-            elif charlie.buttons() == [4] and menuState == 0.5:
-                menuState = 0.1
-                time.sleep(0.2)
+                menuState = 1
+                time.sleep(0.3)
+        elif menuState > 0 and menuState < 6:
+            i += 1
+            #print(i)
+            if charlie.buttons() == [256] and menuState > 1:
+                menuState -= 1
+                time.sleep(0.3)
+            elif charlie.buttons() == [256] and menuState == 1:
+                menuState = 5
+                time.sleep(0.3)
+            if charlie.buttons() == [4] and menuState < 5:
+                menuState += 1
+                time.sleep(0.3)
+            elif charlie.buttons() == [4] and menuState == 5:
+                menuState = 1
+                time.sleep(0.3)
         
         if charlie.buttons() == [32]:
             menuState = menuState * 10
             oldMenuState = menuState
 
             tools.animate(menuState)
-            time.sleep(2)
+            time.sleep(0.5)
 
         if oldMenuState != menuState:
-            tools.drawMenu(menuState)
+            drawMenu(menuState)
             oldMenuState = menuState
+
 
 
 

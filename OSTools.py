@@ -45,8 +45,9 @@ def drawMenu(menuState, *args):
 
     try:
         charlie.display.image(imgPath, Align.TOP_RIGHT, clear = True)
+        print("Menu drawn ", menuState)
     except:
-        pass
+        print("could not draw menu ", menuState)
 
 # method for animating transitions between menus
 def animate(state, *args):
