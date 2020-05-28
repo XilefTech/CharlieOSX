@@ -2,5 +2,6 @@
 {
 	"files.eol": "\n",
 	"debug.openDebug": "neverOpen",
-	"python.linting.enabled": false
+	"python.linting.enabled": false,
+	"python.pythonPath": "D:\\Progams\\Python\\python.exe"
 }
