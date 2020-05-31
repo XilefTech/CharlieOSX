@@ -21,24 +21,35 @@ def drawMenu(menuState, *args):
     try:
         charlie.screen.draw_image(0, 0, menus[menuState], transparent = Color.RED)
     except Exception as exception:
-        #exception = sys.exc_info()
         log.error("Could not draw menu: ", str(exception))
 
 # method for animating transitions between menus
-def animate(state, *args):
-    menus = {10: 'mainProgram'}
-    if state == 50:
-        # in Germany we would call it "Pfusch vor dem Herrn" It's as bad as it could get, but it is only to display something and test if the concept works
-        charlie.screen.draw_image(0, 0, 'graphics/animations/mainSettings/1.png', transparent = Color.RED)
-        charlie.screen.draw_image(0, 0, 'graphics/animations/mainSettings/2.png', transparent = Color.RED)
-        charlie.screen.draw_image(0, 0, 'graphics/animations/mainSettings/3.png', transparent = Color.RED)
-        charlie.screen.draw_image(0, 0, 'graphics/animations/mainSettings/4.png', transparent = Color.RED)
-        charlie.screen.draw_image(0, 0, 'graphics/animations/mainSettings/5.png', transparent = Color.RED)
-        charlie.screen.draw_image(0, 0, 'graphics/animations/mainSettings/6.png', transparent = Color.RED)
-        charlie.screen.draw_image(0, 0, 'graphics/animations/mainSettings/7.png', transparent = Color.RED)
-        charlie.screen.draw_image(0, 0, 'graphics/animations/mainSettings/8.png', transparent = Color.RED)
-        charlie.screen.draw_image(0, 0, 'graphics/animations/mainSettings/9.png', transparent = Color.RED)
-        charlie.screen.draw_image(0, 0, 'graphics/animations/mainSettings/10.png', transparent = Color.RED)
+def animate(state, direction, *args):
+    menus = {10: 'mainProgram',
+             20: 'mainTest',
+             30: 'mainRemote',
+             40: 'mainCompetition',
+             50: 'mainSettings'}
+
+    
+    if direction:
+        i = 1
+        while i <= 10:
+            try:
+                charlie.screen.draw_image(0, 0, 'graphics/animations/%s/%s.png' % (menus[state], i), transparent = Color.RED)
+            except Exception as exception:
+                log.error("Could not animate menu: ", str(exception))
+
+            i += 1
+    else:
+        i = 10
+        while i >= 1:
+            try:
+                charlie.screen.draw_image(0, 0, 'graphics/animations/%s/%s.png' % (menus[state], i), transparent = Color.RED)
+            except Exception as exception:
+                log.error("Could not animate menu: ", str(exception))
+
+            i -= 1
         
 
 # method for Linemap calculations and pathfinding, currently not in use
@@ -72,7 +83,6 @@ class log:
             charlie.screen.draw_image(26, 24, 'graphics/notifications/error.png', transparent = Color.RED)
             charlie.screen.set_font(Font(family = 'arial', size = 7))
             if Font.text_width(Font(family = 'arial', size = 7), exception) <= 90:
-                print(Font.text_width(Font(family = 'arial', size = 7), exception))
                 charlie.screen.draw_text(32, 47, exception, text_color = Color.BLACK)
             elif len(exception) <= 30 * 2:
                 exception1, exception2 = exception[:27], exception[27:]

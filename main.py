@@ -40,12 +40,21 @@ def mainLoop():
             elif Button.DOWN in charlie.buttons.pressed() and menuState == 5:
                 menuState = 1
         
-        if Button.CENTER in charlie.buttons.pressed():
+        
+        if Button.RIGHT in charlie.buttons.pressed():
             menuState = menuState * 10
             oldMenuState = menuState
             charlie.speaker.play_file(SoundFile.CONFIRM)
-            tools.animate(menuState)
+            tools.animate(menuState, True)
             time.sleep(0.5)
+
+        if Button.LEFT in charlie.buttons.pressed() and menuState >= 10:
+            charlie.speaker.play_file(SoundFile.CONFIRM)
+            tools.animate(menuState, False)
+            menuState = menuState / 10
+            oldMenuState = menuState
+            time.sleep(0.5)
+
 
         if oldMenuState != menuState:
             tools.drawMenu(menuState)
