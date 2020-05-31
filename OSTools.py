@@ -1,12 +1,12 @@
 '''This method is for outsourcing mathematical and other essential functions that don't interact directly with sensors or motors'''
 from pybricks.hubs import EV3Brick
-from pybricks.parameters import Align, Color
+from pybricks.parameters import Align, Color, Button
 from pybricks.media.ev3dev import Image, ImageFile, Font
 import time
-import sys as sys
+
 
 charlie = EV3Brick()
-
+logMsg = 0
 # method for displaying the right contents of the menu on the Display
 def drawMenu(menuState, *args):
     menus = {0: 'graphics/menus/mainMenu.png',
@@ -34,23 +34,22 @@ def animate(state, direction, *args):
     
     if direction:
         i = 1
-        while i <= 10:
-            try:
+        try:
+            while i <= 10: 
                 charlie.screen.draw_image(0, 0, 'graphics/animations/%s/%s.png' % (menus[state], i), transparent = Color.RED)
-            except Exception as exception:
-                log.error("Could not animate menu: ", str(exception))
-
-            i += 1
+                i += 1
+        except Exception as exception:
+            log.error("Could not animate menu: ", str(exception))
+  
     else:
         i = 10
-        while i >= 1:
-            try:
+        try:
+            while i >= 1:
                 charlie.screen.draw_image(0, 0, 'graphics/animations/%s/%s.png' % (menus[state], i), transparent = Color.RED)
-            except Exception as exception:
-                log.error("Could not animate menu: ", str(exception))
-
-            i -= 1
-        
+                i -= 1
+        except Exception as exception:
+            log.error("Could not animate menu: ", str(exception))
+            
 
 # method for Linemap calculations and pathfinding, currently not in use
 def doIntersect(lineMap):
@@ -76,6 +75,7 @@ class log:
         pass
 
     def error(msg, exception, *args):
+        global logMsg
         if True:
             print("[Error]", msg, exception, *args)
         
@@ -93,11 +93,45 @@ class log:
                 charlie.screen.draw_text(32, 47, exception1, text_color = Color.BLACK)
                 charlie.screen.draw_text(32, 57, exception2, text_color = Color.BLACK)
                 charlie.screen.draw_text(32, 67, exception3, text_color = Color.BLACK)
+            
+            #wait for user to press middle button
+            while not Button.CENTER in charlie.buttons.pressed():
+                pass
+            charlie.screen.draw_image(26, 24, 'graphics/notifications/errorSel.png', transparent = Color.RED)
+            #wait for user letting button go
+            while Button.CENTER in charlie.buttons.pressed():
+                pass
+            logMsg = 1
+
 
     def warn(msg):
+        global logMsg
         if True:
             print("[Warning]", exception, msg)
         
         if True:
             charlie.screen.draw_image(26, 24, 'graphics/notifications/warn.png', transparent = Color.RED)
-            charlie.screen.draw_text(31, 34, exception, text_color = Color.BLACK)
+            charlie.screen.draw_text(31, 34, msg, text_color = Color.BLACK)
+
+            if Font.text_width(Font(family = 'arial', size = 7), exception) <= 90:
+                charlie.screen.draw_text(32, 47, msg, text_color = Color.BLACK)
+            elif len(exception) <= 30 * 2:
+                msg1, msg2 = msg[:27], msg[27:]
+                charlie.screen.draw_text(32, 47, msg1, text_color = Color.BLACK)
+                charlie.screen.draw_text(32, 57, msg2, text_color = Color.BLACK)
+            else:
+                msg1, msg2, msg3 = exception[:27], exception[27:53], exception[53:]
+                charlie.screen.draw_text(32, 47, msg1, text_color = Color.BLACK)
+                charlie.screen.draw_text(32, 57, msg2, text_color = Color.BLACK)
+                charlie.screen.draw_text(32, 67, msg3, text_color = Color.BLACK)
+            
+            #wait for user to press middle button
+            while not Button.CENTER in charlie.buttons.pressed():
+                pass
+            charlie.screen.draw_image(26, 24, 'graphics/notifications/warnSel.png', transparent = Color.RED)
+            #wait for user letting button go
+            while Button.CENTER in charlie.buttons.pressed():
+                pass
+            logMsg = 1
+
+            

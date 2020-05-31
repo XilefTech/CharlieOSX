@@ -19,12 +19,13 @@ import movements
 charlie = EV3Brick()
 
 def mainLoop():
+    global menuState
     menuState = 0
     oldMenuState = 0
     loop = True
     tools.drawMenu(int(menuState))
     while loop:
-        #print(charlie.buttons())
+        print('in tse loop', tools.logMsg)
         if menuState == 0:
             if Button.UP in charlie.buttons.pressed():
                 menuState = 5
@@ -40,8 +41,8 @@ def mainLoop():
             elif Button.DOWN in charlie.buttons.pressed() and menuState == 5:
                 menuState = 1
         
-        
-        if Button.RIGHT in charlie.buttons.pressed():
+
+        if Button.RIGHT in charlie.buttons.pressed() and menuState > 0:
             menuState = menuState * 10
             oldMenuState = menuState
             charlie.speaker.play_file(SoundFile.CONFIRM)
@@ -61,6 +62,12 @@ def mainLoop():
             oldMenuState = menuState
             charlie.speaker.beep(60, 30)
             time.sleep(0.3)
+
+        if tools.logMsg == 1:
+            tools.logMsg = 0
+            menuState = menuState / 10
+
+        
 
 
 
