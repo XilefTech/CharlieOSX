@@ -1,7 +1,7 @@
 '''This method is for outsourcing mathematical and other essential functions that don't interact directly with sensors or motors'''
 from pybricks.hubs import EV3Brick
 from pybricks.parameters import Align, Color, Button
-from pybricks.media.ev3dev import Image, ImageFile, Font
+from pybricks.media.ev3dev import Image, ImageFile, Font, SoundFile
 import time
 
 
@@ -76,6 +76,7 @@ class log:
 
     def error(msg, exception, *args):
         global logMsg
+        charlie.speaker.play_file(SoundFile.GENERAL_ALERT)
         if True:
             print("[Error]", msg, exception, *args)
         
@@ -106,6 +107,7 @@ class log:
 
     def warn(msg):
         global logMsg
+        charlie.speaker.play_file(SoundFile.GENERAL_ALERT)
         if True:
             print("[Warning]", exception, msg)
         
