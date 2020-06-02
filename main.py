@@ -19,15 +19,6 @@ import movements
 
 charlie = EV3Brick()
 
-sound_lock = _thread.allocate_lock()
-
-def playSoundFile(file):
-    with sound_lock:
-        charlie.speaker.play_file(file)
-
-def sound(file):
-    _thread.start_new_thread(playSoundFile, (file, ))
-
 def mainLoop():
     global menuState
     menuState = 0
@@ -54,13 +45,13 @@ def mainLoop():
         if Button.RIGHT in charlie.buttons.pressed() and menuState > 0:
             menuState = menuState * 10
             oldMenuState = menuState
-            sound('media/confirm.wav')
+            tools.sound('media/confirm.wav')
             time.sleep(0.08)
             tools.animate(menuState, True)
             time.sleep(0.4)
 
         if Button.LEFT in charlie.buttons.pressed() and menuState >= 10:
-            sound('media/confirm.wav')
+            tools.sound('media/confirm.wav')
             time.sleep(0.08)
             tools.animate(menuState, False)
             menuState = menuState / 10
@@ -69,7 +60,7 @@ def mainLoop():
 
 
         if oldMenuState != menuState:
-            sound(SoundFile.CLICK)
+            tools.sound(SoundFile.CLICK)
             time.sleep(0.08)
             tools.drawMenu(menuState)
             oldMenuState = menuState

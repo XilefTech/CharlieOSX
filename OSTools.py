@@ -7,6 +7,15 @@ import time
 
 charlie = EV3Brick()
 logMsg = 0
+
+# playing soundfiles without waiting for the end
+sound_lock = _thread.allocate_lock()
+def playSoundFile(file):
+    with sound_lock:
+        charlie.speaker.play_file(file)
+def sound(file):
+    _thread.start_new_thread(playSoundFile, (file, ))
+
 # method for displaying the right contents of the menu on the Display
 def drawMenu(menuState, *args):
     menus = {0: 'graphics/menus/mainMenu.png',
@@ -76,7 +85,7 @@ class log:
 
     def error(msg, exception, *args):
         global logMsg
-        charlie.speaker.play_file(SoundFile.GENERAL_ALERT)
+        sound(SoundFile.GENERAL_ALERT)
         if True:
             print("[Error]", msg, exception, *args)
         
@@ -107,7 +116,7 @@ class log:
 
     def warn(msg):
         global logMsg
-        charlie.speaker.play_file(SoundFile.GENERAL_ALERT)
+        sound(SoundFile.GENERAL_ALERT)
         if True:
             print("[Warning]", exception, msg)
         
