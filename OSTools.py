@@ -3,6 +3,7 @@ from pybricks.hubs import EV3Brick
 from pybricks.parameters import Align, Color, Button
 from pybricks.media.ev3dev import Image, ImageFile, Font, SoundFile
 import time
+import _thread
 
 
 charlie = EV3Brick()
