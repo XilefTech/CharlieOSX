@@ -3,6 +3,7 @@
 import time
 import math
 import _thread
+import ujson
 import OSTools as tools
 from pybricks.hubs import EV3Brick
 from pybricks.ev3devices import (Motor, TouchSensor, ColorSensor, InfraredSensor, UltrasonicSensor, GyroSensor)
@@ -16,6 +17,17 @@ import config
 import robot
 
 import movements
+settings = 0
+def loadSettings():
+    with open('settings.json') as f:
+        return ujson.load(f)
+
+settings = {'Debug Driving': 2, 'Audio-Volume': 100, 'EFX-Volume': 100, 'Console-Logging': True, 'Show Warnings': True, 'Show Errors': True}
+
+def storeSettings(data):
+    with open('settings.json', 'w') as f:
+        ujson.dump(data, f)
+
 
 charlie = EV3Brick()
 
@@ -23,9 +35,12 @@ def mainLoop():
     global menuState
     menuState = 0
     oldMenuState = 0
+    position = 0
+    oldPos = 1
     loop = True
     tools.drawMenu(int(menuState))
     while loop:
+        # navigation inbetween main pages
         if menuState == 0:
             if Button.UP in charlie.buttons.pressed():
                 menuState = 5
@@ -41,8 +56,27 @@ def mainLoop():
             elif Button.DOWN in charlie.buttons.pressed() and menuState == 5:
                 menuState = 1
         
+        # subMenus
+        elif menuState == 50: #settings Menu
 
-        if Button.RIGHT in charlie.buttons.pressed() and menuState > 0:
+            if Button.UP in charlie.buttons.pressed() and position > 0:
+                position -= 1
+            elif Button.UP in charlie.buttons.pressed() and position == 0:
+                position = len(settings) - 1
+            if Button.DOWN in charlie.buttons.pressed() and position < len(settings) - 1:
+                position += 1
+            elif Button.DOWN in charlie.buttons.pressed() and position == len(settings) - 1:
+                position = 0
+
+            if position != oldPos:
+                tools.sound('media/click.wav')
+                time.sleep(0.08)
+                tools.drawSettings(position, settings)
+                oldPos = position
+                time.sleep(0.3)
+
+        # selection of pages
+        if Button.RIGHT in charlie.buttons.pressed() and menuState > 0 and menuState <= 50:
             menuState = menuState * 10
             oldMenuState = menuState
             tools.sound('media/confirm.wav')
@@ -60,11 +94,11 @@ def mainLoop():
 
 
         if oldMenuState != menuState:
-            tools.sound(SoundFile.CLICK)
+            tools.sound('media/click.wav')
             time.sleep(0.08)
             tools.drawMenu(menuState)
             oldMenuState = menuState
-            time.sleep(0.31)
+            time.sleep(0.3)
 
         if tools.logMsg == 1:
             tools.logMsg = 0
@@ -80,9 +114,7 @@ def mainLoop():
 #movements.execute([7, 75, 10, 0])
 
 
-
-
-### things, I'm currently using to test things
+### things, I'm sometimes using to test things - can be ignored
 """
 lineMap = {'height' : 300, 'width' : 1000,
             'from' : (1, 1), 'to' : (1, 4), 
@@ -90,8 +122,7 @@ lineMap = {'height' : 300, 'width' : 1000,
 
 tools.doIntersect(lineMap)"""
 
-
+settings = loadSettings()
+#runs menu
 mainLoop()
 
-#tools.drawMenu(0.0)
-#time.sleep(20)

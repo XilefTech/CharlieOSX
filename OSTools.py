@@ -33,6 +33,12 @@ def drawMenu(menuState, *args):
     except Exception as exception:
         log.error("Could not draw menu: ", str(exception))
 
+
+def drawSettings(pos, settings, *args):
+    charlie.screen.draw_box(171, 25, 177, 127, r = 2, fill = False, color = Color.BLACK)
+    charlie.screen.draw_box(172, 26, 176, 126, r = 2, fill = True, color = Color.WHITE)
+    charlie.screen.draw_box(173, 27 + 102 / len(settings) * pos, 175, 23 + 102 / len(settings) * (pos + 1), r = 1, fill = True, color = Color.BLACK)
+
 # method for animating transitions between menus
 def animate(state, direction, *args):
     menus = {10: 'mainProgram',
@@ -59,6 +65,7 @@ def animate(state, direction, *args):
                 i -= 1
         except Exception as exception:
             log.error("Could not animate menu: ", str(exception))
+
             
 
 # method for Linemap calculations and pathfinding, currently not in use
