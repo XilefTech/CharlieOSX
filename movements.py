@@ -11,7 +11,7 @@ def execute(params, *args):
     if (OSTools.getBatteryVoltage() <= 7500):
         print('---------------------------------------------------------------------------')
         print('Please Charge the battery')
-        print('Only ', OSTools.getBatteryVoltage(), ' V left')
+        print('Only ', OSTools.getBatteryVoltage(human=True), ' V left')
         print('You need 7.5V or above to execute your Program because lower Battery Voltages can lead to Inconsistencies')
         print('---------------------------------------------------------------------------')
         return "Battery too low"
