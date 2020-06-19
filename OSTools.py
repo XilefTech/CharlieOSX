@@ -85,6 +85,7 @@ def map(x, in_min, in_max, out_min, out_max):
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 
 def getBatteryVoltage(human = False):
+    """Gets the battery voltage, has 'human' argument."""
     global charlie
     if (not human):
         return(charlie.battery.voltage())
