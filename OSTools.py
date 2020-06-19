@@ -57,7 +57,7 @@ def animate(state, direction, *args):
                 i += 1
         except Exception as exception:
             log.error("Could not animate menu: ", str(exception))
-            return(RobotError.Display.generalError)
+            return(RobotError.Display.Animation.generalError)
   
     else:
         i = 10
@@ -67,7 +67,7 @@ def animate(state, direction, *args):
                 i -= 1
         except Exception as exception:
             log.error("Could not animate menu: ", str(exception))
-            return(RobotError.Display.generalError)
+            return(RobotError.Display.Animation.generalError)
 
             
 
