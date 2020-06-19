@@ -1,4 +1,4 @@
-import robot
+import robot, OSTools
 
 if robot.gyro != 0:
     robot.gyro.reset_angle(0)
@@ -8,12 +8,8 @@ if robot.gyro != 0:
 def execute(params, *args):
     """Starts the different Driving modules according to the given parameters"""
 
-    if (charlie.battery.voltage() <= 7500):
-        print('---------------------------------------------------------------------------')
-        print('Please Charge the battery')
-        print('Only ', charlie.battery.voltage(), ' V left')
-        print('You need 7.5V or above to execute your Program because lower Battery Voltages can lead to Inconsistencies')
-        print('---------------------------------------------------------------------------')
+    if (OSTools.getBatteryVoltage() <= 7500):
+        log.warn("Please charge the battery. Only " + str(OSTools.getBatteryVoltage(human=True)) + " V left. You need at least 7.5 Volts.")
         return "Battery too low"
 
     
