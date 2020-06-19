@@ -2,6 +2,7 @@
 from pybricks.hubs import EV3Brick
 from pybricks.parameters import Align, Color, Button
 from pybricks.media.ev3dev import Image, ImageFile, Font, SoundFile
+import robotError
 import time
 import _thread
 
@@ -56,6 +57,7 @@ def animate(state, direction, *args):
                 i += 1
         except Exception as exception:
             log.error("Could not animate menu: ", str(exception))
+            return(RobotErrors.Display.generalError)
   
     else:
         i = 10
@@ -65,6 +67,7 @@ def animate(state, direction, *args):
                 i -= 1
         except Exception as exception:
             log.error("Could not animate menu: ", str(exception))
+            return(RobotErrors.Display.generalError)
 
             
 
@@ -102,7 +105,8 @@ class log:
         global logMsg
         sound(SoundFile.GENERAL_ALERT)
         if True:
-            print("[Error]", msg, exception, *args)
+            timeStamp = strftime("%d.%m.%Y %H:%M:%S")
+            print(timeStamp + "[Error]", msg, exception, *args)
         
         if True:
             charlie.screen.draw_image(26, 24, 'graphics/notifications/error.png', transparent = Color.RED)
@@ -133,7 +137,8 @@ class log:
         global logMsg
         sound(SoundFile.GENERAL_ALERT)
         if True:
-            print("[Warning]", exception, msg)
+            timeStamp = strftime("%d.%m.%Y %H:%M:%S")
+            print(timeStamp + "[Warning]", exception, msg)
         
         if True:
             charlie.screen.draw_image(26, 24, 'graphics/notifications/warn.png', transparent = Color.RED)
