@@ -26,5 +26,5 @@ Just fill in your robot Parameters in the config.py file and everything else lik
 - use a FLL mode with separate program slots according to the Tasks on the Field and an extra mode for executing them in a specific order at the competition itself
 
 ## Contributors
-- Xilef
+- XilefTech
 - TheGreydiamond
