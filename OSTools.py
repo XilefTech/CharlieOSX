@@ -106,7 +106,7 @@ class log:
         sound(SoundFile.GENERAL_ALERT)
         if True:
             timeStamp = strftime("%d.%m.%Y %H:%M:%S")
-            print("[" + timeStamp + " Error]", msg, exception, *args)
+            print("[" + timeStamp + "][Error]", msg, exception, *args)
         
         if True:
             charlie.screen.draw_image(26, 24, 'graphics/notifications/error.png', transparent = Color.RED)
@@ -138,7 +138,7 @@ class log:
         sound(SoundFile.GENERAL_ALERT)
         if True:
             timeStamp = strftime("%d.%m.%Y %H:%M:%S")
-            print("[" + timeStamp + " Warning]", exception, msg)
+            print("[" + timeStamp + "][Warning]", exception, msg)
         
         if True:
             charlie.screen.draw_image(26, 24, 'graphics/notifications/warn.png', transparent = Color.RED)
@@ -170,5 +170,5 @@ class log:
         global logMsg
         if True:
             timeStamp = strftime("%d.%m.%Y %H:%M:%S")
-            print("[" + timeStamp + " Info]", exception, msg)
+            print("[" + timeStamp + "][Info]", exception, msg)
     
