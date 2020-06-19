@@ -83,7 +83,15 @@ def doIntersect(lineMap):
 # maps a number x as a number in range in_min - in_max to a number in range out_min - out_max
 def map(x, in_min, in_max, out_min, out_max):
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
-
+def getBatVoltage(human = False):
+    global charlie
+    if(not human):
+        return(charlie.battery.voltage())
+    else:
+        bat = charlie.battery.voltage()
+        temp = str(bat)[:1]
+        temp2 = str(bat)[1:]
+        return(float(temp + "." + temp2))
 
 # error, notification an logging
 class log:
