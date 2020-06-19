@@ -9,11 +9,11 @@ def execute(params, *args):
     """Starts the different Driving modules according to the given parameters"""
 
     if (OSTools.getBatteryVoltage() <= 7500):
-        print('---------------------------------------------------------------------------')
+        print('------------------------------[Alert]------------------------------')
         print('Please Charge the battery')
         print('Only ', OSTools.getBatteryVoltage(human=True), ' V left')
         print('You need 7.5V or above to execute your Program because lower Battery Voltages can lead to Inconsistencies')
-        print('---------------------------------------------------------------------------')
+        print('------------------------------[Alert]------------------------------')
         return "Battery too low"
 
     
