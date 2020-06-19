@@ -2,7 +2,7 @@
 from pybricks.hubs import EV3Brick
 from pybricks.parameters import Align, Color, Button
 from pybricks.media.ev3dev import Image, ImageFile, Font, SoundFile
-import robotError
+from robotError import *
 import time
 import _thread
 

@@ -1,4 +1,5 @@
-import robot, OSTools, robotError
+import robot, OSTools
+from robotError import *
 
 if robot.gyro != 0:
     robot.gyro.reset_angle(0)
