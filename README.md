@@ -1,5 +1,5 @@
 *Disclaimer: Everything in this Repository is still experimental and WIP.
-I'm still far away from a findal version.*
+I'm still far away from a final version.*
 
 # CharlieOSX
 *By XilefTech from the "Lego Spirits"*
