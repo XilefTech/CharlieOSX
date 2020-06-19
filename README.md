@@ -25,3 +25,6 @@ Just fill in your robot Parameters in the config.py file and everything else lik
 - steer the robot with a remote control of some kind (actually not sure what kind), save the steered path and let it repeat it
 - use a FLL mode with separate program slots according to the Tasks on the Field and an extra mode for executing them in a specific order at the competition itself
 
+## Contributors
+- Xilef
+- TheGreydiamond
