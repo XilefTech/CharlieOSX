@@ -89,9 +89,7 @@ def getBatteryVoltage(human = False):
     if (not human):
         return(charlie.battery.voltage())
     else:
-        temp = str(charlie.battery.voltage())[:1]
-        temp2 = str(charlie.battery.voltage())[1:]
-        return(float(temp + "." + temp2))
+        return(float(str(charlie.battery.voltage())[:1] + "." + str(charlie.battery.voltage())[1:]))
 
 # error, notification an logging
 class log:
