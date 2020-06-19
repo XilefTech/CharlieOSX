@@ -3,6 +3,8 @@ from pybricks.hubs import EV3Brick
 from pybricks.parameters import Align, Color, Button
 from pybricks.media.ev3dev import Image, ImageFile, Font, SoundFile
 from robotError import *
+import urllib2
+import json
 import time
 import _thread
 
@@ -39,6 +41,15 @@ def drawSettings(pos, settings, *args):
     charlie.screen.draw_box(171, 25, 177, 127, r = 2, fill = False, color = Color.BLACK)
     charlie.screen.draw_box(172, 26, 176, 126, r = 2, fill = True, color = Color.WHITE)
     charlie.screen.draw_box(173, 27 + 102 / len(settings) * pos, 175, 23 + 102 / len(settings) * (pos + 1), r = 1, fill = True, color = Color.BLACK)
+
+def checkForUpdate(makeUpdateBanner=True):
+    log.info("Starting update check..")
+    remoteVersionURL = "https://raw.githubusercontent.com/XilefTech/CharlieOSX/master/version.json"
+    f = open("version.json", "r")
+    raw = f.readlines()
+    f.close()
+    data = json.loads(raw)
+    runVer = data['version']
 
 # method for animating transitions between menus
 def animate(state, direction, *args):
