@@ -101,12 +101,12 @@ class log:
     def __init__ (self):
         pass
 
-    def error(msg, exception, *args):
+    def error(self, msg, exception, *args):
         global logMsg
         sound(SoundFile.GENERAL_ALERT)
         if True:
             timeStamp = strftime("%d.%m.%Y %H:%M:%S")
-            print(timeStamp + "[Error]", msg, exception, *args)
+            print("[" + timeStamp + " Error]", msg, exception, *args)
         
         if True:
             charlie.screen.draw_image(26, 24, 'graphics/notifications/error.png', transparent = Color.RED)
@@ -133,12 +133,12 @@ class log:
             logMsg = 1
 
 
-    def warn(msg):
+    def warn(self, msg):
         global logMsg
         sound(SoundFile.GENERAL_ALERT)
         if True:
             timeStamp = strftime("%d.%m.%Y %H:%M:%S")
-            print(timeStamp + "[Warning]", exception, msg)
+            print("[" + timeStamp + " Warning]", exception, msg)
         
         if True:
             charlie.screen.draw_image(26, 24, 'graphics/notifications/warn.png', transparent = Color.RED)
@@ -164,5 +164,12 @@ class log:
             while Button.CENTER in charlie.buttons.pressed():
                 pass
             logMsg = 1
-
-            
+    
+    def info(self, msg):
+        ''' Makes a log output, without showing anything on the EV3 screen'''
+        global logMsg
+        sound(SoundFile.GENERAL_ALERT)
+        if True:
+            timeStamp = strftime("%d.%m.%Y %H:%M:%S")
+            print("[" + timeStamp + " Info]", exception, msg)
+    
