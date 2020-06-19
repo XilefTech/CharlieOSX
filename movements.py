@@ -1,4 +1,5 @@
 import robot, OSTools
+from robotError import *
 
 if robot.gyro != 0:
     robot.gyro.reset_angle(0)
@@ -10,7 +11,7 @@ def execute(params, *args):
 
     if (OSTools.getBatteryVoltage() <= 7500):
         log.warn("Please charge the battery. Only " + str(OSTools.getBatteryVoltage(human=True)) + " V left. You need at least 7.5 Volts.")
-        return "Battery too low"
+        return RobotError.Battery.tooLow
 
     
     while params != [] and not any(charlie.buttons()):
