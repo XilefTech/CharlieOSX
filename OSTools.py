@@ -168,7 +168,6 @@ class log:
     def info(self, msg):
         ''' Makes a log output, without showing anything on the EV3 screen'''
         global logMsg
-        sound(SoundFile.GENERAL_ALERT)
         if True:
             timeStamp = strftime("%d.%m.%Y %H:%M:%S")
             print("[" + timeStamp + " Info]", exception, msg)
