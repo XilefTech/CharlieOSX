@@ -10,7 +10,7 @@ def execute(params, *args):
 
     if (OSTools.getBatteryVoltage() <= 7500):
         log.warn("Please charge the battery. Only " + str(OSTools.getBatteryVoltage(human=True)) + " V left. You need at least 7.5 Volts.")
-        return RobotErrors.Battery.tooLow
+        return RobotError.Battery.tooLow
 
     
     while params != [] and not any(charlie.buttons()):
