@@ -9,7 +9,7 @@ if robot.gyro != 0:
 def execute(params, *args):
     """Starts the different Driving modules according to the given parameters"""
 
-    if (OSTools.getBatteryVoltage() <= 7500):
+    if OSTools.getBatteryVoltage() <= 7500:
         log.warn("Please charge the battery. Only " + str(OSTools.getBatteryVoltage(human=True)) + " V left. You need at least 7.5 Volts.")
         return RobotError.Battery.tooLow
 
