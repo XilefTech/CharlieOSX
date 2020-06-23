@@ -22,7 +22,7 @@ def loadSettings():
     with open('settings.json') as f:
         return ujson.load(f)
 
-settings = {'Debug Driving': 2, 'Audio-Volume': 100, 'EFX-Volume': 100, 'Console-Logging': True, 'Show Warnings': True, 'Show Errors': True}
+settings = {'Debug Driving': 2, 'Audio-Volume': 100, 'EFX-Volume': 100, 'Console-Log': True, 'Show Warnings': True, 'Show Errors': True}
 
 def storeSettings(data):
     with open('settings.json', 'w') as f:
@@ -73,7 +73,7 @@ def mainLoop():
                 time.sleep(0.08)
                 tools.drawSettings(position, settings)
                 oldPos = position
-                time.sleep(0.3)
+                time.sleep(0.17)
 
         # selection of pages
         if Button.RIGHT in charlie.buttons.pressed() and menuState > 0 and menuState <= 50:

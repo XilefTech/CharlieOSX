@@ -3,10 +3,11 @@ from pybricks.hubs import EV3Brick
 from pybricks.parameters import Align, Color, Button
 from pybricks.media.ev3dev import Image, ImageFile, Font, SoundFile
 from robotError import *
+
 import urllib2
 import json
-import time
-import _thread
+import time, _thread
+
 
 
 charlie = EV3Brick()
@@ -36,11 +37,38 @@ def drawMenu(menuState, *args):
     except Exception as exception:
         log.error("Could not draw menu: ", str(exception))
 
-
+# method for the settings selection menu
 def drawSettings(pos, settings, *args):
+
+    def drawOptions(value, *args):
+        '''Function that draws the 5 current options on the screen'''
+        i = 0
+        while i <= 4:
+            if value + i == pos:
+                charlie.screen.draw_box(26, 29 + i * 20, 168, 46 + i * 20, r = 3, fill = False, color = Color.BLACK)
+                charlie.screen.draw_text(29, 30 + i * 20, '%s: %s' % (keys[value + i], settings[keys[value + i]]), text_color = Color.BLACK, background_color = Color.WHITE)
+            else:
+                charlie.screen.draw_box(26, 29 + i * 20, 170, 46 + i * 20, fill = True, color = Color.WHITE)
+                charlie.screen.draw_text(29, 30 + i * 20, '%s: %s' % (keys[value + i], settings[keys[value + i]]), text_color = Color.BLACK, background_color = Color.WHITE)
+            i += 1
+
+    keys = list(settings.keys())
+    charlie.screen.set_font(Font(family = 'arial', size = 13))
+
+    # the slider bar indicator
     charlie.screen.draw_box(171, 25, 177, 127, r = 2, fill = False, color = Color.BLACK)
     charlie.screen.draw_box(172, 26, 176, 126, r = 2, fill = True, color = Color.WHITE)
     charlie.screen.draw_box(173, 27 + 102 / len(settings) * pos, 175, 23 + 102 / len(settings) * (pos + 1), r = 1, fill = True, color = Color.BLACK)
+    if pos > 1 and pos < (len(settings) - 2):
+        drawOptions(pos - 2)
+    elif pos == 0:
+        drawOptions(pos)
+    elif pos == 1:
+        drawOptions(pos - 1)
+    elif pos == len(settings) - 2:
+        drawOptions(pos - 3)
+    elif pos == len(settings) - 1:
+        drawOptions(pos - 4)
 
 def checkForUpdate(makeUpdateBanner=True):
     log.info("Starting update check..")
@@ -50,6 +78,9 @@ def checkForUpdate(makeUpdateBanner=True):
     f.close()
     data = json.loads(raw)
     runVer = data['version']
+
+    
+
 
 # method for animating transitions between menus
 def animate(state, direction, *args):
@@ -114,12 +145,12 @@ class log:
 
     def error(self, msg, exception, *args):
         global logMsg
-        sound(SoundFile.GENERAL_ALERT)
         if True:
-            timeStamp = strftime("%d.%m.%Y %H:%M:%S")
-            print("[" + timeStamp + "][Error]", msg, exception, *args)
+            ts = time.localtime(time.time())
+            print('[%d.%d.%d %d:%d:%d] [Error]' % (ts[2], ts[1], ts[0], ts[3], ts[4], ts[5]), msg, exception, *args)
         
         if True:
+            sound(SoundFile.GENERAL_ALERT)
             charlie.screen.draw_image(26, 24, 'graphics/notifications/error.png', transparent = Color.RED)
             charlie.screen.set_font(Font(family = 'arial', size = 7))
             if Font.text_width(Font(family = 'arial', size = 7), exception) <= 90:
@@ -144,14 +175,15 @@ class log:
             logMsg = 1
 
 
-    def warn(self, msg):
+    def warn(self, msg, *args):
         global logMsg
-        sound(SoundFile.GENERAL_ALERT)
-        if True:
-            timeStamp = strftime("%d.%m.%Y %H:%M:%S")
-            print("[" + timeStamp + "][Warning]", exception, msg)
         
         if True:
+            ts = time.localtime(time.time())
+            print('[%d.%d.%d %d:%d:%d] [Warning]' % (ts[2], ts[1], ts[0], ts[3], ts[4], ts[5]), msg)
+        
+        if True:
+            sound(SoundFile.GENERAL_ALERT)
             charlie.screen.draw_image(26, 24, 'graphics/notifications/warn.png', transparent = Color.RED)
             charlie.screen.draw_text(31, 34, msg, text_color = Color.BLACK)
 
@@ -176,10 +208,9 @@ class log:
                 pass
             logMsg = 1
     
-    def info(self, msg):
+    def info(msg, *args):
         ''' Makes a log output, without showing anything on the EV3 screen'''
-        global logMsg
         if True:
-            timeStamp = strftime("%d.%m.%Y %H:%M:%S")
-            print("[" + timeStamp + "][Info]", exception, msg)
+            ts = time.localtime(time.time())
+            print('[%d.%d.%d %d:%d:%d] [Info]' % (ts[2], ts[1], ts[0], ts[3], ts[4], ts[5]), msg)
     
