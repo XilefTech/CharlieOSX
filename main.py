@@ -33,11 +33,9 @@ charlie = EV3Brick()
 
 def mainLoop():
     global menuState
-    menuState = 0
-    oldMenuState = 0
-    position = 0
+    menuState, oldMenuState, position = 0, 0, 0
     oldPos = 1
-    loop = True
+    loop, selected = True, False
     tools.drawMenu(int(menuState))
     while loop:
         # navigation inbetween main pages
@@ -59,19 +57,29 @@ def mainLoop():
         # subMenus
         elif menuState == 50: #settings Menu
 
-            if Button.UP in charlie.buttons.pressed() and position > 0:
-                position -= 1
-            elif Button.UP in charlie.buttons.pressed() and position == 0:
-                position = len(settings) - 1
-            if Button.DOWN in charlie.buttons.pressed() and position < len(settings) - 1:
-                position += 1
-            elif Button.DOWN in charlie.buttons.pressed() and position == len(settings) - 1:
-                position = 0
+            if Button.UP in charlie.buttons.pressed():
+                if not selected:
+                    if position > 0:
+                        position -= 1
+                    elif position == 0:
+                        position = len(settings) - 1
+            if Button.DOWN in charlie.buttons.pressed():
+                if not selected:
+                    if position < len(settings) - 1:
+                        position += 1
+                    if position == len(settings) - 1:
+                        position = 0
+
+
+            if Button.CENTER in charlie.buttons.pressed():
+                selected = not selected
+                oldPos += 1
+
 
             if position != oldPos:
                 tools.sound('media/click.wav')
                 time.sleep(0.08)
-                tools.drawSettings(position, settings)
+                tools.drawSettings(position, settings, selected)
                 oldPos = position
                 time.sleep(0.17)
 

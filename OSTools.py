@@ -35,15 +35,20 @@ def drawMenu(menuState, *args):
         log.error("Could not draw menu: ", str(exception))
 
 # method for the settings selection menu
-def drawSettings(pos, settings, *args):
+def drawSettings(pos, settings, selected, *args):
 
     def drawOptions(value, *args):
         '''Function that draws the 5 current options on the screen'''
         i = 0
         while i <= 4:
             if value + i == pos:
-                charlie.screen.draw_box(26, 29 + i * 20, 168, 46 + i * 20, r = 3, fill = False, color = Color.BLACK)
-                charlie.screen.draw_text(29, 30 + i * 20, '%s: %s' % (keys[value + i], settings[keys[value + i]]), text_color = Color.BLACK, background_color = Color.WHITE)
+                if selected:
+                    charlie.screen.draw_box(26, 29 + i * 20, 168, 46 + i * 20, r = 3, fill = True, color = Color.BLACK)
+                    charlie.screen.draw_text(29, 30 + i * 20, '%s: %s' % (keys[value + i], settings[keys[value + i]]), text_color = Color.WHITE, background_color = None)
+                else:
+                    charlie.screen.draw_box(26, 29 + i * 20, 168, 46 + i * 20, r = 3, fill = True, color = Color.WHITE)
+                    charlie.screen.draw_box(26, 29 + i * 20, 168, 46 + i * 20, r = 3, fill = False, color = Color.BLACK)
+                    charlie.screen.draw_text(29, 30 + i * 20, '%s: %s' % (keys[value + i], settings[keys[value + i]]), text_color = Color.BLACK, background_color = None)
             else:
                 charlie.screen.draw_box(26, 29 + i * 20, 170, 46 + i * 20, fill = True, color = Color.WHITE)
                 charlie.screen.draw_text(29, 30 + i * 20, '%s: %s' % (keys[value + i], settings[keys[value + i]]), text_color = Color.BLACK, background_color = Color.WHITE)
@@ -129,7 +134,7 @@ class log:
     def __init__ (self):
         pass
 
-    def error(self, msg, exception, *args):
+    def error(msg, exception, *args):
         global logMsg
         if True:
             ts = time.localtime(time.time())
@@ -161,9 +166,9 @@ class log:
             logMsg = 1
 
 
-    def warn(self, msg, *args):
+    def warn(msg, *args):
         global logMsg
-        
+
         if True:
             ts = time.localtime(time.time())
             print('[%d.%d.%d %d:%d:%d] [Warning]' % (ts[2], ts[1], ts[0], ts[3], ts[4], ts[5]), msg)
