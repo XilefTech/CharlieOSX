@@ -44,33 +44,33 @@ def drawSettings(pos, settings, selected, *args):
             if value + i == pos:
                 if selected:
                     charlie.screen.draw_box(26, 29 + i * 20, 168, 46 + i * 20, r = 3, fill = True, color = Color.BLACK)
-                    charlie.screen.draw_text(29, 30 + i * 20, '%s: %s' % (keys[value + i], settings[keys[value + i]]), text_color = Color.WHITE, background_color = None)
+                    charlie.screen.draw_text(29, 30 + i * 20, '%s: %s' % (keys[value + i], settings['options'][keys[value + i]]), text_color = Color.WHITE, background_color = None)
                 else:
                     charlie.screen.draw_box(26, 29 + i * 20, 168, 46 + i * 20, r = 3, fill = True, color = Color.WHITE)
                     charlie.screen.draw_box(26, 29 + i * 20, 168, 46 + i * 20, r = 3, fill = False, color = Color.BLACK)
-                    charlie.screen.draw_text(29, 30 + i * 20, '%s: %s' % (keys[value + i], settings[keys[value + i]]), text_color = Color.BLACK, background_color = None)
+                    charlie.screen.draw_text(29, 30 + i * 20, '%s: %s' % (keys[value + i], settings['options'][keys[value + i]]), text_color = Color.BLACK, background_color = None)
             else:
                 charlie.screen.draw_box(26, 29 + i * 20, 170, 46 + i * 20, fill = True, color = Color.WHITE)
-                charlie.screen.draw_text(29, 30 + i * 20, '%s: %s' % (keys[value + i], settings[keys[value + i]]), text_color = Color.BLACK, background_color = Color.WHITE)
+                charlie.screen.draw_text(29, 30 + i * 20, '%s: %s' % (keys[value + i], settings['options'][keys[value + i]]), text_color = Color.BLACK, background_color = Color.WHITE)
             i += 1
 
-    keys = list(settings.keys())
+    keys = list(settings['options'].keys())
     charlie.screen.set_font(Font(family = 'arial', size = 13))
 
     # the slider bar indicator
     charlie.screen.draw_box(171, 25, 177, 127, r = 2, fill = False, color = Color.BLACK)
     charlie.screen.draw_box(172, 26, 176, 126, r = 2, fill = True, color = Color.WHITE)
-    charlie.screen.draw_box(173, 27 + 102 / len(settings) * pos, 175, 23 + 102 / len(settings) * (pos + 1), r = 1, fill = True, color = Color.BLACK)
+    charlie.screen.draw_box(173, 27 + 102 / len(settings['options']) * pos, 175, 23 + 102 / len(settings['options']) * (pos + 1), r = 1, fill = True, color = Color.BLACK)
 
-    if pos > 1 and pos < (len(settings) - 2):
+    if pos > 1 and pos < (len(settings['options']) - 2):
         drawOptions(pos - 2)
     elif pos == 0:
         drawOptions(pos)
     elif pos == 1:
         drawOptions(pos - 1)
-    elif pos == len(settings) - 2:
+    elif pos == len(settings['options']) - 2:
         drawOptions(pos - 3)
-    elif pos == len(settings) - 1:
+    elif pos == len(settings['options']) - 1:
         drawOptions(pos - 4)
 
 # method for animating transitions between menus
