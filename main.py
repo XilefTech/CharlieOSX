@@ -31,6 +31,10 @@ def storeSettings(data):
     with open('settings.json', 'w') as f:
         f.write(json.dumps(data, sort_keys = False))
 
+def applySettings(settings):
+    charlie.speaker.set_volume(settings['options']['Audio-Volume'] * 0.9, 'Beep')
+    charlie.speaker.set_volume(settings['options']['EFX-Volume'] * 0.9, 'PCM')
+
 settings = OrderedDict({'options': OrderedDict({'Debug Driving': 2, 'Audio-Volume': 100, 'EFX-Volume': 100, 'Console-Log': True, 'Show Warnings': True, 'Show Errors': True}),
             'values': {
                 'min': {'Debug Driving': 0, 'Audio-Volume': 0, 'EFX-Volume': 0, 'Console-Log': False, 'Show Warnings': False, 'Show Errors': False},
@@ -49,6 +53,7 @@ def mainLoop():
     loop, selected = True, False
     tools.drawMenu(int(menuState))
     keys = list(settings['options'].keys())
+    applySettings(settings)
     while loop:
         # navigation inbetween main pages
         if menuState == 0:
@@ -76,10 +81,10 @@ def mainLoop():
                     elif position == 0:
                         position = len(settings['options']) - 1
                 else:
-                    if settings['options'][keys[position]] > settings['values']['min'][keys[position]]:
-                        settings['options'][keys[position]] -= 1
-                    elif settings['options'][keys[position]] == settings['values']['min'][keys[position]]:
-                        settings['options'][keys[position]] = settings['values']['max'][keys[position]]
+                    if settings['options'][keys[position]] < settings['values']['max'][keys[position]]:
+                        settings['options'][keys[position]] += 1
+                    elif settings['options'][keys[position]] == settings['values']['max'][keys[position]]:
+                        settings['options'][keys[position]] = settings['values']['min'][keys[position]]
                     tools.sound('media/click.wav')
                     tools.drawSettings(position, settings, selected)
             if Button.DOWN in charlie.buttons.pressed():
@@ -89,10 +94,10 @@ def mainLoop():
                     elif position == len(settings['options']) - 1:
                         position = 0
                 else:
-                    if settings['options'][keys[position]] < settings['values']['max'][keys[position]]:
-                        settings['options'][keys[position]] += 1
-                    elif settings['options'][keys[position]] == settings['values']['max'][keys[position]]:
-                        settings['options'][keys[position]] = settings['values']['min'][keys[position]]
+                    if settings['options'][keys[position]] > settings['values']['min'][keys[position]]:
+                        settings['options'][keys[position]] -= 1
+                    elif settings['options'][keys[position]] == settings['values']['min'][keys[position]]:
+                        settings['options'][keys[position]] = settings['values']['max'][keys[position]]
                     tools.sound('media/click.wav')
                     tools.drawSettings(position, settings, selected)
                         
@@ -101,6 +106,8 @@ def mainLoop():
             if Button.CENTER in charlie.buttons.pressed():
                 if selected:
                     storeSettings(settings)
+                    applySettings(settings)
+                    
                 selected = not selected
                 oldPos += 1
 
@@ -141,7 +148,7 @@ def mainLoop():
             tools.logMsg = 0
             menuState = menuState / 10
 
-        
+            
 
 
 
