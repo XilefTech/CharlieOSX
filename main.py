@@ -25,6 +25,7 @@ def loadSettings():
         for i in range(len(order)):
             sorted_settings['options'][order[i]] = settings['options'][order[i]]
         sorted_settings['values'] = settings['values']
+        sorted_settings['types'] = settings['types']
         return sorted_settings
 
 def storeSettings(data):
@@ -35,11 +36,12 @@ def applySettings(settings):
     charlie.speaker.set_volume(settings['options']['Audio-Volume'] * 0.9, 'Beep')
     charlie.speaker.set_volume(settings['options']['EFX-Volume'] * 0.9, 'PCM')
 
-settings = OrderedDict({'options': OrderedDict({'Debug Driving': 2, 'Audio-Volume': 100, 'EFX-Volume': 100, 'Console-Log': True, 'Show Warnings': True, 'Show Errors': True}),
+settings = OrderedDict({'options': OrderedDict({'Debug Driving': 2, 'Audio-Volume': 80, 'EFX-Volume': 25, 'Console-Log': True, 'Show Warnings': True, 'Show Errors': True}),
             'values': {
                 'min': {'Debug Driving': 0, 'Audio-Volume': 0, 'EFX-Volume': 0, 'Console-Log': False, 'Show Warnings': False, 'Show Errors': False},
-                'max': {'Debug Driving': 2, 'Audio-Volume': 100, 'EFX-Volume': 100, 'Console-Log': True, 'Show Warnings': True, 'Show Errors': True}
-            }})
+                'max': {'Debug Driving': 2, 'Audio-Volume': 100, 'EFX-Volume': 100, 'Console-Log': True, 'Show Warnings': True, 'Show Errors': True}},
+            'types': {'Debug Driving': 'int', 'Audio-Volume': 'int', 'EFX-Volume': 'int', 'Console-Log': 'bool', 'Show Warnings': 'bool', 'Show Errors': 'bool'}
+            })
 
 
 #storeSettings(settings) # temporary for storing changes in keys of the dictionary, created above, to the file
@@ -113,10 +115,9 @@ def mainLoop():
 
             if position != oldPos:
                 tools.sound('media/click.wav')
-                time.sleep(0.08)
                 tools.drawSettings(position, settings, selected)
                 oldPos = position
-                time.sleep(0.15)
+                time.sleep(0.07)
 
         # selection of pages
         if Button.RIGHT in charlie.buttons.pressed() and menuState > 0 and menuState <= 5 and not selected:
@@ -149,9 +150,6 @@ def mainLoop():
             menuState = menuState / 10
 
             
-
-
-
 
 # just some example code
 #charlie.sound.beep()
