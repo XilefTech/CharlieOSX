@@ -4,7 +4,7 @@ from pybricks.parameters import Align, Color, Button
 from pybricks.media.ev3dev import Image, ImageFile, Font, SoundFile
 from robotError import *
 import time, _thread
-
+import __main__
 
 
 charlie = EV3Brick()
@@ -136,7 +136,7 @@ class log:
 
     def error(msg, exception, *args):
         global logMsg
-        if True:
+        if __main__.settings['options']['Console-Log']:
             ts = time.localtime(time.time())
             print('[%d.%d.%d %d:%d:%d] [Error]' % (ts[2], ts[1], ts[0], ts[3], ts[4], ts[5]), msg, exception, *args)
         
@@ -169,7 +169,7 @@ class log:
     def warn(msg, *args):
         global logMsg
 
-        if True:
+        if __main__.settings['options']['Console-Log']:
             ts = time.localtime(time.time())
             print('[%d.%d.%d %d:%d:%d] [Warning]' % (ts[2], ts[1], ts[0], ts[3], ts[4], ts[5]), msg)
         
@@ -201,7 +201,7 @@ class log:
     
     def info(msg, *args):
         ''' Makes a log output, without showing anything on the EV3 screen'''
-        if True:
+        if __main__.settings['options']['Console-Log']:
             ts = time.localtime(time.time())
             print('[%d.%d.%d %d:%d:%d] [Info]' % (ts[2], ts[1], ts[0], ts[3], ts[4], ts[5]), msg)
     
