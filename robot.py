@@ -331,6 +331,61 @@ class Charlie():
                     if any(self.brick.buttons()):
                             return
 
+    def straightMecanum(speed, dist, ang, *args):
+        """Driving a straight line of dist cm with speed in ang direction. Only working with MECANUM Type"""
+        self.__fRMotor.reset_angle(0)
+        revs = dist / (config.wheelDiameter * math.pi) # convert the input (cm) to revs
+        speed = speed * 1.7 * 6 # convert speed form % to deg/min
+
+        # driving the robot into the desired direction
+        if ang >= 0 and ang <= 45:
+            multiplier = tools.map(ang, 0, 45, 1, 0)
+            self.__fRMotor.run_angle(speed, revs * 360, Stop.COAST, False)
+            self.__bRMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
+            self.__fLMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
+            self.__bLMotor.run_angle(speed, revs * 360, Stop.COAST, True)
+        elif ang >= -45 and ang < 0:
+            multiplier = tools.map(ang, -45, 0, 0, 1)
+            self.__fRMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
+            self.__bRMotor.run_angle(speed, revs * 360, Stop.COAST, False)
+            self.__bLMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
+            self.__fLMotor.run_angle(speed, revs * 360, Stop.COAST, True)
+        elif ang > 45 and ang <= 90:
+            multiplier = tools.map(ang, 45, 90, 0, 1)
+            self.__fRMotor.run_angle(speed, revs * 360, Stop.COAST, False)
+            self.__bRMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
+            self.__fLMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
+            self.__bLMotor.run_angle(speed, revs * 360, Stop.COAST, True)
+        elif ang < -45 and ang >= -90:
+            multiplier = tools.map(ang, -45, -90, 0, 1)
+            self.__fRMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
+            self.__bRMotor.run_angle(speed, revs * 360, Stop.COAST, False)
+            self.__bLMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
+            self.__fLMotor.run_angle(speed, revs * 360, Stop.COAST, True)
+        elif ang > 90 and ang <= 135:
+            multiplier = tools.map(ang, 90, 135, 1, 0)
+            self.__fRMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
+            self.__bRMotor.run_angle(speed, revs * -360, Stop.COAST, False)
+            self.__bLMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
+            self.__fLMotor.run_angle(speed, revs * -360, Stop.COAST, True)
+        elif ang < -90 and ang >= -135:
+            multiplier = tools.map(ang, -90, -135, 1, 0)
+            self.__fRMotor.run_angle(speed, revs * -360, Stop.COAST, False)
+            self.__bRMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
+            self.__fLMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
+            self.__bLMotor.run_angle(speed, revs * -360, Stop.COAST, True)
+        elif ang > 135 and ang <= 180:
+            multiplier = tools.map(ang, 135, 180, 0, 1)
+            self.__fRMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
+            self.__bRMotor.run_angle(speed, revs * -360, Stop.COAST, False)
+            self.__bLMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
+            self.__fLMotor.run_angle(speed, revs * -360, Stop.COAST, True)
+        elif ang < -135 and ang >= -180:
+            multiplier = tools.map(ang, -135, -180, 0, 1)
+            self.__fRMotor.run_angle(speed, revs * -360, Stop.COAST, False)
+            self.__bRMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
+            self.__fLMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
+            self.__bLMotor.run_angle(speed, revs * -360, Stop.COAST, True)
 
 
 
