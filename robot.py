@@ -100,7 +100,7 @@ class Charlie():
             return 'error: no gyro'
 
         __gyro.reset_angle(0)
-        while params != [] and not any(charlie.buttons()):
+        while params != [] and not any(self.brick.buttons()):
             mode, arg1, arg2, arg3 = params.pop(0), params.pop(0), params.pop(0), params.pop(0)
 
             methods = { 4: turn(),
@@ -114,9 +114,10 @@ class Charlie():
             methods[mode](arg1, arg2, arg3)
             
         breakMotors()
-
         if config.useGearing:
             gearingPortMotor.run_target(300, 0, Stop.HOLD, True)    #reset gearing
+
+        time.sleep(0.3)
 
     def breakMotors(self):
         if config.robotType == 'NORMAL':
@@ -149,7 +150,7 @@ class Charlie():
                         speed = speed - tools.map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
 
                     #cancel if button pressed
-                    if any(charlie.buttons()):
+                    if any(self.brick.buttons()):
                         return
             else:
                 while self.__gyro.angle() - startValue > deg:
@@ -163,7 +164,7 @@ class Charlie():
                         speed = speed - tools.map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
 
                     #cancel if button pressed
-                    if any(charlie.buttons()):
+                    if any(self.brick.buttons()):
                         return
 
         #turn only with right motor
@@ -183,7 +184,7 @@ class Charlie():
                         speed = speed - tools.map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
 
                     #cancel if button pressed
-                    if any(charlie.buttons()):
+                    if any(self.brick.buttons()):
                         return                 
             else:
                 while self.__gyro.angle() - startValue > deg:
@@ -197,7 +198,7 @@ class Charlie():
                         speed = speed - tools.map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
                     
                     #cancel if button pressed
-                    if any(charlie.buttons()):
+                    if any(self.brick.buttons()):
                         return
 
         #turn with both motors
@@ -218,7 +219,7 @@ class Charlie():
                         speed = speed - tools.map(deg, 1, 360, 10, 0.01) if speed > 40 else speed
 
                     #cancel if button pressed
-                    if any(charlie.buttons()):
+                    if any(self.brick.buttons()):
                         return    
                     
             else:
@@ -236,5 +237,105 @@ class Charlie():
                         speed = speed - tools.map(deg, 1, 360, 10, 0.01) if speed > 40 else speed
                     
                     #cancel if button pressed
-                    if any(charlie.buttons()):
+                    if any(self.brick.buttons()):
                         return
+
+    def straight(speed, dist, *args):
+        """drives forward with speed in a straight line, corrected by the self.__gyro. Only working for NORMAL and ALLWHEEL Type"""
+        correctionStrength = 2 # how strongly the self will correct. 2 = default, 0 = nothing
+        startValue = self.__gyro.angle()
+        
+        revs = dist / (config.wheelDiameter * math.pi) # convert the input (cm) to revs
+        revs = revs / 2
+
+        #drive
+        if config.robotType == 'NORMAL':
+            self.__rMotor.reset_angle(0)
+            if revs > 0:
+                while revs > self.__rMotor.angle() / 360:
+                    #if not driving staright correct it
+                    if self.__gyro.angle() - startValue > 0:
+                        lSpeed = speed - abs(self.__gyro.angle() - startValue) * correctionStrength
+                        rSpeed = speed
+                    elif self.__gyro.angle() - startValue < 0:
+                        rSpeed = speed - abs(self.__gyro.angle() - startValue) * correctionStrength
+                        lSpeed = speed
+                    else:
+                        lSpeed = speed
+                        rSpeed = speed
+
+                    self.__rMotor.dc(rSpeed)
+                    self.__lMotor.dc(lSpeed)
+                    #cancel if button pressed
+                    if any(self.brick.buttons()):
+                            return
+            else:
+                while revs < __rMotor.angle() / 360:
+                    #if not driving staright correct it
+                    if self.__gyro.angle() - startValue < 0:
+                        rSpeed = speed + abs(self.__gyro.angle() - startValue) * correctionStrength
+                        lSpeed = speed
+                    elif self.__gyro.angle() - startValue > 0:
+                        lSpeed = speed + abs(self.__gyro.angle() - startValue) * correctionStrength
+                        rSpeed = speed
+                    else:
+                        lSpeed = speed
+                        rSpeed = speed
+
+                    self.__rMotor.dc(-rSpeed)
+                    self.__lMotor.dc(-lSpeed)
+                    #cancel if button pressed
+                    if any(self.brick.buttons()):
+                            return
+
+        elif config.robotType == 'ALLWHEEL':
+            self.__fRMotor.reset_angle(0)
+            if revs > 0:
+                while revs > self.__fRMotor.angle() / 360:
+                    #if not driving staright correct it
+                    if self.__gyro.angle() - startValue > 0:
+                        lSpeed = speed - abs(self.__gyro.angle() - startValue) * correctionStrength
+                        rSpeed = speed
+                    elif self.__gyro.angle() - startValue < 0:
+                        rSpeed = speed - abs(self.__gyro.angle() - startValue) * correctionStrength
+                        lSpeed = speed
+                    else:
+                        lSpeed = speed
+                        rSpeed = speed
+
+                    self.__fRMotor.dc(rSpeed)
+                    self.__bRMotor.dc(rSpeed)
+                    self.__fLMotor.dc(lSpeed)
+                    self.__bLMotor.dc(lSpeed)
+                    #cancel if button pressed
+                    if any(self.brick.buttons()):
+                            return
+            else:
+                while revs < self.__fRMotor.angle() / 360:
+                    #if not driving staright correct it
+                    if self.__gyro.angle() - startValue < 0:
+                        rSpeed = speed + abs(self.__gyro.angle() - startValue) * correctionStrength
+                        lSpeed = speed
+                    elif self.__gyro.angle() - startValue > 0:
+                        lSpeed = speed + abs(self.__gyro.angle() - startValue) * correctionStrength
+                        rSpeed = speed
+                    else:
+                        lSpeed = speed
+                        rSpeed = speed
+
+                    self.__fRMotor.dc(rSpeed)
+                    self.__bRMotor.dc(rSpeed)
+                    self.__fLMotor.dc(lSpeed)
+                    self.__bLMotor.dc(lSpeed)
+                    #cancel if button pressed
+                    if any(self.brick.buttons()):
+                            return
+
+
+
+
+
+
+
+
+
