@@ -1,8 +1,7 @@
 import robot, OSTools
 from robotError import *
 
-if robot.gyro != 0:
-    robot.gyro.reset_angle(0)
+  
 
 # TODO?: gearing homing?
 
@@ -21,49 +20,25 @@ def execute(params, *args):
         arg2 = params.pop(0)
         arg3 = params.pop(0)
 
-        #turn
-        if mode == 4:
-            turn(arg1, arg2, arg3)
-    
-        #gearing
-        elif mode == 5:
-            if config.useGearing():
-                gearing(arg1, arg2, arg3)
-            else:
-                actionMotors(arg1, arg2, arg3)
-    
-        #straight
-        elif mode == 7:
-            if config.robotType != 'MECANUM':
-                straight(arg1, arg2, arg3)
-            else:
-                straightMecanum(arg1, arg2, arg3)
+        methods = { 4: turn(),
+                    5: gearing(), if config.useGearing else actionMotors(),
+                    7: straight(), if config.robotType != 'MECANUM' else straightMecanum(),
+                    9: intervall(),
+                    11: curveShape(),
+                    12: toColor(),
+                    15: toWall()}
         
-        #intervall
-        elif mode == 9:
-            intervall(arg1, arg2, arg3)
-        
-        #curve shaped
-        elif mode == 11:
-            curveShape(arg1, arg2, arg3)
-        
-        #to color 
-        elif mode == 12:
-            toColor(arg1, arg2, arg3)
-        
-        #until back wall
-        elif mode == 15:
-            toWall(arg1, arg2, arg3)
+        methods[mode](arg1, arg2, arg3)
         
 
     if config.robotType == 'NORMAL':
-        lMotor.dc(0)
-        rMotor.dc(0)
+        lMotor.run_angle(100, 0, Stop.HOLD, False)
+        rMotor.run_angle(100, 0, Stop.HOLD, False)
     else:
-        fRMotor.dc(0)
-        bRMotor.dc(0)
-        fLMotor.dc(0)
-        bLMotor.dc(0)
+        fRMotor.run_angle(100, 0, Stop.HOLD, False)
+        bRMotor.run_angle(100, 0, Stop.HOLD, False)
+        fLMotor.run_angle(100, 0, Stop.HOLD, False)
+        bLMotor.run_angle(100, 0, Stop.HOLD, False)
 
     if config.useGearing:
         gearingPortMotor.run_target(300, 0, Stop.HOLD, True)    #reset gearing
@@ -71,6 +46,7 @@ def execute(params, *args):
     time.sleep(0.3)
 
 if robot.gyro != 0:
+    robot.gyro.reset_angle(0)
     def turn(speed, deg, port, *args):
         """turns deg with speed. port indicates with wich motor(s)"""
         startValue = robot.gyro.angle()
