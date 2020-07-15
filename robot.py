@@ -107,7 +107,7 @@ class Charlie():
                         5: gearing(), if config.useGearing else actionMotors(),
                         7: straight(), if config.robotType != 'MECANUM' else straightMecanum(),
                         9: intervall(),
-                        11: curveShape(),
+                        11: curve(),
                         12: toColor(),
                         15: toWall()}
             
@@ -432,6 +432,43 @@ class Charlie():
                         return
             i += 1
 
+    def curve(speed, revs1, deg, *args):
+        """Drives in a curve deg over revs with speed"""
+        speed = speed * 1.7 * 6 #speed to deg/s from %
+
+        #gyro starting point
+        startValue = self.__gyro.angle()
+        
+        #claculate revs for the second wheel
+        pathOutside = config.wheelDiameter * 2 * math.pi * revs1
+        rad1 = pathOutside / (math.pi * (deg / 180))
+        rad2 = rad1 - config.wheelDistance
+        pathInside = rad2 * math.pi * (deg/180)
+        revs2 = pathInside / (config.wheelDiameter * 2 * math.pi)
+
+        #claculate the speed for the second wheel
+        relation = revs1 / revs2
+        speedSlow = speed / relation
+
+        if deg > 0:
+            #asign higher speed to outer wheel
+            lSpeed = speed
+            rSpeed = speedSlow
+            self.__rMotor.run_angle(rSpeed, revs2 * 360, Stop.COAST, False)
+            self.__lMotor.run_angle(lSpeed, revs1 * 360 + 5, Stop.COAST, False)
+            #turn
+            while self.__gyro.angle() - startValue < deg and not any(self.brick.buttons()):
+                pass
+
+        else:
+            #asign higher speed to outer wheel
+            rSpeed = speed
+            lSpeed = speedSlow
+            self.__rMotor.run_angle(rSpeed, revs1 * 360 + 5, Stop.COAST, False)
+            self.__lMotor.run_angle(lSpeed, revs2 * 360, Stop.COAST, False)
+            #turn
+            while self.__gyro.angle() + startValue > deg and not any(self.brick.buttons()):
+                pass
 
 
 
