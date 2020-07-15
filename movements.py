@@ -5,43 +5,6 @@ from robotError import *
 
 # TODO?: gearing homing?
 
-def execute(params, *args):
-    """Starts the different Driving modules according to the given parameters"""
-
-    if OSTools.getBatteryVoltage() <= 7500:
-        log.warn("Please charge the battery. Only " + str(OSTools.getBatteryVoltage(human=True)) + " V left. You need at least 7.5 Volts.")
-        return RobotError.Battery.tooLow
-
-    
-    while params != [] and not any(charlie.buttons()):
-
-        mode = params.pop(0)
-        arg1 = params.pop(0)
-        arg2 = params.pop(0)
-        arg3 = params.pop(0)
-
-        methods = { 4: turn(),
-                    5: gearing(), if config.useGearing else actionMotors(),
-                    7: straight(), if config.robotType != 'MECANUM' else straightMecanum(),
-                    9: intervall(),
-                    11: curveShape(),
-                    12: toColor(),
-                    15: toWall()}
-        
-        methods[mode](arg1, arg2, arg3)
-        
-
-    if config.robotType == 'NORMAL':
-        lMotor.run_angle(100, 0, Stop.HOLD, False)
-        rMotor.run_angle(100, 0, Stop.HOLD, False)
-    else:
-        fRMotor.run_angle(100, 0, Stop.HOLD, False)
-        bRMotor.run_angle(100, 0, Stop.HOLD, False)
-        fLMotor.run_angle(100, 0, Stop.HOLD, False)
-        bLMotor.run_angle(100, 0, Stop.HOLD, False)
-
-    if config.useGearing:
-        gearingPortMotor.run_target(300, 0, Stop.HOLD, True)    #reset gearing
 
     time.sleep(0.3)
 

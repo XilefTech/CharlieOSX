@@ -11,6 +11,7 @@ class Charlie():
         self.__logFileLocation = logFileLocation
         self.__configPath = configPath
 
+        self.brick = EV3Brick()
         self.logger = Logger(self.__configPath, self.__logFileLocation)
 
         __initSensors()
@@ -84,5 +85,40 @@ class Charlie():
         except as Exception:
             self.logger.error("Failed to initialize the Touch-Sensor - Are u sure it's connected (to the right port)?")
             self.logger.error(Exception)
-            
+
         self.logger.debug("Sensor initialisation done")
+
+    def breakMotors(self):
+        if config.robotType == 'NORMAL':
+            lMotor.run_angle(100, 0, Stop.HOLD, False)
+            rMotor.run_angle(100, 0, Stop.HOLD, False)
+        else:
+            fRMotor.run_angle(100, 0, Stop.HOLD, False)
+            bRMotor.run_angle(100, 0, Stop.HOLD, False)
+            fLMotor.run_angle(100, 0, Stop.HOLD, False)
+            bLMotor.run_angle(100, 0, Stop.HOLD, False)
+
+    def execute(self, params):
+        """Starts the different Driving modules according to the given parameters"""
+
+        if self.brick.battery.voltage()() <= 7500:
+            self.logger.warn("Please charge the battery. Only %sV left. We recommend least 7.5 Volts for accurate and repeatable results." % self.brick.battery.voltage() * 0.001)
+            return 'failed to execute: Battery to low'
+
+        while params != [] and not any(charlie.buttons()):
+            mode, arg1, arg2, arg3 = params.pop(0), params.pop(0), params.pop(0), params.pop(0)
+
+            methods = { 4: turn(),
+                        5: gearing(), if config.useGearing else actionMotors(),
+                        7: straight(), if config.robotType != 'MECANUM' else straightMecanum(),
+                        9: intervall(),
+                        11: curveShape(),
+                        12: toColor(),
+                        15: toWall()}
+            
+            methods[mode](arg1, arg2, arg3)
+            
+        breakMotors()
+
+        if config.useGearing:
+            gearingPortMotor.run_target(300, 0, Stop.HOLD, True)    #reset gearing
