@@ -240,7 +240,7 @@ class Charlie():
                     if any(self.brick.buttons()):
                         return
 
-    def straight(speed, dist, *args):
+    def straight(self, speed, dist, *args):
         """drives forward with speed in a straight line, corrected by the self.__gyro. Only working for NORMAL and ALLWHEEL Type"""
         correctionStrength = 2 # how strongly the self will correct. 2 = default, 0 = nothing
         startValue = self.__gyro.angle()
@@ -331,7 +331,7 @@ class Charlie():
                     if any(self.brick.buttons()):
                             return
 
-    def straightMecanum(speed, dist, ang, *args):
+    def straightMecanum(self, speed, dist, ang):
         """Driving a straight line of dist cm with speed in ang direction. Only working with MECANUM Type"""
         self.__fRMotor.reset_angle(0)
         revs = dist / (config.wheelDiameter * math.pi) # convert the input (cm) to revs
@@ -387,7 +387,7 @@ class Charlie():
             self.__fLMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
             self.__bLMotor.run_angle(speed, revs * -360, Stop.COAST, True)
 
-    def intervall(speed, revs, count, *args):
+    def intervall(self, speed, revs, count):
         """drives revs forward and backward with speed count times"""
         i = 0
         speed = speed * 1.7 * 6 # speed in deg/s to %
@@ -432,7 +432,7 @@ class Charlie():
                         return
             i += 1
 
-    def curve(speed, revs1, deg, *args):
+    def curve(self, speed, revs1, deg):
         """Drives in a curve deg over revs with speed"""
         speed = speed * 1.7 * 6 #speed to deg/s from %
 
@@ -470,7 +470,103 @@ class Charlie():
             while self.__gyro.angle() + startValue > deg and not any(self.brick.buttons()):
                 pass
 
+    def toColor(self, speed, color, side):
+        """Drives until the self drives to a color line with speed"""
+        # sets color to a value that the colorSensor can work with
+        if color == 0:
+            color = Color.BLACK
+        else:
+            color = Color.WHITE
 
+        #only drive till left colorSensor 
+        if side == 2:
+            #if drive to color black drive until back after white to not recognize colors on the field as lines
+            if color == Color.BLACK:
+                while lLight.color() != Color.WHITE and not any(self.brick.buttons()):
+                    if robotType == 'NORMAL':
+                        self.__rMotor.dc(speed)
+                        self.__lMotor.dc(speed)
+                    else: 
+                        self.__fRMotor.dc(speed)
+                        self.__bRMotor.dc(speed)
+                        self.__fLMotor.dc(speed)
+                        self.__bLMotor.dc(speed)
+
+            while lLight.color() != color and not any(self.brick.buttons()):
+                if robotType == 'NORMAL':
+                    self.__rMotor.dc(speed)
+                    self.__lMotor.dc(speed)
+                else: 
+                    self.__fRMotor.dc(speed)
+                    self.__bRMotor.dc(speed)
+                    self.__fLMotor.dc(speed)
+                    self.__bLMotor.dc(speed)
+            
+        #only drive till right colorSensor 
+        elif side == 3:
+            #if drive to color black drive until back after white to not recognize colors on the field as lines
+            if color == Color.BLACK:
+                while rLight.color() != Color.WHITE and not any(self.brick.buttons()):
+                    if robotType == 'NORMAL':
+                        self.__rMotor.dc(speed)
+                        self.__lMotor.dc(speed)
+                    else: 
+                        self.__fRMotor.dc(speed)
+                        self.__bRMotor.dc(speed)
+                        self.__fLMotor.dc(speed)
+                        self.__bLMotor.dc(speed)
+
+            while rLight.color() != color and not any(self.brick.buttons()):
+                if robotType == 'NORMAL':
+                    self.__rMotor.dc(speed)
+                    self.__lMotor.dc(speed)
+                else: 
+                    self.__fRMotor.dc(speed)
+                    self.__bRMotor.dc(speed)
+                    self.__fLMotor.dc(speed)
+                    self.__bLMotor.dc(speed)
+            
+        #drive untill both colorSensors
+        elif side == 23:
+            rSpeed = speed
+            lSpeed = speed
+            rWhite = False
+            lWhite = False
+            
+            while (rLight.color() != color or lLight.color() != color) and not any(self.brick.buttons()):
+                #if drive to color black drive until back after white to not recognize colors on the field as lines
+                if color == Color.BLACK:
+                    if rLight.color() == Color.WHITE:
+                        rWhite = True
+                    if lLight.color() == Color.WHITE:
+                        lWhite = True
+
+                self.__rMotor.dc(rSpeed)
+                self.__lMotor.dc(lSpeed)
+                #if right at color stop right Motor
+                if rLight.color() == color and rWhite:
+                    rSpeed = 0
+                #if left at color stop left Motor
+                if lLight.color() == color and lWhite:
+                    lSpeed = 0
+
+    def toWall(self, speed, *args):
+        """drives backwards with speed until it reaches a wall"""
+        while not touch.pressed():
+            if config.robotType == 'NORMAL':
+                self.__rMotor.dc(- abs(speed))
+                self.__lMotor.dc(- abs(speed))
+            else:
+                self.__fRMotor.dc(- abs(speed))
+                self.__bRMotor.dc(- abs(speed))
+                self.__fLMotor.dc(- abs(speed))
+                self.__bLMotor.dc(- abs(speed))
+
+            if any(self.brick.buttons()):
+                break
+        
+        self.__lMotor.dc(0)
+        self.__rMotor.dc(0)
 
 
 
