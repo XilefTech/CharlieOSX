@@ -387,6 +387,50 @@ class Charlie():
             self.__fLMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
             self.__bLMotor.run_angle(speed, revs * -360, Stop.COAST, True)
 
+    def intervall(speed, revs, count, *args):
+        """drives revs forward and backward with speed count times"""
+        i = 0
+        speed = speed * 1.7 * 6 # speed in deg/s to %
+        # move count times forwards and backwards
+        while i < count:
+            if config.robotType == 'NORMAL':
+                ang = self.__lMotor.angle()
+                # drive backwards
+                self.__rMotor.run_angle(speed, revs * -360, Stop.BRAKE, False)
+                self.__lMotor.run_angle(speed, revs * -360, Stop.BRAKE, False)
+                # return to cancel if any button is pressed
+                while self.__lMotor.angle() > revs * -360:
+                    if any(self.brick.buttons()):
+                        return
+                #drive forwards
+                self.__lMotor.run_angle(speed, revs * 360, Stop.BRAKE, False)
+                self.__rMotor.run_angle(speed, revs * 360, Stop.BRAKE, False)
+                # return to cancel if any button is pressed
+                while self.__rMotor.angle() <= ang:
+                    if any(self.brick.buttons()):
+                        return
+            
+            elif config.robotType == 'ALLWHEEL' or config.robotType == 'MECANUM':
+                ang = self.__lMotor.angle()
+                # drive backwards
+                self.__fRMotor.run_angle(speed, revs * -360, Stop.BRAKE, False)
+                self.__bRMotor.run_angle(speed, revs * -360, Stop.BRAKE, False)
+                self.__fLMotor.run_angle(speed, revs * -360, Stop.BRAKE, False)
+                self.__bLMotor.run_angle(speed, revs * -360, Stop.BRAKE, False)
+                # return to cancel if any button is pressed
+                while self.__lMotor.angle() > revs * -360:
+                    if any(self.brick.buttons()):
+                        return
+                #drive forwards
+                self.__fRMotor.run_angle(speed, revs * 360, Stop.BRAKE, False)
+                self.__bRMotor.run_angle(speed, revs * 360, Stop.BRAKE, False)
+                self.__fLMotor.run_angle(speed, revs * 360, Stop.BRAKE, False)
+                self.__bLMotor.run_angle(speed, revs * 360, Stop.BRAKE, False)
+                # return to cancel if any button is pressed
+                while self.__rMotor.angle() <= ang:
+                    if any(self.brick.buttons()):
+                        return
+            i += 1
 
 
 
