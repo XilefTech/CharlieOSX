@@ -12,7 +12,7 @@ class Charlie():
         self.__configPath = configPath
 
         self.brick = EV3Brick()
-        self.logger = Logger(self.__configPath, self.__logFileLocation)
+        self.logger = Logger(self.__configPath, self.__logFileLocation, self.brick)
 
         __initSensors()
         __initMotors()
@@ -88,16 +88,6 @@ class Charlie():
 
         self.logger.debug("Sensor initialisation done")
 
-    def breakMotors(self):
-        if config.robotType == 'NORMAL':
-            lMotor.run_angle(100, 0, Stop.HOLD, False)
-            rMotor.run_angle(100, 0, Stop.HOLD, False)
-        else:
-            fRMotor.run_angle(100, 0, Stop.HOLD, False)
-            bRMotor.run_angle(100, 0, Stop.HOLD, False)
-            fLMotor.run_angle(100, 0, Stop.HOLD, False)
-            bLMotor.run_angle(100, 0, Stop.HOLD, False)
-
     def execute(self, params):
         """Starts the different Driving modules according to the given parameters"""
 
@@ -105,6 +95,11 @@ class Charlie():
             self.logger.warn("Please charge the battery. Only %sV left. We recommend least 7.5 Volts for accurate and repeatable results." % self.brick.battery.voltage() * 0.001)
             return 'failed to execute: Battery to low'
 
+        if self.__gyro == 0:
+            self.logger.error("Cannot drive without gyro")
+            return 'error: no gyro'
+
+        __gyro.reset_angle(0)
         while params != [] and not any(charlie.buttons()):
             mode, arg1, arg2, arg3 = params.pop(0), params.pop(0), params.pop(0), params.pop(0)
 
@@ -122,3 +117,124 @@ class Charlie():
 
         if config.useGearing:
             gearingPortMotor.run_target(300, 0, Stop.HOLD, True)    #reset gearing
+
+    def breakMotors(self):
+        if config.robotType == 'NORMAL':
+            lMotor.run_angle(100, 0, Stop.HOLD, False)
+            rMotor.run_angle(100, 0, Stop.HOLD, False)
+        else:
+            fRMotor.run_angle(100, 0, Stop.HOLD, False)
+            bRMotor.run_angle(100, 0, Stop.HOLD, False)
+            fLMotor.run_angle(100, 0, Stop.HOLD, False)
+            bLMotor.run_angle(100, 0, Stop.HOLD, False)
+
+    def turn(self, speed, deg, port):
+        """turns deg with speed. port indicates with wich motor(s)"""
+        startValue = self.__gyro.angle()
+
+        #turn only with left motor
+        if port == 2:
+            #right motor off
+            __rMotor.dc(0)
+            #turn the angle
+            if deg > 0:
+                while self.__gyro.angle() - startValue < deg:
+                    if config.robotType == 'NORMAL':
+                        __lMotor.dc(speed)
+                    else:
+                        __fLMotor.dc(speed)
+                        __bLMotor.dc(speed)
+                    #slow down to not overshoot
+                    if not self.__gyro.angle() - startValue < deg * 0.6:
+                        speed = speed - tools.map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
+
+                    #cancel if button pressed
+                    if any(charlie.buttons()):
+                        return
+            else:
+                while self.__gyro.angle() - startValue > deg:
+                    if config.robotType == 'NORMAL':
+                        __lMotor.dc(-speed)
+                    else:
+                        __fLMotor.dc(-speed)
+                        __bLMotor.dc(-speed)
+                    #slow down to not overshoot
+                    if not self.__gyro.angle() - startValue > deg * 0.6:
+                        speed = speed - tools.map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
+
+                    #cancel if button pressed
+                    if any(charlie.buttons()):
+                        return
+
+        #turn only with right motor
+        elif port == 3:
+            #left motor off
+            __lMotor.dc(0)
+            #turn the angle
+            if deg > 0:
+                while self.__gyro.angle() - startValue < deg:
+                    if config.robotType == 'NORMAL':
+                        __rMotor.dc(-speed)
+                    else:
+                        __fRMotor.dc(-speed)
+                        __bRMotor.dc(-speed)
+                    #slow down to not overshoot
+                    if not self.__gyro.angle() - startValue < deg * 0.6:
+                        speed = speed - tools.map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
+
+                    #cancel if button pressed
+                    if any(charlie.buttons()):
+                        return                 
+            else:
+                while self.__gyro.angle() - startValue > deg:
+                    if config.robotType == 'NORMAL':
+                        __rMotor.dc(speed)
+                    else:
+                        __fRMotor.dc(speed)
+                        __bRMotor.dc(speed)
+                    #slow down to not overshoot
+                    if not self.__gyro.angle() - startValue > deg * 0.6:
+                        speed = speed - tools.map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
+                    
+                    #cancel if button pressed
+                    if any(charlie.buttons()):
+                        return
+
+        #turn with both motors
+        elif port == 23:
+            #turn the angle
+            if deg > 0:
+                while self.__gyro.angle() - startValue < deg:
+                    if config.robotType == 'NORMAL':
+                        __rMotor.dc(-speed / 2)
+                        __lMotor.dc(speed / 2)
+                    else:
+                        __fRMotor.dc(-speed / 2)
+                        __bRMotor.dc(-speed / 2)
+                        __fLMotor.dc(speed / 2)
+                        __bLMotor.dc(speed / 2)
+                    #slow down to not overshoot
+                    if not self.__gyro.angle() - startValue < deg * 0.6:
+                        speed = speed - tools.map(deg, 1, 360, 10, 0.01) if speed > 40 else speed
+
+                    #cancel if button pressed
+                    if any(charlie.buttons()):
+                        return    
+                    
+            else:
+                while self.__gyro.angle() - startValue > deg:
+                    if config.robotType == 'NORMAL':
+                        __rMotor.dc(speed / 2)
+                        __lMotor.dc(-speed / 2)
+                    else:
+                        __fRMotor.dc(speed / 2)
+                        __bRMotor.dc(speed / 2)
+                        __fLMotor.dc(-speed / 2)
+                        __bLMotor.dc(-speed / 2)
+                    #slow down to not overshoot
+                    if not self.__gyro.angle() - startValue > deg * 0.6:
+                        speed = speed - tools.map(deg, 1, 360, 10, 0.01) if speed > 40 else speed
+                    
+                    #cancel if button pressed
+                    if any(charlie.buttons()):
+                        return
