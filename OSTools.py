@@ -1,5 +1,5 @@
 '''This method is for outsourcing mathematical and other essential functions that don't interact directly with sensors or motors'''
-from pybricks.hubs import EV3Brick
+
 from pybricks.parameters import Align, Color, Button
 from pybricks.media.ev3dev import Image, ImageFile, Font, SoundFile
 from robotError import *

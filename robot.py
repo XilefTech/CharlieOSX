@@ -1,19 +1,16 @@
 import config
-from logging import Logger
 from pybricks.ev3devices import (Motor, TouchSensor, ColorSensor, InfraredSensor, UltrasonicSensor, GyroSensor)
 from pybricks.parameters import (Port, Direction)
-
 
 class Charlie():
     '''This is the main class of the robot. It contains all the functions CharlieOSX has to offer'''
 
-    def __init__(self, configPath, settingsPath, logFileLocation):
+    def __init__(self, configPath, settingsPath, brick, logger):
         self.__configPath = configPath
-        self.__logFileLocation = logFileLocation
         self.__configPath = configPath
 
-        self.brick = EV3Brick()
-        self.logger = Logger(self.__configPath, self.__logFileLocation, self.brick)
+        self.brick = brick
+        self.logger = logger
 
         __initSensors()
         __initMotors()
