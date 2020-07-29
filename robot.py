@@ -1,4 +1,5 @@
 import config
+from logging import Logger
 from pybricks.ev3devices import (Motor, TouchSensor, ColorSensor, InfraredSensor, UltrasonicSensor, GyroSensor)
 from pybricks.parameters import (Port, Direction)
 
@@ -16,10 +17,10 @@ class Charlie():
 
         __initSensors()
         __initMotors()
-    
+    #TODO
     def __repr__(self):
         return "TODO"
-  
+    #TODO
     def __str__(self):
         return "TODO"
 
