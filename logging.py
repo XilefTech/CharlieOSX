@@ -8,6 +8,7 @@ class Logger:
         self.__configPath = configPath
         self.__fileLocation = fileLocation
         self.__brick = brick
+        self.__refreshScreenNeeded = 0
 
         self.sound_lock = _thread.allocate_lock()
     
@@ -24,8 +25,6 @@ class Logger:
             print('[%d.%d.%d %d:%d:%d] [Info]' % (ts[2], ts[1], ts[0], ts[3], ts[4], ts[5]), msg)
 
     def warn(self, method, msg):
-        global logMsg
-
         if True:
             ts = time.localtime(time.time())
             print('[%d.%d.%d %d:%d:%d] [Warning]' % (ts[2], ts[1], ts[0], ts[3], ts[4], ts[5]), msg)
@@ -54,10 +53,9 @@ class Logger:
             #wait for user letting button go
             while Button.CENTER in self.brick.buttons.pressed():
                 pass
-            logMsg = 1
+            self.__refreshScreenNeeded = 1
 
     def error(self, method, msg, exception):
-        global logMsg
         if True:
             ts = time.localtime(time.time())
             print('[%d.%d.%d %d:%d:%d] [Error]' % (ts[2], ts[1], ts[0], ts[3], ts[4], ts[5]), msg, exception, *args)
@@ -85,8 +83,10 @@ class Logger:
             #wait for user letting button go
             while Button.CENTER in self.brick.buttons.pressed():
                 pass
-            logMsg = 1
+            self.__refreshScreenNeeded = 1
 
-
+    def getScreenRefreshNeeded(self):
+        return self.__refreshScreenNeeded
     
-    
+    def setScreenRefreshNeeded(self, value):
+        self.__refreshScreenNeeded = value

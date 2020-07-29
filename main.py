@@ -145,8 +145,8 @@ def mainLoop():
             oldMenuState = menuState
             time.sleep(0.3)
 
-        if tools.logMsg == 1:
-            tools.logMsg = 0
+        if self.logger.getScreenRefreshNeeded == 1:
+            self.logger.setScreenRefreshNeeded = 0
             menuState = menuState / 10
 
             
