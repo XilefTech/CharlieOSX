@@ -87,7 +87,7 @@ def mainLoop():
                         settings['options'][keys[position]] += 1
                     elif settings['options'][keys[position]] == settings['values']['max'][keys[position]]:
                         settings['options'][keys[position]] = settings['values']['min'][keys[position]]
-                    tools.sound('media/click.wav')
+                    tools.sound('assets/media/click.wav')
                     tools.drawSettings(position, settings, selected)
             if Button.DOWN in charlie.buttons.pressed():
                 if not selected:
@@ -100,7 +100,7 @@ def mainLoop():
                         settings['options'][keys[position]] -= 1
                     elif settings['options'][keys[position]] == settings['values']['min'][keys[position]]:
                         settings['options'][keys[position]] = settings['values']['max'][keys[position]]
-                    tools.sound('media/click.wav')
+                    tools.sound('assets/media/click.wav')
                     tools.drawSettings(position, settings, selected)
                         
 
@@ -114,7 +114,7 @@ def mainLoop():
                 oldPos += 1
 
             if position != oldPos:
-                tools.sound('media/click.wav')
+                tools.sound('assets/media/click.wav')
                 tools.drawSettings(position, settings, selected)
                 oldPos = position
                 time.sleep(0.07)
@@ -124,13 +124,13 @@ def mainLoop():
             menuState = menuState * 10
             position, oldPos = 0, 1
             oldMenuState = menuState
-            tools.sound('media/confirm.wav')
+            tools.sound('assets/media/confirm.wav')
             time.sleep(0.08)
             tools.animate(menuState, True)
             time.sleep(0.4)
 
         if Button.LEFT in charlie.buttons.pressed() and menuState >= 10 and not selected:
-            tools.sound('media/confirm.wav')
+            tools.sound('assets/media/confirm.wav')
             time.sleep(0.08)
             tools.animate(menuState, False)
             menuState = menuState / 10
@@ -139,7 +139,7 @@ def mainLoop():
 
 
         if oldMenuState != menuState:
-            tools.sound('media/click.wav')
+            tools.sound('assets/media/click.wav')
             time.sleep(0.08)
             tools.drawMenu(menuState)
             oldMenuState = menuState

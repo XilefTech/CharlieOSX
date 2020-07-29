@@ -9,17 +9,15 @@ import time, _thread
 charlie = EV3Brick()
 logMsg = 0
 
-# playing soundfiles without waiting for the end
-
 
 # method for displaying the right contents of the menu on the Display
 def drawMenu(menuState, *args):
-    menus = {0: 'graphics/menus/mainMenu.png',
-             1: 'graphics/menus/programmingMainMenu.png',
-             2: 'graphics/menus/testingMainMenu.png',
-             3: 'graphics/menus/remoteMainMenu.png',
-             4: 'graphics/menus/competitionMainMenu.png',
-             5: 'graphics/menus/settingsMainMenu.png'
+    menus = {0: 'assets/graphics/menus/mainMenu.png',
+             1: 'assets/graphics/menus/programmingMainMenu.png',
+             2: 'assets/graphics/menus/testingMainMenu.png',
+             3: 'assets/graphics/menus/remoteMainMenu.png',
+             4: 'assets/graphics/menus/competitionMainMenu.png',
+             5: 'assets/graphics/menus/settingsMainMenu.png'
              }
 
     
@@ -80,7 +78,7 @@ def animate(state, direction, *args):
         i = 1
         try:
             while i <= 10: 
-                charlie.screen.draw_image(0, 0, 'graphics/animations/%s/%s.png' % (menus[state], i), transparent = Color.RED)
+                charlie.screen.draw_image(0, 0, 'assets/graphics/animations/%s/%s.png' % (menus[state], i), transparent = Color.RED)
                 i += 1
         except Exception as exception:
             log.error("Could not animate menu: ", str(exception))
@@ -90,13 +88,11 @@ def animate(state, direction, *args):
         i = 10
         try:
             while i >= 1:
-                charlie.screen.draw_image(0, 0, 'graphics/animations/%s/%s.png' % (menus[state], i), transparent = Color.RED)
+                charlie.screen.draw_image(0, 0, 'assets/graphics/animations/%s/%s.png' % (menus[state], i), transparent = Color.RED)
                 i -= 1
         except Exception as exception:
             log.error("Could not animate menu: ", str(exception))
-            return(RobotError.Display.Animation.generalError)
-
-            
+            return(RobotError.Display.Animation.generalError) 
 
 # method for Linemap calculations and pathfinding, currently not in use
 def doIntersect(lineMap):
@@ -109,7 +105,6 @@ def doIntersect(lineMap):
     y4 = lineMap['obstacles'][0][1][1]
     print((x1+x2*y3-x3)/(x4+x2*y4))
 
-
 # maps a number x as a number in range in_min - in_max to a number in range out_min - out_max
 def map(x, in_min, in_max, out_min, out_max):
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
@@ -121,7 +116,4 @@ def getBatteryVoltage(human = False):
         return(charlie.battery.voltage())
     else:
         return(float(str(charlie.battery.voltage())[:1] + "." + str(charlie.battery.voltage())[1:]))
-
-# error, notification an logging
-
-    
+  
