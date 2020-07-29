@@ -10,21 +10,6 @@ charlie = EV3Brick()
 logMsg = 0
 
 
-# method for displaying the right contents of the menu on the Display
-def drawMenu(menuState, *args):
-    menus = {0: 'assets/graphics/menus/mainMenu.png',
-             1: 'assets/graphics/menus/programmingMainMenu.png',
-             2: 'assets/graphics/menus/testingMainMenu.png',
-             3: 'assets/graphics/menus/remoteMainMenu.png',
-             4: 'assets/graphics/menus/competitionMainMenu.png',
-             5: 'assets/graphics/menus/settingsMainMenu.png'
-             }
-
-    
-    try:
-        charlie.screen.draw_image(0, 0, menus[menuState], transparent = Color.RED)
-    except Exception as exception:
-        log.error("Could not draw menu: ", str(exception))
 
 # method for the settings selection menu
 def drawSettings(pos, settings, selected, *args):
