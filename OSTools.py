@@ -12,34 +12,6 @@ logMsg = 0
 
 
 
-# method for animating transitions between menus
-def animate(state, direction, *args):
-    menus = {10: 'mainProgram',
-             20: 'mainTest',
-             30: 'mainRemote',
-             40: 'mainCompetition',
-             50: 'mainSettings'}
-
-    
-    if direction:
-        i = 1
-        try:
-            while i <= 10: 
-                charlie.screen.draw_image(0, 0, 'assets/graphics/animations/%s/%s.png' % (menus[state], i), transparent = Color.RED)
-                i += 1
-        except Exception as exception:
-            log.error("Could not animate menu: ", str(exception))
-            return(RobotError.Display.Animation.generalError)
-  
-    else:
-        i = 10
-        try:
-            while i >= 1:
-                charlie.screen.draw_image(0, 0, 'assets/graphics/animations/%s/%s.png' % (menus[state], i), transparent = Color.RED)
-                i -= 1
-        except Exception as exception:
-            log.error("Could not animate menu: ", str(exception))
-            return(RobotError.Display.Animation.generalError) 
 
 # method for Linemap calculations and pathfinding, currently not in use
 def doIntersect(lineMap):
