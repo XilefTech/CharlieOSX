@@ -126,3 +126,42 @@ class UI:
             charlie.screen.draw_image(0, 0, menus[menuState], transparent = Color.RED)
         except Exception as exception:
             log.error("Could not draw menu: ", str(exception))
+
+    # method for the settings selection menu
+    def drawSettings(pos, settings, selected, *args):
+
+        def drawOptions(value, *args):
+            '''Function that draws the 5 current options on the screen'''
+            i = 0
+            while i <= 4:
+                if value + i == pos:
+                    if selected:
+                        charlie.screen.draw_box(26, 29 + i * 20, 168, 46 + i * 20, r = 3, fill = True, color = Color.BLACK)
+                        charlie.screen.draw_text(29, 30 + i * 20, '%s: %s' % (keys[value + i], settings['options'][keys[value + i]]), text_color = Color.WHITE, background_color = None) if settings['types'][keys[value + i]] == 'int' else charlie.screen.draw_text(29, 30 + i * 20, '%s: %s' % (keys[value + i], bool(settings['options'][keys[value + i]])), text_color = Color.WHITE, background_color = None)
+                    else:
+                        charlie.screen.draw_box(26, 29 + i * 20, 168, 46 + i * 20, r = 3, fill = True, color = Color.WHITE)
+                        charlie.screen.draw_box(26, 29 + i * 20, 168, 46 + i * 20, r = 3, fill = False, color = Color.BLACK)
+                        charlie.screen.draw_text(29, 30 + i * 20, '%s: %s' % (keys[value + i], settings['options'][keys[value + i]]), text_color = Color.BLACK, background_color = None) if settings['types'][keys[value + i]] == 'int' else charlie.screen.draw_text(29, 30 + i * 20, '%s: %s' % (keys[value + i], bool(settings['options'][keys[value + i]])), text_color = Color.BLACK, background_color = None)
+                else:
+                    charlie.screen.draw_box(26, 29 + i * 20, 170, 46 + i * 20, fill = True, color = Color.WHITE)
+                    charlie.screen.draw_text(29, 30 + i * 20, '%s: %s' % (keys[value + i], settings['options'][keys[value + i]]), text_color = Color.BLACK, background_color = Color.WHITE) if settings['types'][keys[value + i]] == 'int' else charlie.screen.draw_text(29, 30 + i * 20, '%s: %s' % (keys[value + i], bool(settings['options'][keys[value + i]])), text_color = Color.BLACK, background_color = Color.WHITE)
+                i += 1
+
+        keys = list(settings['options'].keys())
+        charlie.screen.set_font(Font(family = 'arial', size = 13))
+
+        # the slider bar indicator
+        charlie.screen.draw_box(171, 25, 177, 127, r = 2, fill = False, color = Color.BLACK)
+        charlie.screen.draw_box(172, 26, 176, 126, r = 2, fill = True, color = Color.WHITE)
+        charlie.screen.draw_box(173, 27 + 102 / len(settings['options']) * pos, 175, 23 + 102 / len(settings['options']) * (pos + 1), r = 1, fill = True, color = Color.BLACK)
+
+        if pos > 1 and pos < (len(settings['options']) - 2):
+            drawOptions(pos - 2)
+        elif pos == 0:
+            drawOptions(pos)
+        elif pos == 1:
+            drawOptions(pos - 1)
+        elif pos == len(settings['options']) - 2:
+            drawOptions(pos - 3)
+        elif pos == len(settings['options']) - 1:
+            drawOptions(pos - 4)
