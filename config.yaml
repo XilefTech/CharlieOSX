@@ -1,0 +1,98 @@
+#----------------------------------------------------------------------------------
+#
+#                               Config file for 
+#
+#
+#                                 CharlieOSX
+#
+#                    the OS with more control of your Robot
+#
+#----------------------------------------------------------------------------------
+# Here you should configure CharlieOSX, so that it knows, what kind of robot to work with
+# Motors and Sensors just require the Letter or number of the port, they're at
+# Each motor has a Inverted variable that you can use, if you mounted a motor 'backwards'
+# It can be set if you built your robot so that the motors are inversed.
+
+
+# Robot wheels
+# used for Calculating driving parameters
+wheelDistance: 12 # cm
+wheelDiameter: 7.5  # cm
+
+sensors:
+  # touchSensor in the back of the Robot
+  backTouchSensor: 1
+
+  # bottom viewing light sensors in the front
+  # used for detection of lines on the floor to follow or to stop at
+  leftLightSensorPort: 2
+  rightLightSensorPort: 3
+
+  # gyro sensor
+  # used for accurate driving
+  gyroSensorPort: 4
+
+motors:
+  # Robot type:
+  # NORMAL = 2 powered normal wheels
+  # ALLWHEEL = 4 powered normal wheels
+  # MECANUM = 4 powered mecanum wheels
+  robotType: MECANUM
+
+  # driving motors
+  # only use this for a NORMAL robot type, else 0
+  rightMotorPort: 0
+  rightMotorInverted: True
+  leftMotorPort: 0
+  leftMotorInverted: True
+
+  gearing:
+    # use this, if your robot has got a 4-Way hardware-gearing, else False
+    useGearing: False
+    # optional: if you got a light sensor that can be used to 'home' the gearing by sensing RED when the gearing is on port 0
+    gearingHomeLightSensorPort: 0
+
+    # gearing motor for selecting the port
+    gearingSelectMotorPort: 0
+    gearingSelectMotorPortInverted: False
+    # gearing motor for turning the port
+    gearingTurnMotorPort: 0
+    gearingTurnMotorPortInverted: False
+
+  action motors:
+    # if you got Motors for something other than driving
+    firstActionMotorPort: 0
+    firstActionMotorInverted: False
+
+    secondActionMotorPort: 0
+    secondActionMotorInverted: False
+
+  # driving motors
+  # only use this for a ALLWHEEL and MECANUM robot type, else every motor 0
+  frontRightMotorPort: B
+  frontRightMotorInverted: False
+
+  frontLeftMotorPort: A
+  frontLeftMotorInverted: False
+
+  backRightMotorPort: D
+  backRightMotorInverted: True
+
+  backLeftMotorPort: C
+  backLeftMotorInverted: True
+
+
+# FLL:
+# Activates different saving slots for programs according to the names given in runNames
+# Also activates an option for the competition to run all the programs after each other in the same order as in runNames
+FLLMode: True
+
+# names of the different runs that you want to complete at FLL
+# please note that names over x characters will appear shortened on the screen        -> TODO: insert max characters number
+runNames:
+  - Crane
+  - Elevator
+  - Treehouse
+  - ConstructRed
+  - ConstructBrown
+  - Architecture
