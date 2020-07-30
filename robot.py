@@ -145,7 +145,7 @@ class Charlie():
                         __bLMotor.dc(speed)
                     #slow down to not overshoot
                     if not self.__gyro.angle() - startValue < deg * 0.6:
-                        speed = speed - tools.map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
+                        speed = speed - _map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
 
                     #cancel if button pressed
                     if any(self.brick.buttons()):
@@ -159,7 +159,7 @@ class Charlie():
                         __bLMotor.dc(-speed)
                     #slow down to not overshoot
                     if not self.__gyro.angle() - startValue > deg * 0.6:
-                        speed = speed - tools.map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
+                        speed = speed - _map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
 
                     #cancel if button pressed
                     if any(self.brick.buttons()):
@@ -179,7 +179,7 @@ class Charlie():
                         __bRMotor.dc(-speed)
                     #slow down to not overshoot
                     if not self.__gyro.angle() - startValue < deg * 0.6:
-                        speed = speed - tools.map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
+                        speed = speed - _map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
 
                     #cancel if button pressed
                     if any(self.brick.buttons()):
@@ -193,7 +193,7 @@ class Charlie():
                         __bRMotor.dc(speed)
                     #slow down to not overshoot
                     if not self.__gyro.angle() - startValue > deg * 0.6:
-                        speed = speed - tools.map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
+                        speed = speed - _map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
                     
                     #cancel if button pressed
                     if any(self.brick.buttons()):
@@ -214,7 +214,7 @@ class Charlie():
                         __bLMotor.dc(speed / 2)
                     #slow down to not overshoot
                     if not self.__gyro.angle() - startValue < deg * 0.6:
-                        speed = speed - tools.map(deg, 1, 360, 10, 0.01) if speed > 40 else speed
+                        speed = speed - _map(deg, 1, 360, 10, 0.01) if speed > 40 else speed
 
                     #cancel if button pressed
                     if any(self.brick.buttons()):
@@ -232,7 +232,7 @@ class Charlie():
                         __bLMotor.dc(-speed / 2)
                     #slow down to not overshoot
                     if not self.__gyro.angle() - startValue > deg * 0.6:
-                        speed = speed - tools.map(deg, 1, 360, 10, 0.01) if speed > 40 else speed
+                        speed = speed - _map(deg, 1, 360, 10, 0.01) if speed > 40 else speed
                     
                     #cancel if button pressed
                     if any(self.brick.buttons()):
@@ -337,49 +337,49 @@ class Charlie():
 
         # driving the robot into the desired direction
         if ang >= 0 and ang <= 45:
-            multiplier = tools.map(ang, 0, 45, 1, 0)
+            multiplier = _map(ang, 0, 45, 1, 0)
             self.__fRMotor.run_angle(speed, revs * 360, Stop.COAST, False)
             self.__bRMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
             self.__fLMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
             self.__bLMotor.run_angle(speed, revs * 360, Stop.COAST, True)
         elif ang >= -45 and ang < 0:
-            multiplier = tools.map(ang, -45, 0, 0, 1)
+            multiplier = _map(ang, -45, 0, 0, 1)
             self.__fRMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
             self.__bRMotor.run_angle(speed, revs * 360, Stop.COAST, False)
             self.__bLMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
             self.__fLMotor.run_angle(speed, revs * 360, Stop.COAST, True)
         elif ang > 45 and ang <= 90:
-            multiplier = tools.map(ang, 45, 90, 0, 1)
+            multiplier = _map(ang, 45, 90, 0, 1)
             self.__fRMotor.run_angle(speed, revs * 360, Stop.COAST, False)
             self.__bRMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
             self.__fLMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
             self.__bLMotor.run_angle(speed, revs * 360, Stop.COAST, True)
         elif ang < -45 and ang >= -90:
-            multiplier = tools.map(ang, -45, -90, 0, 1)
+            multiplier = _map(ang, -45, -90, 0, 1)
             self.__fRMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
             self.__bRMotor.run_angle(speed, revs * 360, Stop.COAST, False)
             self.__bLMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
             self.__fLMotor.run_angle(speed, revs * 360, Stop.COAST, True)
         elif ang > 90 and ang <= 135:
-            multiplier = tools.map(ang, 90, 135, 1, 0)
+            multiplier = _map(ang, 90, 135, 1, 0)
             self.__fRMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
             self.__bRMotor.run_angle(speed, revs * -360, Stop.COAST, False)
             self.__bLMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
             self.__fLMotor.run_angle(speed, revs * -360, Stop.COAST, True)
         elif ang < -90 and ang >= -135:
-            multiplier = tools.map(ang, -90, -135, 1, 0)
+            multiplier = _map(ang, -90, -135, 1, 0)
             self.__fRMotor.run_angle(speed, revs * -360, Stop.COAST, False)
             self.__bRMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
             self.__fLMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
             self.__bLMotor.run_angle(speed, revs * -360, Stop.COAST, True)
         elif ang > 135 and ang <= 180:
-            multiplier = tools.map(ang, 135, 180, 0, 1)
+            multiplier = _map(ang, 135, 180, 0, 1)
             self.__fRMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
             self.__bRMotor.run_angle(speed, revs * -360, Stop.COAST, False)
             self.__bLMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
             self.__fLMotor.run_angle(speed, revs * -360, Stop.COAST, True)
         elif ang < -135 and ang >= -180:
-            multiplier = tools.map(ang, -135, -180, 0, 1)
+            multiplier = _map(ang, -135, -180, 0, 1)
             self.__fRMotor.run_angle(speed, revs * -360, Stop.COAST, False)
             self.__bRMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
             self.__fLMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
@@ -612,5 +612,7 @@ class Charlie():
                         self.__aMotor2.dc(0)
                         return
 
+    def _map(x, in_min, in_max, out_min, out_max):
+        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 
 
