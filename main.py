@@ -8,7 +8,7 @@ from pybricks.parameters import (Port, Stop, Direction, Button, Color, SoundFile
 from pybricks.tools import print, wait, StopWatch
 from pybricks.robotics import DriveBase
 from collections import OrderedDict
-
+from charlieosx import CharlieOSX
 import config, ui
 
       
@@ -19,7 +19,7 @@ lineMap = {'height' : 300, 'width' : 1000,
             'obstacles' : [((2, 1), (4, 1))]}
 
 tools.doIntersect(lineMap)"""
-
+os = CharlieOSX('/config.yaml', '/settings.json', '/logs/')
 
 #runs menu
 ui.mainLoop()
