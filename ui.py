@@ -1,7 +1,7 @@
 class UI:
-    def __init__(self, configPath, settingsPath, brick, logger):
+    def __init__(self, configPath, settings, brick, logger):
         self.__configPath = configPath
-        self.__settingsPath = settingsPath
+        self.__settings = settings
         self.brick = brick
         self.logger = logger
     #TODO
@@ -16,8 +16,8 @@ class UI:
         oldPos = 1
         loop, selected = True, False
         tools.drawMenu(int(menuState))
-        keys = list(settings['options'].keys())
-        applySettings(settings)
+        keys = list(self.__settings['options'].keys())
+        applySettings(self.__settings)
         while loop:
             # navigation inbetween main pages
             if menuState == 0:
@@ -43,41 +43,41 @@ class UI:
                         if position > 0:
                             position -= 1
                         elif position == 0:
-                            position = len(settings['options']) - 1
+                            position = len(self.__settings['options']) - 1
                     else:
-                        if settings['options'][keys[position]] < settings['values']['max'][keys[position]]:
-                            settings['options'][keys[position]] += 1
-                        elif settings['options'][keys[position]] == settings['values']['max'][keys[position]]:
-                            settings['options'][keys[position]] = settings['values']['min'][keys[position]]
+                        if self.__settings['options'][keys[position]] < self.__settings['values']['max'][keys[position]]:
+                            self.__settings['options'][keys[position]] += 1
+                        elif self.__settings['options'][keys[position]] == self.__settings['values']['max'][keys[position]]:
+                            self.__settings['options'][keys[position]] = self.__settings['values']['min'][keys[position]]
                         tools.sound('assets/media/click.wav')
-                        tools.drawSettings(position, settings, selected)
+                        drawSettings(position, self.__settings, selected)
                 if Button.DOWN in charlie.buttons.pressed():
                     if not selected:
-                        if position < len(settings['options']) - 1:
+                        if position < len(self.__settings['options']) - 1:
                             position += 1
-                        elif position == len(settings['options']) - 1:
+                        elif position == len(self.__settings['options']) - 1:
                             position = 0
                     else:
-                        if settings['options'][keys[position]] > settings['values']['min'][keys[position]]:
-                            settings['options'][keys[position]] -= 1
-                        elif settings['options'][keys[position]] == settings['values']['min'][keys[position]]:
-                            settings['options'][keys[position]] = settings['values']['max'][keys[position]]
+                        if self.__settings['options'][keys[position]] > self.__settings['values']['min'][keys[position]]:
+                            self.__settings['options'][keys[position]] -= 1
+                        elif self.__settings['options'][keys[position]] == self.__settings['values']['min'][keys[position]]:
+                            self.__settings['options'][keys[position]] = self.__settings['values']['max'][keys[position]]
                         tools.sound('assets/media/click.wav')
-                        tools.drawSettings(position, settings, selected)
+                        tools.drawSettings(position, self.__settings, selected)
                             
 
 
                 if Button.CENTER in charlie.buttons.pressed():
                     if selected:
-                        storeSettings(settings)
-                        applySettings(settings)
+                        storeSettings(self.__settings)
+                        applySettings(self.__settings)
                         
                     selected = not selected
                     oldPos += 1
 
                 if position != oldPos:
                     tools.sound('assets/media/click.wav')
-                    tools.drawSettings(position, settings, selected)
+                    tools.drawSettings(position, self.__settings, selected)
                     oldPos = position
                     time.sleep(0.07)
 
@@ -169,8 +169,6 @@ class UI:
                 30: 'mainRemote',
                 40: 'mainCompetition',
                 50: 'mainSettings'}
-
-        
         if direction:
             i = 1
             try:
@@ -180,7 +178,6 @@ class UI:
             except Exception as exception:
                 log.error("Could not animate menu: ", str(exception))
                 return(RobotError.Display.Animation.generalError)
-    
         else:
             i = 10
             try:
