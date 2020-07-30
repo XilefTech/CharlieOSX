@@ -11,7 +11,7 @@ class UI:
     def __str__(self):
         return "TODO"
 
-    def mainLoop():
+    def mainLoop(self):
         menuState, oldMenuState, position = 0, 0, 0
         oldPos = 1
         loop, selected = True, False
@@ -111,8 +111,7 @@ class UI:
                 self.logger.setScreenRefreshNeeded = 0
                 menuState = menuState / 10
 
-    # method for displaying the right contents of the menu on the Display
-    def drawMenu(menuState, *args):
+    def drawMenu(self, menuState):
         menus = {0: 'assets/graphics/menus/mainMenu.png',
                 1: 'assets/graphics/menus/programmingMainMenu.png',
                 2: 'assets/graphics/menus/testingMainMenu.png',
@@ -120,18 +119,19 @@ class UI:
                 4: 'assets/graphics/menus/competitionMainMenu.png',
                 5: 'assets/graphics/menus/settingsMainMenu.png'
                 }
-
-        
         try:
             charlie.screen.draw_image(0, 0, menus[menuState], transparent = Color.RED)
         except Exception as exception:
             log.error("Could not draw menu: ", str(exception))
 
-    # method for the settings selection menu
-    def drawSettings(pos, settings, selected, *args):
+    def drawScrollBar(self, totalLength, pos):
+        charlie.screen.draw_box(171, 25, 177, 127, r = 2, fill = False, color = Color.BLACK)
+        charlie.screen.draw_box(172, 26, 176, 126, r = 2, fill = True, color = Color.WHITE)
+        charlie.screen.draw_box(173, 27 + 102 / totalLength * pos, 175, 23 + 102 / totalLength * (pos + 1), r = 1, fill = True, color = Color.BLACK)
 
+    def drawSettings(self, pos, settings, selected):
         def drawOptions(value, *args):
-            '''Function that draws the 5 current options on the screen'''
+            '''Subfunction that draws the 5 current options on the screen'''
             i = 0
             while i <= 4:
                 if value + i == pos:
@@ -150,10 +150,7 @@ class UI:
         keys = list(settings['options'].keys())
         charlie.screen.set_font(Font(family = 'arial', size = 13))
 
-        # the slider bar indicator
-        charlie.screen.draw_box(171, 25, 177, 127, r = 2, fill = False, color = Color.BLACK)
-        charlie.screen.draw_box(172, 26, 176, 126, r = 2, fill = True, color = Color.WHITE)
-        charlie.screen.draw_box(173, 27 + 102 / len(settings['options']) * pos, 175, 23 + 102 / len(settings['options']) * (pos + 1), r = 1, fill = True, color = Color.BLACK)
+        drawScrollBar(len(settings['options']), pos)
 
         if pos > 1 and pos < (len(settings['options']) - 2):
             drawOptions(pos - 2)
@@ -166,8 +163,7 @@ class UI:
         elif pos == len(settings['options']) - 1:
             drawOptions(pos - 4)
 
-    # method for animating transitions between menus
-    def animate(state, direction, *args):
+    def animate(self, state, direction):
         menus = {10: 'mainProgram',
                 20: 'mainTest',
                 30: 'mainRemote',
