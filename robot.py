@@ -5,9 +5,9 @@ from pybricks.parameters import (Port, Direction)
 class Charlie():
     '''This is the main class of the robot. It contains all the functions CharlieOSX has to offer'''
 
-    def __init__(self, configPath, settingsPath, brick, logger):
-        self.__configPath = configPath
-        self.__configPath = configPath
+    def __init__(self, config, settings, brick, logger):
+        self.__config = config
+        self.__settings = settings
 
         self.brick = brick
         self.logger = logger

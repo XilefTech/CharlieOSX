@@ -4,8 +4,8 @@ from pybricks.media.ev3dev import Image, ImageFile, Font, SoundFile
 #TODO Logging into Log file
 class Logger:
     '''Logging method for CharlieOSX'''
-    def __init__ (self, configPath, fileLocation, brick):
-        self.__configPath = configPath
+    def __init__ (self, config, fileLocation, brick):
+        self.__config = config
         self.__fileLocation = fileLocation
         self.__brick = brick
         self.__refreshScreenNeeded = 0

@@ -1,6 +1,6 @@
 class UI:
-    def __init__(self, configPath, settings, brick, logger):
-        self.__configPath = configPath
+    def __init__(self, config, settings, brick, logger):
+        self.__config = config
         self.__settings = settings
         self.brick = brick
         self.logger = logger
