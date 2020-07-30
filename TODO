@@ -1,2 +1,12 @@
 o merge straigt() and straightMecanum()
+o merge gearing() and actionMotors
 + make straightMecanum() abortalble with brick buttons
++ add function to set a speed to all driving motors
+o config should be a .cfg file
++ proper implementation of new config file
+o cleanup of Logger
++ documentation throughout the whole program
++ detection of missing libraries & installation batch file
++ add posibility for only one colorSensor in Front
++ line following mode
+o cleanup of imports
