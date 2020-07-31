@@ -8,7 +8,7 @@ class CharlieOSX:
     def __init__(self, configPath, settingsPath, logfilePath):
         self.__settings = loadSettings(settingsPath)
         self.__logfilePath = logfilePath
-        with open(configPath, 'r') as f
+        with open(configPath, 'r') as f:
             self.__config = yaml.load(f)
         self.brick = EV3Brick()
         self.logger = Logger(self.__config, self.__logfilePath, brick)
@@ -21,7 +21,7 @@ class CharlieOSX:
     def __str__(self):
         return "TODO"
 
-    def loadSettings(path):
+    def loadSettings(self, path):
         order = ['Debug Driving', 'Audio-Volume', 'EFX-Volume', 'Console-Log', 'Show Warnings', 'Show Errors']
         try:
             with open(path, 'r') as f:
@@ -42,11 +42,10 @@ class CharlieOSX:
             storeSettings(settings, path)
             return settings
 
-    def storeSettings(data, path):
+    def storeSettings(self, data, path):
         with open(path, 'w') as f:
             f.write(json.dumps(data, sort_keys = False))
 
-    def applySettings(settings):
+    def applySettings(self, settings):
         charlie.speaker.set_volume(settings['options']['Audio-Volume'] * 0.9, 'Beep')
         charlie.speaker.set_volume(settings['options']['EFX-Volume'] * 0.9, 'PCM')
-
