@@ -18,6 +18,9 @@ class Logger:
                 charlie.speaker.play_file(soundFile)
         _thread.start_new_thread(__playSoundFile, (file, ))
 
+    def debug(self, method, msg):
+        print('TODO: Debug')
+
     def info(self, method, msg):
         ''' Makes a log output, without showing anything on the EV3 screen'''
         if True:
