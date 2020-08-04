@@ -10,22 +10,24 @@ class Charlie():
         self.brick = brick
         self.logger = logger
 
+        self.__conf2port = {1: Port.S1, 2: Port.S2, 3: Port.S3, 4: Port.S4}
+
         self.logger.debug(self, "Starting sensor initialisation...")
         try:
-            self.__gyro = GyroSensor(config.gyroSensorPort) if config.gyroSensorPort != 0 else 0
+            self.__gyro = GyroSensor(self.__conf2port[self.__config['gyroSensorPort']]) if self.__config['gyroSensorPort'] != 0 else 0
         except Exception as exception:
             self.__gyro = 0
             self.logger.error(self, "Failed to initialize the Gyro-Sensor - Are u sure it's connected (to the right port)?", exception)
         try:
-            self.__rLight = ColorSensor(config.rightLightSensorPort) if (config.rightLightSensorPort != 0) else 0
+            self.__rLight = ColorSensor(self.__conf2port[self.__config['rightLightSensorPort']]) if self.__config['rightLightSensorPort'] != 0 else 0
         except Exception as exception:
             self.logger.error(self, "Failed to initialize the right Color-Sensor - Are u sure it's connected (to the right port)?", exception)
         try:
-            self.__lLight = ColorSensor(config.leftLightSensorPort) if (config.leftLightSensorPort != 0) else 0  
+            self.__lLight = ColorSensor(self.__conf2port[self.__config['leftLightSensorPort']]) if self.__config['leftLightSensorPort'] != 0 else 0  
         except Exception as exception:
             self.logger.error(self, "Failed to initialize the left Color-Sensor - Are u sure it's connected (to the right port)?", exception)
         try:
-            self.__touch = TouchSensor(config.touchSensorPort) if (config.touchSensorPort != 0) else 0
+            self.__touch = TouchSensor(self.__conf2port[self.__config['backTouchSensor']]) if self.__config['backTouchSensor'] != 0 else 0
         except Exception as exception:
             self.logger.error(self, "Failed to initialize the Touch-Sensor - Are u sure it's connected (to the right port)?", exception)
         self.logger.debug(self, "Sensor initialisation done")
