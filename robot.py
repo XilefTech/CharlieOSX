@@ -221,7 +221,7 @@ class Charlie():
 
     def straight(self, speed, dist, *args):
         """drives forward with speed in a straight line, corrected by the self.__gyro when in normal or allwheel mode"""
-        if self.__config['robotType'] != 'MECANUM'
+        if self.__config['robotType'] != 'MECANUM':
             correctionStrength = 2 # how strongly the self will correct. 2 = default, 0 = nothing
             startValue = self.__gyro.angle()
             
