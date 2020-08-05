@@ -83,7 +83,7 @@ class Charlie():
             mode, arg1, arg2, arg3 = params.pop(0), params.pop(0), params.pop(0), params.pop(0)
 
             methods = { 4: turn(),
-                        5: gearing() if self.__config['useGearing'] else actionMotors(),
+                        5: action(),
                         7: straight(),
                         9: intervall(),
                         11: curve(),
@@ -546,51 +546,51 @@ class Charlie():
         self.__lMotor.dc(0)
         self.__rMotor.dc(0)
 
-    def gearing(self, speed, revs, port):
+    def action(self, speed, revs, port):
         """rotates the port for revs revulutions with a speed of speed"""
-        speed = speed * 1.7 * 6 #speed to deg/s from %
-        self.__gearingPortMotor.run_target(300, port * 90, Stop.HOLD, True) #select gearing Port
-        ang = self.__gearingTurnMotor.angle()
-        self.__gearingTurnMotor.run_angle(speed, revs * 360, Stop.BRAKE, False) #start turning the port
-        #cancel, if any brick button is pressed
-        if revs > 0:
-            while self.__gearingTurnMotor.angle() < revs * 360 - ang:
-                if any(self.brick.buttons()):
-                    self.__gearingTurnMotor.dc(0)
-                    return
+        if self.__config['useGearing']:
+            speed = speed * 1.7 * 6 #speed to deg/s from %
+            self.__gearingPortMotor.run_target(300, port * 90, Stop.HOLD, True) #select gearing Port
+            ang = self.__gearingTurnMotor.angle()
+            self.__gearingTurnMotor.run_angle(speed, revs * 360, Stop.BRAKE, False) #start turning the port
+            #cancel, if any brick button is pressed
+            if revs > 0:
+                while self.__gearingTurnMotor.angle() < revs * 360 - ang:
+                    if any(self.brick.buttons()):
+                        self.__gearingTurnMotor.dc(0)
+                        return
+            else:
+                while self.__gearingTurnMotor.angle() > revs * 360 + ang:
+                    if any(self.brick.buttons()):
+                        self.__gearingTurnMotor.dc(0)
+                        return
         else:
-            while self.__gearingTurnMotor.angle() > revs * 360 + ang:
-                if any(self.brick.buttons()):
-                    self.__gearingTurnMotor.dc(0)
-                    return
-
-    def actionMotors(self, speed, revs, port):
-        # turn motor 1
-        if port == 1:
-            self.__aMotor1.run_angle(speed, revs * 360, Stop.BRAKE, False)
-            if revs > 0:
-                while self.__aMotor1.angle() < revs * 360 - ang:
-                    if any(self.brick.buttons()):
-                        self.__aMotor1.dc(0)
-                        return
-            else:
-                while self.__aMotor1.angle() > revs * 360 + ang:
-                    if any(self.brick.buttons()):
-                        self.__aMotor1.dc(0)
-                        return
-        # turm motor 2
-        elif port == 2:
-            self.__aMotor2.run_angle(speed, revs * 360, Stop.BRAKE, False)
-            if revs > 0:
-                while self.__aMotor2.angle() < revs * 360 - ang:
-                    if any(self.brick.buttons()):
-                        self.__aMotor2.dc(0)
-                        return
-            else:
-                while self.__aMotor2.angle() > revs * 360 + ang:
-                    if any(self.brick.buttons()):
-                        self.__aMotor2.dc(0)
-                        return
+            # turn motor 1
+            if port == 1:
+                self.__aMotor1.run_angle(speed, revs * 360, Stop.BRAKE, False)
+                if revs > 0:
+                    while self.__aMotor1.angle() < revs * 360 - ang:
+                        if any(self.brick.buttons()):
+                            self.__aMotor1.dc(0)
+                            return
+                else:
+                    while self.__aMotor1.angle() > revs * 360 + ang:
+                        if any(self.brick.buttons()):
+                            self.__aMotor1.dc(0)
+                            return
+            # turm motor 2
+            elif port == 2:
+                self.__aMotor2.run_angle(speed, revs * 360, Stop.BRAKE, False)
+                if revs > 0:
+                    while self.__aMotor2.angle() < revs * 360 - ang:
+                        if any(self.brick.buttons()):
+                            self.__aMotor2.dc(0)
+                            return
+                else:
+                    while self.__aMotor2.angle() > revs * 360 + ang:
+                        if any(self.brick.buttons()):
+                            self.__aMotor2.dc(0)
+                            return
 
     def _map(x, in_min, in_max, out_min, out_max):
         return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
