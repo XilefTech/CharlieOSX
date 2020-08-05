@@ -68,14 +68,14 @@ class Charlie():
         return "TODO"   
 
     def execute(self, params):
-        """Starts the different Driving modules according to the given parameters"""
+        '''Starts the different Driving modules according to the given parameters'''
 
-        if self.brick.battery.voltage()() <= 7500:
+        if self.__brick.battery.voltage()() <= 7500:
             self.logger.warn("Please charge the battery. Only %sV left. We recommend least 7.5 Volts for accurate and repeatable results." % self.brick.battery.voltage() * 0.001)
             return 'failed to execute: Battery to low'
 
         if self.__gyro == 0:
-            self.logger.error("Cannot drive without gyro")
+            self.logger.error(self, "Cannot drive without gyro", '')
             return 'error: no gyro'
 
         __gyro.reset_angle(0)
@@ -83,8 +83,8 @@ class Charlie():
             mode, arg1, arg2, arg3 = params.pop(0), params.pop(0), params.pop(0), params.pop(0)
 
             methods = { 4: turn(),
-                        5: gearing() if config.useGearing else actionMotors(),
-                        7: straight() if config.robotType != 'MECANUM' else straightMecanum(),
+                        5: gearing() if self.__config['useGearing'] else actionMotors(),
+                        7: straight() if self.__config['robotType'] != 'MECANUM' else straightMecanum(),
                         9: intervall(),
                         11: curve(),
                         12: toColor(),
@@ -93,13 +93,13 @@ class Charlie():
             methods[mode](arg1, arg2, arg3)
             
         breakMotors()
-        if config.useGearing:
+        if self.__config['useGearing']:
             gearingPortMotor.run_target(300, 0, Stop.HOLD, True)    #reset gearing
 
         time.sleep(0.3)
 
     def breakMotors(self):
-        if config.robotType == 'NORMAL':
+        if self.__config['robotType'] == 'NORMAL':
             lMotor.run_angle(100, 0, Stop.HOLD, False)
             rMotor.run_angle(100, 0, Stop.HOLD, False)
         else:
@@ -119,7 +119,7 @@ class Charlie():
             #turn the angle
             if deg > 0:
                 while self.__gyro.angle() - startValue < deg:
-                    if config.robotType == 'NORMAL':
+                    if self.__config['robotType'] == 'NORMAL':
                         __lMotor.dc(speed)
                     else:
                         __fLMotor.dc(speed)
@@ -133,7 +133,7 @@ class Charlie():
                         return
             else:
                 while self.__gyro.angle() - startValue > deg:
-                    if config.robotType == 'NORMAL':
+                    if self.__config['robotType'] == 'NORMAL':
                         __lMotor.dc(-speed)
                     else:
                         __fLMotor.dc(-speed)
@@ -153,7 +153,7 @@ class Charlie():
             #turn the angle
             if deg > 0:
                 while self.__gyro.angle() - startValue < deg:
-                    if config.robotType == 'NORMAL':
+                    if self.__config['robotType'] == 'NORMAL':
                         __rMotor.dc(-speed)
                     else:
                         __fRMotor.dc(-speed)
@@ -167,7 +167,7 @@ class Charlie():
                         return                 
             else:
                 while self.__gyro.angle() - startValue > deg:
-                    if config.robotType == 'NORMAL':
+                    if self.__config['robotType'] == 'NORMAL':
                         __rMotor.dc(speed)
                     else:
                         __fRMotor.dc(speed)
@@ -185,7 +185,7 @@ class Charlie():
             #turn the angle
             if deg > 0:
                 while self.__gyro.angle() - startValue < deg:
-                    if config.robotType == 'NORMAL':
+                    if self.__config['robotType'] == 'NORMAL':
                         __rMotor.dc(-speed / 2)
                         __lMotor.dc(speed / 2)
                     else:
@@ -203,7 +203,7 @@ class Charlie():
                     
             else:
                 while self.__gyro.angle() - startValue > deg:
-                    if config.robotType == 'NORMAL':
+                    if self.__config['robotType'] == 'NORMAL':
                         __rMotor.dc(speed / 2)
                         __lMotor.dc(-speed / 2)
                     else:
@@ -224,11 +224,11 @@ class Charlie():
         correctionStrength = 2 # how strongly the self will correct. 2 = default, 0 = nothing
         startValue = self.__gyro.angle()
         
-        revs = dist / (config.wheelDiameter * math.pi) # convert the input (cm) to revs
+        revs = dist / (self.__config['wheelDiameter'] * math.pi) # convert the input (cm) to revs
         revs = revs / 2
 
         #drive
-        if config.robotType == 'NORMAL':
+        if self.__config['robotType'] == 'NORMAL':
             self.__rMotor.reset_angle(0)
             if revs > 0:
                 while revs > self.__rMotor.angle() / 360:
@@ -267,7 +267,7 @@ class Charlie():
                     if any(self.brick.buttons()):
                             return
 
-        elif config.robotType == 'ALLWHEEL':
+        elif self.__config['robotType'] == 'ALLWHEEL':
             self.__fRMotor.reset_angle(0)
             if revs > 0:
                 while revs > self.__fRMotor.angle() / 360:
@@ -313,7 +313,7 @@ class Charlie():
     def straightMecanum(self, speed, dist, ang):
         """Driving a straight line of dist cm with speed in ang direction. Only working with MECANUM Type"""
         self.__fRMotor.reset_angle(0)
-        revs = dist / (config.wheelDiameter * math.pi) # convert the input (cm) to revs
+        revs = dist / (self.__config['wheelDiameter'] * math.pi) # convert the input (cm) to revs
         speed = speed * 1.7 * 6 # convert speed form % to deg/min
 
         # driving the robot into the desired direction
@@ -372,7 +372,7 @@ class Charlie():
         speed = speed * 1.7 * 6 # speed in deg/s to %
         # move count times forwards and backwards
         while i < count:
-            if config.robotType == 'NORMAL':
+            if self.__config['robotType'] == 'NORMAL':
                 ang = self.__lMotor.angle()
                 # drive backwards
                 self.__rMotor.run_angle(speed, revs * -360, Stop.BRAKE, False)
@@ -389,7 +389,7 @@ class Charlie():
                     if any(self.brick.buttons()):
                         return
             
-            elif config.robotType == 'ALLWHEEL' or config.robotType == 'MECANUM':
+            elif self.__config['robotType'] == 'ALLWHEEL' or self.__config['robotType'] == 'MECANUM':
                 ang = self.__lMotor.angle()
                 # drive backwards
                 self.__fRMotor.run_angle(speed, revs * -360, Stop.BRAKE, False)
@@ -419,11 +419,11 @@ class Charlie():
         startValue = self.__gyro.angle()
         
         #claculate revs for the second wheel
-        pathOutside = config.wheelDiameter * 2 * math.pi * revs1
+        pathOutside = self.__config['wheelDiameter'] * 2 * math.pi * revs1
         rad1 = pathOutside / (math.pi * (deg / 180))
-        rad2 = rad1 - config.wheelDistance
+        rad2 = rad1 - self.__config['wheelDistance']
         pathInside = rad2 * math.pi * (deg/180)
-        revs2 = pathInside / (config.wheelDiameter * 2 * math.pi)
+        revs2 = pathInside / (self.__config['wheelDiameter'] * 2 * math.pi)
 
         #claculate the speed for the second wheel
         relation = revs1 / revs2
@@ -532,7 +532,7 @@ class Charlie():
     def toWall(self, speed, *args):
         """drives backwards with speed until it reaches a wall"""
         while not touch.pressed():
-            if config.robotType == 'NORMAL':
+            if self.__config['robotType'] == 'NORMAL':
                 self.__rMotor.dc(- abs(speed))
                 self.__lMotor.dc(- abs(speed))
             else:
