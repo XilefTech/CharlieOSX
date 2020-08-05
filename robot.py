@@ -4,6 +4,7 @@ from pybricks.parameters import (Port, Direction)
 class Charlie():
     '''This is the main class of the robot. It contains all the functions CharlieOSX has to offer'''
     def __init__(self, config, settings, brick, logger):
+        logger.info(self, 'Starting initialisation of Charlie')
         self.__config = config
         self.__settings = settings
 
@@ -15,23 +16,26 @@ class Charlie():
         self.logger.debug(self, "Starting sensor initialisation...")
         try:
             self.__gyro = GyroSensor(self.__conf2port[self.__config['gyroSensorPort']]) if self.__config['gyroSensorPort'] != 0 else 0
+            self.logger.debug(self, 'Gyrosensor initialized sucessfully on port %s' % self.__config['gyroSensorPort'])
         except Exception as exception:
             self.__gyro = 0
-            self.logger.error(self, "Failed to initialize the Gyro-Sensor - Are u sure it's connected (to the right port)?", exception)
+            self.logger.error(self, "Failed to initialize the Gyro-Sensor - Are u sure it's connected to Port %s?" % exception, exception)
         try:
             self.__rLight = ColorSensor(self.__conf2port[self.__config['rightLightSensorPort']]) if self.__config['rightLightSensorPort'] != 0 else 0
+            self.logger.debug(self, 'Colorsensor initialized sucessfully on port %s' % self.__config['rightLightSensorPort'])
         except Exception as exception:
-            self.logger.error(self, "Failed to initialize the right Color-Sensor - Are u sure it's connected (to the right port)?", exception)
+            self.logger.error(self, "Failed to initialize the right Color-Sensor - Are u sure it's connected to Port %s?" % exception, exception)
         try:
             self.__lLight = ColorSensor(self.__conf2port[self.__config['leftLightSensorPort']]) if self.__config['leftLightSensorPort'] != 0 else 0  
+            self.logger.debug(self, 'Colorsensor initialized sucessfully on port %s' % self.__config['leftLightSensorPort'])
         except Exception as exception:
-            self.logger.error(self, "Failed to initialize the left Color-Sensor - Are u sure it's connected (to the right port)?", exception)
+            self.logger.error(self, "Failed to initialize the left Color-Sensor - Are u sure it's connected to Port %s?" % exception, exception)
         try:
             self.__touch = TouchSensor(self.__conf2port[self.__config['backTouchSensor']]) if self.__config['backTouchSensor'] != 0 else 0
+            self.logger.debug(self, 'Touchsensor initialized sucessfully on port %s' % self.__config['backTouchSensor'])
         except Exception as exception:
-            self.logger.error(self, "Failed to initialize the Touch-Sensor - Are u sure it's connected (to the right port)?", exception)
+            self.logger.error(self, "Failed to initialize the Touch-Sensor - Are u sure it's connected to Port %s?" % exception, exception)
         self.logger.debug(self, "Sensor initialisation done")
-
         self.logger.debug(self, "Starting motor initialisation...")
         if self.__config['robotType'] == 'NORMAL':
             try:
@@ -58,14 +62,15 @@ class Charlie():
                 self.__fLMotor = Motor(self.__conf2port[self.__config['frontLeftMotorPort']], Direction.CLOCKWISE if (not self.__config['frontLeftMotorInverted']) else Direction.COUNTERCLOCKWISE) if (self.__config['frontLeftMotorPort'] != 0) else 0
                 self.__bLMotor = Motor(self.__conf2port[self.__config['backLeftMotorPort']], Direction.CLOCKWISE if (not self.__config['backLeftMotorInverted']) else Direction.COUNTERCLOCKWISE) if (self.__config['backLeftMotorPort'] != 0) else 0
             except Exception as exception:
-                self.logger.error(self, "Failed to initialize movement motors for robot type %s - Are u sure they\'re all connected?" % config['robotType'], exception)
+                self.logger.error(self, "Failed to initialize movement motors for robot type %s - Are u sure they\'re all connected? Errored at Port" % config['robotType'], exception)
         self.logger.debug(self, "Motor initialisation done")
+        self.logger.info(self, 'Charlie initialized')
     #TODO
     def __repr__(self):
         return "TODO"
     #TODO
     def __str__(self):
-        return "TODO"   
+        return "Charlie"   
 
     def execute(self, params):
         '''Starts the different Driving modules according to the given parameters'''

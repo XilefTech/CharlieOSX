@@ -21,16 +21,16 @@ class CharlieOSX:
                 sorted_settings['types'] = settings['types']
             self.__settings = sorted_settings
         except:
-            settings = OrderedDict({'options': OrderedDict({'Debug Driving': 2, 'Audio-Volume': 80, 'EFX-Volume': 25, 'Console-Log': True, 'Show Warnings': True, 'Show Errors': True}),
+            settings = OrderedDict({'options': OrderedDict({'Debug Driving': 2, 'Audio-Volume': 80, 'EFX-Volume': 25, 'loggingLevel': 0, 'Show Warnings': True, 'Show Errors': True}),
                                     'values': {
-                                        'min': {'Debug Driving': 0, 'Audio-Volume': 0, 'EFX-Volume': 0, 'Console-Log': False, 'Show Warnings': False, 'Show Errors': False},
-                                        'max': {'Debug Driving': 2, 'Audio-Volume': 100, 'EFX-Volume': 100, 'Console-Log': True, 'Show Warnings': True, 'Show Errors': True}},
-                                    'types': {'Debug Driving': 'int', 'Audio-Volume': 'int', 'EFX-Volume': 'int', 'Console-Log': 'bool', 'Show Warnings': 'bool', 'Show Errors': 'bool'}})
+                                        'min': {'Debug Driving': 0, 'Audio-Volume': 0, 'EFX-Volume': 0, 'loggingLevel': 0, 'Show Warnings': False, 'Show Errors': False},
+                                        'max': {'Debug Driving': 2, 'Audio-Volume': 100, 'EFX-Volume': 100, 'loggingLevel': 3, 'Show Warnings': True, 'Show Errors': True}},
+                                    'types': {'Debug Driving': 'int', 'Audio-Volume': 'int', 'EFX-Volume': 'int', 'loggingLevel': 'int', 'Show Warnings': 'bool', 'Show Errors': 'bool'}})
             self.__settings = settings
         self.__logfilePath = logfilePath
         self.brick = EV3Brick()
         self.__config = parseConfig(configPath)
-        self.logger = Logger(self.__config, self.__logfilePath, self.brick)
+        self.logger = Logger(self.__config, self.__settings, self.__logfilePath, self.brick)
         self.robot = Charlie(self.__config, self.__settings, self.brick, self.logger)
         self.ui = UI(self.__config, self.__settings, self.brick, self.logger)
     #TODO
@@ -38,14 +38,19 @@ class CharlieOSX:
         return "TODO"
     #TODO
     def __str__(self):
-        return "TODO"   
+        return "CharlieOSX"   
 
     def storeSettings(self, data, path):
-        with open(path, 'w') as f:
-            f.write(json.dumps(data, sort_keys = False))
+        try:
+            with open(path, 'w') as f:
+                f.write(json.dumps(data, sort_keys = False))
+            self.logger.info(self, 'Successfully stored settings')
+        except Exception as exception:
+            self.logger.error(self, 'Failed to store settings to %s' % path, exception)
 
     def applySettings(self, settings):
         charlie.speaker.set_volume(settings['options']['Audio-Volume'] * 0.9, 'Beep')
         charlie.speaker.set_volume(settings['options']['EFX-Volume'] * 0.9, 'PCM')
+        self.logger.debug(self, 'Applied settings')
 
 

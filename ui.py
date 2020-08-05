@@ -1,15 +1,17 @@
 class UI:
     def __init__(self, config, settings, brick, logger):
+        logger.info(self, 'Starting UI initialisation')
         self.__config = config
         self.__settings = settings
         self.brick = brick
         self.logger = logger
+        self.logger.info(self, 'UI initialized')
     #TODO
     def __repr__(self):
         return "TODO"
     #TODO
     def __str__(self):
-        return "TODO"
+        return "UI"
 
     def mainLoop(self):
         menuState, oldMenuState, position = 0, 0, 0
