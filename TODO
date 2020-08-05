@@ -1,7 +1,6 @@
 + make straightMecanum() abortalble with brick buttons
 + add function to set a speed to all driving motors in robot.py
 o cleanup of Logger
-+ improvement of logging
 + documentation throughout the whole program
 + add posibility for only one colorSensor in Front through config and robot.py
 + line following mode
