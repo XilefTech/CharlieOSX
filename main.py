@@ -17,7 +17,7 @@ lineMap = {'height' : 300, 'width' : 1000,
             'obstacles' : [((2, 1), (4, 1))]}
 
 tools.doIntersect(lineMap)"""
-os = CharlieOSX('config.cfg', 'settings.json', '/logs/')
+os = CharlieOSX('config.cfg', 'settings.json', '')
 
 #runs menu
 #ui.mainLoop()
