@@ -36,7 +36,7 @@ class CharlieOSX:
         self.__config = parseConfig(configPath)
         self.logger = Logger(self.__config, self.__settings, self.__logfilePath, self.brick)
         self.robot = Charlie(self.__config, self.__settings, self.brick, self.logger)
-        self.ui = UI(self.__config, self.__settings, self.brick, self.logger)
+        self.ui = UI(self.__config, self.__settings, self.brick, self.logger, settingsPath, self.storeSettings)
     #TODO
     def __repr__(self):
         return "TODO"
