@@ -60,22 +60,22 @@ class Logger:
         return timeString
 
     def debug(self, method, msg):
-        if self.__settings['options']['loggingLevel'] <= 0:
+        if self.__settings['options']['Logging-level'] <= 0:
             print(self.getFormattedTime(), '[%s] [Debug]' % str(method), msg)
             self.__logFile.write('%s [%s] [Debug] %s\n' % (self.getFormattedTime(), str(method), msg))
 
     def info(self, method, msg):
         ''' Makes a log output, without showing anything on the EV3 screen'''
-        if self.__settings['options']['loggingLevel'] <= 1:
+        if self.__settings['options']['Logging-level'] <= 1:
             print(self.getFormattedTime(), '[%s] [Info]' % str(method), msg)
             self.__logFile.write('%s [%s] [Info] %s\n' % (self.getFormattedTime(), str(method), msg))
 
     def warn(self, method, msg):
-        if self.__settings['options']['loggingLevel'] <= 2:
+        if self.__settings['options']['Logging-level'] <= 2:
             print(self.getFormattedTime(), '[%s] [Warning]' % str(method), msg)
             self.__logFile.write('%s [%s] [Warning] %s\n' % (self.getFormattedTime(), str(method), msg))
         
-        if True:
+        if self.__settings['options']['Show Errors']:
             self.__sound(SoundFile.GENERAL_ALERT)
             self.__brick.screen.draw_image(26, 24, 'assets/graphics/notifications/warn.png', transparent = Color.RED)
             self.__brick.screen.draw_text(31, 34, msg, text_color = Color.BLACK)
@@ -103,11 +103,11 @@ class Logger:
 
     def error(self, method, msg, exception):
         exception = str(exception)
-        if self.__settings['options']['loggingLevel'] <= 3:
+        if self.__settings['options']['Logging-level'] <= 3:
             print(self.getFormattedTime(), '[%s] [Error]' % str(method), msg, exception)
             self.__logFile.write('%s [%s] [Error] %s: %s\n' % (self.getFormattedTime(), str(method), msg, exception))
         
-        if True:
+        if self.__settings['options']['Show Errors']:
             self.__sound(SoundFile.GENERAL_ALERT)
             self.__brick.screen.draw_image(26, 24, 'assets/graphics/notifications/error.png', transparent = Color.RED)
             self.__brick.screen.set_font(Font(family = 'arial', size = 7))

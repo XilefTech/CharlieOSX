@@ -1,3 +1,4 @@
+import json
 from robot import Charlie
 from logging import Logger
 from ui import UI
@@ -9,7 +10,7 @@ from collections import OrderedDict
 class CharlieOSX:
     '''TODO'''
     def __init__(self, configPath, settingsPath, logfilePath):
-        order = ['Debug Driving', 'Audio-Volume', 'EFX-Volume', 'Console-Log', 'Show Warnings', 'Show Errors']
+        order = ['Debug Driving', 'Audio-Volume', 'EFX-Volume', 'Logging-level', 'Show Warnings', 'Show Errors']
         try:
             with open(settingsPath, 'r') as f:
                 settings = json.load(f)
@@ -20,12 +21,15 @@ class CharlieOSX:
                 sorted_settings['values'] = settings['values']
                 sorted_settings['types'] = settings['types']
             self.__settings = sorted_settings
-        except:
-            settings = OrderedDict({'options': OrderedDict({'Debug Driving': 2, 'Audio-Volume': 80, 'EFX-Volume': 25, 'loggingLevel': 0, 'Show Warnings': True, 'Show Errors': True}),
+        except Exception as exception:
+            print('No settings found, falling back to default values \t caused by:', exception)
+            settings = OrderedDict({'options': OrderedDict({'Debug Driving': 2, 'Audio-Volume': 80, 'EFX-Volume': 25, 'Logging-level': 0, 'Show Warnings': True, 'Show Errors': True}),
                                     'values': {
-                                        'min': {'Debug Driving': 0, 'Audio-Volume': 0, 'EFX-Volume': 0, 'loggingLevel': 0, 'Show Warnings': False, 'Show Errors': False},
-                                        'max': {'Debug Driving': 2, 'Audio-Volume': 100, 'EFX-Volume': 100, 'loggingLevel': 3, 'Show Warnings': True, 'Show Errors': True}},
-                                    'types': {'Debug Driving': 'int', 'Audio-Volume': 'int', 'EFX-Volume': 'int', 'loggingLevel': 'int', 'Show Warnings': 'bool', 'Show Errors': 'bool'}})
+                                        'min': {'Debug Driving': 0, 'Audio-Volume': 0, 'EFX-Volume': 0, 'Logging-level': 0, 'Show Warnings': False, 'Show Errors': False},
+                                        'max': {'Debug Driving': 2, 'Audio-Volume': 100, 'EFX-Volume': 100, 'Logging-level': 3, 'Show Warnings': True, 'Show Errors': True}},
+                                    'types': {'Debug Driving': 'int', 'Audio-Volume': 'int', 'EFX-Volume': 'int', 'Logging-level': 'int', 'Show Warnings': 'bool', 'Show Errors': 'bool'}})
+            with open(settingsPath, 'w') as f:
+                f.write(json.dumps(settings, sort_keys = False))
             self.__settings = settings
         self.__logfilePath = logfilePath
         self.brick = EV3Brick()
