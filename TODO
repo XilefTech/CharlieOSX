@@ -8,3 +8,4 @@ o cleanup of imports
 + use sensors only when connected
 + do configParser error handling porperly
 + error messaging loadsettings
++ automatic region detection based on ip location + timezone time adjustment 
