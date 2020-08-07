@@ -77,15 +77,15 @@ class Charlie():
 
         if self.__brick.battery.voltage()() <= 7500:
             self.logger.warn("Please charge the battery. Only %sV left. We recommend least 7.5 Volts for accurate and repeatable results." % self.brick.battery.voltage() * 0.001)
-            return 'failed to execute: Battery to low'
-
+            return
         if self.__gyro == 0:
             self.logger.error(self, "Cannot drive without gyro", '')
-            return 'error: no gyro'
+            return
 
         __gyro.reset_angle(0)
         while params != [] and not any(self.brick.buttons()):
-            mode, arg1, arg2, arg3 = params.pop(0), params.pop(0), params.pop(0), params.pop(0)
+            pparams = params.pop(0)
+            mode, arg1, arg2, arg3 = pparams.pop(0), pparams.pop(0), pparams.pop(0), pparams.pop(0)
 
             methods = { 4: turn(),
                         5: action(),
