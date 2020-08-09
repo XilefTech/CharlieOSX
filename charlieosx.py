@@ -36,7 +36,7 @@ class CharlieOSX:
         self.__config = parseConfig(configPath)
         self.logger = Logger(self.__config, self.__settings, self.__logfilePath, self.brick)
         self.robot = Charlie(self.__config, self.__settings, self.brick, self.logger)
-        self.ui = UI(self.__config, self.__settings, self.brick, self.logger, settingsPath, self.storeSettings)
+        self.ui = UI(self.__config, self.__settings, self.brick, self.logger, settingsPath, self.storeSettings, self.applySettings)
     #TODO
     def __repr__(self):
         return "TODO"
@@ -53,8 +53,8 @@ class CharlieOSX:
             self.logger.error(self, 'Failed to store settings to %s' % path, exception)
 
     def applySettings(self, settings):
-        charlie.speaker.set_volume(settings['options']['Audio-Volume'] * 0.9, 'Beep')
-        charlie.speaker.set_volume(settings['options']['EFX-Volume'] * 0.9, 'PCM')
+        self.brick.speaker.set_volume(settings['options']['Audio-Volume'] * 0.9, 'Beep')
+        self.brick.speaker.set_volume(settings['options']['EFX-Volume'] * 0.9, 'PCM')
         self.logger.debug(self, 'Applied settings')
 
 
