@@ -102,10 +102,9 @@ class Logger:
             self.__refreshScreenNeeded = 1
 
     def error(self, method, msg, exception):
-        exception = str(exception)
         if self.__settings['options']['Logging-level'] <= 3:
-            print(self.getFormattedTime(), '[%s] [Error]' % str(method), msg, exception)
-            self.__logFile.write('%s [%s] [Error] %s: %s\n' % (self.getFormattedTime(), str(method), msg, exception))
+            print(self.getFormattedTime(), '[%s] [Error]' % str(method), msg, type(exception).__name__, str(exception))
+            self.__logFile.write('%s [%s] [Error] %s: %s: %s\n' % (self.getFormattedTime(), str(method), msg, type(exception).__name__, str(exception)))
         
         if self.__settings['options']['Show Errors']:
             self.__sound(SoundFile.GENERAL_ALERT)
