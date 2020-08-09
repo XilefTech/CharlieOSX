@@ -71,8 +71,7 @@ class UI:
                             self.__settings['options'][keys[position]] = self.__settings['values']['min'][keys[position]]
                     self.__sound(self.__click)
                     self.drawSettings(position, self.__settings, selected)
-                if Button.DOWN in self.brick.buttons.pressed():
-                    if selected:
+                if Button.DOWN in self.brick.buttons.pressed() and selected:
                         if self.__settings['options'][keys[position]] > self.__settings['values']['min'][keys[position]]:
                             self.__settings['options'][keys[position]] -= 1
                         elif self.__settings['options'][keys[position]] == self.__settings['values']['min'][keys[position]]:
@@ -110,13 +109,10 @@ class UI:
                     self.__sound(self.__confirm)
                 time.sleep(0.08)
                 self.animate(menuState, False)
-                menuState = menuState / 10
-                self.drawMenu(menuState)
                 else:
                     self.__sound(self.__click)
                     menuState = menuState / 10
-                    self.drawMenu(menuState)
-                oldMenuState = menuState ##### to be deleted
+                self.drawMenu(menuState, position = position, selected = selected)
                 time.sleep(0.4)
 
             if Button.UP in self.brick.buttons.pressed() and not selected:
