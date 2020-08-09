@@ -82,24 +82,24 @@ class Charlie():
             self.logger.error(self, "Cannot drive without gyro", '')
             return
 
-        __gyro.reset_angle(0)
+        self.__gyro.reset_angle(0)
         while params != [] and not any(self.brick.buttons()):
             pparams = params.pop(0)
             mode, arg1, arg2, arg3 = pparams.pop(0), pparams.pop(0), pparams.pop(0), pparams.pop(0)
 
-            methods = { 4: turn(),
-                        5: action(),
-                        7: straight(),
-                        9: intervall(),
-                        11: curve(),
-                        12: toColor(),
-                        15: toWall()}
+            methods = { 4: self.turn(),
+                        5: self.action(),
+                        7: self.straight(),
+                        9: self.intervall(),
+                        11: self.curve(),
+                        12: self.toColor(),
+                        15: self.toWall()}
             
             methods[mode](arg1, arg2, arg3)
             
-        breakMotors()
+        self.breakMotors()
         if self.__config['useGearing']:
-            gearingPortMotor.run_target(300, 0, Stop.HOLD, True)    #reset gearing
+            self.__gearingPortMotor.run_target(300, 0, Stop.HOLD, True)    #reset gearing
 
         time.sleep(0.3)
 
