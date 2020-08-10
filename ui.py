@@ -1,15 +1,13 @@
-import _thread, time
+import _thread, time, json
 from pybricks.parameters import Button, Color
 from pybricks.media.ev3dev import Image, ImageFile, Font, SoundFile
 
 class UI:
-    def __init__(self, config, settings, brick, logger, settingsPath, storeSettings, applySettings):
+    def __init__(self, config, settings, brick, logger, settingsPath):
         logger.info(self, 'Starting UI initialisation')
         self.__config = config
         self.__settings = settings
         self.__settingsPath = settingsPath
-        self.__storeSettings = storeSettings
-        self.__applySettings = applySettings
         self.__click = 'assets/media/click.wav'
         self.__confirm = 'assets/media/confirm.wav'
         self.brick = brick
@@ -44,24 +42,7 @@ class UI:
                     menuState = menuState / 10
                 
             elif menuState > 100 and menuState < 200:
-                '''if Button.UP in self.brick.buttons.pressed():
-                    if position > 0:
-                        position -= 1
-                    elif position == 0:
-                        position = len(self.__config['runNames']) - 1
-                if Button.DOWN in self.brick.buttons.pressed():
-                    if position < len(self.__config['runNames']) - 1:
-                        position += 1
-                    elif position == len(self.__config['runNames']) - 1:
-                        position = 0'''
-                '''if position != oldPos1:
-                    self.drawExtendableList(pos1, [[7, 11, 50, 0], [11, 12, 50, 0]])
-                    oldPos1 = position'''
-                '''if Button.LEFT in self.brick.buttons.pressed():
-                    self.logger.debug(self, 'own left method %s, %s' % (menuState, pos1))
-                    self.__sound('assets/media/click.wav')
-                    menuState = 10
-                    time.sleep(0.3)'''
+                pass
 
             elif menuState == 50: #settings Menu
                 if Button.UP in self.brick.buttons.pressed() and selected:
@@ -332,4 +313,15 @@ class UI:
         elif pos == len(llist) - 1:
             drawOptions(pos - 4)
 
+    def __storeSettings(self, data, path):
+        try:
+            with open(path, 'w') as f:
+                f.write(json.dumps(data, sort_keys = False))
+            self.logger.info(self, 'Successfully stored settings')
+        except Exception as exception:
+            self.logger.error(self, 'Failed to store settings to %s' % path, exception)
 
+    def __applySettings(self, settings):
+        self.brick.speaker.set_volume(settings['options']['Audio-Volume'] * 0.9, 'Beep')
+        self.brick.speaker.set_volume(settings['options']['EFX-Volume'] * 0.9, 'PCM')
+        self.logger.debug(self, 'Applied settings')
