@@ -30,7 +30,7 @@ class UI:
         _thread.start_new_thread(__playSoundFile, (file, ))
 
     def mainLoop(self):
-        menuState, oldMenuState, position, pos1 = 0, 0, 0, 0
+        menuState, position, oldPos = 0, 0, 0
         selected = False
         self.toAnimate = [10, 20, 30, 40, 50]
         loop, selected = True, False
@@ -38,47 +38,46 @@ class UI:
         keys = list(self.__settings['options'].keys())
         self.__storeSettings(self.__settings, self.__settingsPath)
         while loop:
-            # navigation inbetween main pages
-            if menuState == 0:
-                if Button.UP in self.brick.buttons.pressed():
-                    menuState = 5
-                elif Button.DOWN in self.brick.buttons.pressed():
-                    menuState = 1
-            elif menuState > 0 and menuState < 6:
-                if Button.UP in self.brick.buttons.pressed() and menuState > 1:
-                    menuState -= 1
-                elif Button.UP in self.brick.buttons.pressed() and menuState == 1:
-                    menuState = 5
-                if Button.DOWN in self.brick.buttons.pressed() and menuState < 5:
-                    menuState += 1
-                elif Button.DOWN in self.brick.buttons.pressed() and menuState == 5:
-                    menuState = 1
-            
-            # subMenus
-            elif menuState == 50: #settings Menu
-
-                if Button.UP in self.brick.buttons.pressed():
-                    if not selected:
-                        if position > 0:
-                            position -= 1
-                        elif position == 0:
+            if menuState == 10:
+                if len(self.__config['runNames']) > 99:
+                    logger.error(self, 'Maximum of runs exceeded. Please lower your number of runs to a maximum of 99', '')
+                    menuState = menuState / 10
+                
+            elif menuState > 100 and menuState < 200:
+                '''if Button.UP in self.brick.buttons.pressed():
+                    if position > 0:
+                        position -= 1
+                    elif position == 0:
+                        position = len(self.__config['runNames']) - 1
+                if Button.DOWN in self.brick.buttons.pressed():
+                    if position < len(self.__config['runNames']) - 1:
+                        position += 1
+                    elif position == len(self.__config['runNames']) - 1:
+                        position = 0'''
+                '''if position != oldPos1:
+                    self.drawExtendableList(pos1, [[7, 11, 50, 0], [11, 12, 50, 0]])
+                    oldPos1 = position'''
+                '''if Button.LEFT in self.brick.buttons.pressed():
+                    self.logger.debug(self, 'own left method %s, %s' % (menuState, pos1))
+                    self.__sound('assets/media/click.wav')
+                    menuState = 10
+                    time.sleep(0.3)'''
 
             elif menuState == 50: #settings Menu
                 if Button.UP in self.brick.buttons.pressed() and selected:
-                        if self.__settings['options'][keys[position]] < self.__settings['values']['max'][keys[position]]:
-                            self.__settings['options'][keys[position]] += 1
-                        elif self.__settings['options'][keys[position]] == self.__settings['values']['max'][keys[position]]:
-                            self.__settings['options'][keys[position]] = self.__settings['values']['min'][keys[position]]
+                    if self.__settings['options'][keys[position]] < self.__settings['values']['max'][keys[position]]:
+                        self.__settings['options'][keys[position]] += 1
+                    elif self.__settings['options'][keys[position]] == self.__settings['values']['max'][keys[position]]:
+                        self.__settings['options'][keys[position]] = self.__settings['values']['min'][keys[position]]
                     self.__sound(self.__click)
                     self.drawSettings(position, self.__settings, selected)
                 if Button.DOWN in self.brick.buttons.pressed() and selected:
-                        if self.__settings['options'][keys[position]] > self.__settings['values']['min'][keys[position]]:
-                            self.__settings['options'][keys[position]] -= 1
-                        elif self.__settings['options'][keys[position]] == self.__settings['values']['min'][keys[position]]:
-                            self.__settings['options'][keys[position]] = self.__settings['values']['max'][keys[position]]
-                        self.__sound('assets/media/click.wav')
-                        self.drawSettings(position, self.__settings, selected)
-                            
+                    if self.__settings['options'][keys[position]] > self.__settings['values']['min'][keys[position]]:
+                        self.__settings['options'][keys[position]] -= 1
+                    elif self.__settings['options'][keys[position]] == self.__settings['values']['min'][keys[position]]:
+                        self.__settings['options'][keys[position]] = self.__settings['values']['max'][keys[position]]
+                    self.__sound('assets/media/click.wav')
+                    self.drawSettings(position, self.__settings, selected)
                 if Button.CENTER in self.brick.buttons.pressed():
                     self.logger.debug(self, 'Center button pressed from %s' % selected)
                     if selected:
@@ -87,31 +86,33 @@ class UI:
                     selected = not selected
                     self.drawMenu(menuState, position = position, selected = selected)
                     time.sleep(0.3)
-
+            
             if Button.RIGHT in self.brick.buttons.pressed() and not selected:
                 self.logger.debug(self, 'Right button triggered at %s' % menuState)
                 menuState = menuState * 10
                 if menuState in self.toAnimate:
                     self.__sound(self.__confirm)
-                time.sleep(0.08)
+                    time.sleep(0.08)
                     position = 0
-                self.animate(menuState, True)
-                    self.drawMenu(menuState, position = position, selected = selected)
+                    self.animate(menuState, True)
+                if menuState == 100:
+                    menuState += position + 1
                 else:
                     self.__sound(self.__click)
-                self.drawMenu(menuState)
-                oldMenuState = menuState ##### to be deleted
+                self.drawMenu(menuState, position = position, selected = selected)
                 time.sleep(0.4)
 
             if Button.LEFT in self.brick.buttons.pressed() and not selected:
                 self.logger.debug(self, 'Left button triggered at %s' % menuState)
                 if menuState in self.toAnimate:
                     self.__sound(self.__confirm)
-                time.sleep(0.08)
-                self.animate(menuState, False)
+                    time.sleep(0.08)
+                    self.animate(menuState, False)
+                elif menuState > 100 and menuState < 200:
+                    menuState = 100
                 else:
                     self.__sound(self.__click)
-                    menuState = menuState / 10
+                menuState = menuState / 10
                 self.drawMenu(menuState, position = position, selected = selected)
                 time.sleep(0.4)
 
@@ -122,14 +123,15 @@ class UI:
                     position = len(self.__settings['options']) - 1
                 elif menuState == 50:
                     position -= 1
+                elif (menuState == 10 or (menuState > 100 and menuState < 200)) and position == 0:
+                    position = len(self.__config['runNames']) - 1
+                elif menuState == 10 or (menuState > 100 and menuState < 200):
+                    position -= 1
                 elif menuState in [0, 1]:
                     menuState = 5
                 else:
                     menuState -= 1
-                if menuState == 50:
-                    self.drawMenu(menuState, position = position, selected = selected)
-                else:
-                    self.drawMenu(menuState)
+                self.drawMenu(menuState, position = position, selected = selected)
                 time.sleep(0.3)
 
             if Button.DOWN in self.brick.buttons.pressed() and not selected:
@@ -139,14 +141,15 @@ class UI:
                     position = 0
                 elif menuState == 50:
                     position += 1
+                elif (menuState == 10 or (menuState > 100 and menuState < 200)) and position == len(self.__config['runNames']) - 1:
+                    position = 0
+                elif menuState == 10 or (menuState > 100 and menuState < 200):
+                    position += 1
                 elif menuState in [0, 5]:
                     menuState = 1
                 else:
                     menuState += 1
-                if menuState == 50:
-                    self.drawMenu(menuState, position = position, selected = selected)
-                else:
-                self.drawMenu(menuState)
+                self.drawMenu(menuState, position = position, selected = selected)
                 time.sleep(0.3)
 
             if self.logger.getScreenRefreshNeeded() == 1:
@@ -163,7 +166,9 @@ class UI:
                 }
         try:
             if menuState in range(0, 6):
-            self.brick.screen.draw_image(0, 0, menus[menuState], transparent = Color.RED)
+                self.brick.screen.draw_image(0, 0, menus[menuState], transparent = Color.RED)
+            elif menuState == 10:
+                self.drawList(kwargs['position'], self.__config['runNames'])
             elif menuState == 50:
                 self.drawSettings(kwargs['position'], self.__settings, kwargs['selected'])
         except Exception as exception:
