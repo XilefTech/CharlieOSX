@@ -119,7 +119,21 @@ class Charlie():
 
         #turn only with left motor
         if port == 2:
-            #right motor off
+            turnLeftMotorOnly()
+
+        #turn only with right motor
+        elif port == 3:
+            turnRightMotorOnly()
+
+        #turn with both motors
+        elif port == 23:
+            turnBothMotos()
+
+        #cancel if button pressed
+        if any(self.brick.buttons()):
+            return
+    
+    def turnLeftMotorOnly():
             __rMotor.dc(0)
             #turn the angle
             if deg > 0:
@@ -147,13 +161,9 @@ class Charlie():
                     if not self.__gyro.angle() - startValue > deg * 0.6:
                         speed = speed - _map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
 
-                    #cancel if button pressed
-                    if any(self.brick.buttons()):
-                        return
-
-        #turn only with right motor
-        elif port == 3:
-            #left motor off
+    
+    def turnRightMotorOnly():
+        #left motor off
             __lMotor.dc(0)
             #turn the angle
             if deg > 0:
@@ -167,9 +177,7 @@ class Charlie():
                     if not self.__gyro.angle() - startValue < deg * 0.6:
                         speed = speed - _map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
 
-                    #cancel if button pressed
-                    if any(self.brick.buttons()):
-                        return                 
+              
             else:
                 while self.__gyro.angle() - startValue > deg:
                     if self.__config['robotType'] == 'NORMAL':
@@ -180,14 +188,9 @@ class Charlie():
                     #slow down to not overshoot
                     if not self.__gyro.angle() - startValue > deg * 0.6:
                         speed = speed - _map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
-                    
-                    #cancel if button pressed
-                    if any(self.brick.buttons()):
-                        return
-
-        #turn with both motors
-        elif port == 23:
-            #turn the angle
+    
+    def turnBothMotors():
+        #turn the angle
             if deg > 0:
                 while self.__gyro.angle() - startValue < deg:
                     if self.__config['robotType'] == 'NORMAL':
@@ -219,11 +222,8 @@ class Charlie():
                     #slow down to not overshoot
                     if not self.__gyro.angle() - startValue > deg * 0.6:
                         speed = speed - _map(deg, 1, 360, 10, 0.01) if speed > 40 else speed
-                    
-                    #cancel if button pressed
-                    if any(self.brick.buttons()):
-                        return
-
+    
+    
     def straight(self, speed, dist, *args):
         """drives forward with speed in a straight line, corrected by the self.__gyro when in normal or allwheel mode"""
         if self.__config['robotType'] != 'MECANUM':
