@@ -1,0 +1,12 @@
++ make straightMecanum() abortalble with brick buttons
++ add function to set a speed to all driving motors in robot.py
+o cleanup of Logger
++ documentation throughout the whole program
++ add posibility for only one colorSensor in Front through config and robot.py
++ line following mode
+o cleanup of imports
++ use sensors only when connected
++ do configParser error handling porperly
++ error messaging loadsettings
++ automatic region detection based on ip location + timezone time adjustment 
++ add side buttons for value input for higher steps
