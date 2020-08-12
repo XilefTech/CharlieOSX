@@ -103,7 +103,7 @@ class Logger:
 
     def error(self, method, msg, exception):
         if self.__settings['options']['Logging-level'] <= 3:
-            print(self.getFormattedTime(), '[%s] [Error]' % str(method), msg, type(exception).__name__, str(exception))
+            print(self.getFormattedTime(), '[%s] [Error] %s: %s: %s' % (str(method), msg, type(exception).__name__, str(exception)))
             self.__logFile.write('%s [%s] [Error] %s: %s: %s\n' % (self.getFormattedTime(), str(method), msg, type(exception).__name__, str(exception)))
         
         if self.__settings['options']['Show Errors']:
