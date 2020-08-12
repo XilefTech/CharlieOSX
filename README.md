@@ -20,12 +20,12 @@ Just fill in your robot Parameters in the config.py file and everything else lik
 4. Just download and the robot will execute your instructions
 
 #### Features
-|       | Info     |
+|Feature       | Status     |
 |-------|----------|
 | Steering any of the three Robot types with the Help of the [number codes](https://docs.google.com/spreadsheets/d/1DmdYeWCkykAH5O6e8qv4fGR5aR4e66AjW1zxPTqASJo/edit?usp=sharing) | Done |
-| insert/edit the number codes on the brick itself | NYI |
+| insert/edit the number codes on the brick itself | WIP |
 | create a map with barriers and let the robot navigate on it's own   | NYI |
-| steer the robot with a remote control of some kind (actually not sure what kind), save the steered path and let it repeat it   | NYI |
+| steer the robot with a remote control of some kind (actually not sure what), save the steered path and let it repeat it   | NYI |
 | use a FLL mode with separate program slots according to the Tasks on the Field and an extra mode for executing them in a specific order at the competition itself   | NYI |
 
 
