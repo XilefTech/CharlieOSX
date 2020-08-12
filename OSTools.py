@@ -5,7 +5,7 @@ from pybricks.media.ev3dev import Image, ImageFile, Font, SoundFile
 from robotError import *
 
 import urllib2
-import json
+import ujson
 import time, _thread
 
 
