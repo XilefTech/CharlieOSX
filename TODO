@@ -9,3 +9,4 @@ o cleanup of imports
 + do configParser error handling porperly
 + error messaging loadsettings
 + automatic region detection based on ip location + timezone time adjustment 
++ add side buttons for value input for higher steps
