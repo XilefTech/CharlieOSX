@@ -10,8 +10,8 @@ Just fill in your robot Parameters in the config.py file and everything else lik
 
 ### How to use CharlieOSX with your robot:
 #### Prerequisites
-- Pybrick OS
-- Python 3.X
+- Pybricks OS
+- some kind of python (idk what exactly)
 - (Pybricks extension for VS-Code)
 
 1. Download and open this project in VS code
