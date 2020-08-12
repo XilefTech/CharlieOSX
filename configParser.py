@@ -19,16 +19,12 @@ def parseConfig(configPath):
                 elif l.find('#') == -1 and l != '':
                     keys.append(l[:l.find(':')])
                     arrMode = 1
-
-
     except Exception as exception:
         if str(exception) == '[Errno 2] ENOENT':
             print(exception)
         else:
             print(exception, type(exception), str(exception))
 
-
     for key in keys: 
         configDict[key] = values[keys.index(key)]
-
     return configDict
