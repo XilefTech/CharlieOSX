@@ -1,4 +1,5 @@
 import _thread, time, json
+from profileHelper import ProfileHelper
 from pybricks.parameters import Button, Color
 from pybricks.media.ev3dev import Image, ImageFile, Font, SoundFile
 
@@ -12,6 +13,7 @@ class UI:
         self.__confirm = 'assets/media/confirm.wav'
         self.brick = brick
         self.logger = logger
+        self.profileHelper = ProfileHelper(self.logger, self.__config)
         self.__sound_lock = _thread.allocate_lock()
         self.logger.info(self, 'UI initialized')
     #TODO
@@ -37,7 +39,7 @@ class UI:
         self.__storeSettings(self.__settings, self.__settingsPath)
         while loop:
             if menuState == 10:
-                if len(self.__config['runNames']) > 99:
+                if len(self.__config['profileNames']) > 99:
                     logger.error(self, 'Maximum of runs exceeded. Please lower your number of runs to a maximum of 99', '')
                     menuState = menuState / 10
                 
@@ -77,6 +79,7 @@ class UI:
                     position = 0
                     self.animate(menuState, True)
                 if menuState == 100:
+                    self.__sound(self.__click)
                     menuState += position + 1
                 else:
                     self.__sound(self.__click)
@@ -90,10 +93,11 @@ class UI:
                     time.sleep(0.08)
                     self.animate(menuState, False)
                 elif menuState > 100 and menuState < 200:
+                    self.__sound(self.__click)
                     menuState = 100
                 else:
                     self.__sound(self.__click)
-                menuState = menuState / 10
+                menuState = int(menuState / 10)
                 self.drawMenu(menuState, position = position, selected = selected)
                 time.sleep(0.4)
 
@@ -105,7 +109,7 @@ class UI:
                 elif menuState == 50:
                     position -= 1
                 elif (menuState == 10 or (menuState > 100 and menuState < 200)) and position == 0:
-                    position = len(self.__config['runNames']) - 1
+                    position = len(self.__config['profileNames']) - 1
                 elif menuState == 10 or (menuState > 100 and menuState < 200):
                     position -= 1
                 elif menuState in [0, 1]:
@@ -122,7 +126,7 @@ class UI:
                     position = 0
                 elif menuState == 50:
                     position += 1
-                elif (menuState == 10 or (menuState > 100 and menuState < 200)) and position == len(self.__config['runNames']) - 1:
+                elif (menuState == 10 or (menuState > 100 and menuState < 200)) and position == len(self.__config['profileNames']) - 1:
                     position = 0
                 elif menuState == 10 or (menuState > 100 and menuState < 200):
                     position += 1
@@ -149,9 +153,11 @@ class UI:
             if menuState in range(0, 6):
                 self.brick.screen.draw_image(0, 0, menus[menuState], transparent = Color.RED)
             elif menuState == 10:
-                self.drawList(kwargs['position'], self.__config['runNames'])
+                self.drawList(kwargs['position'], self.__config['profileNames'])
             elif menuState == 50:
                 self.drawSettings(kwargs['position'], self.__settings, kwargs['selected'])
+            elif menuState > 100 and menuState < 200:
+                self.drawExtendableList(kwargs['position'], self.profileHelper.getProfileData(self.__config['profileNames'][menuState - 100]))
         except Exception as exception:
             self.logger.error(self, "Could not draw menu: %s:" % type(exception).__name__, exception)
 
