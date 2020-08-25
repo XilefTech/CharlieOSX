@@ -32,6 +32,11 @@ def parseConfig(configPath):
             try:
                 element = float(values[keys.index(key)])
             except:
-                element = values[keys.index(key)]
+                if values[keys.index(key)] == 'True':
+                    element = True
+                elif values[keys.index(key)] == 'False':
+                    element = False
+                else:
+                    element = values[keys.index(key)]
         configDict[key] = element
     return configDict
