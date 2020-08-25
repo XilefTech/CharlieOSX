@@ -13,6 +13,18 @@ class Charlie():
 
         self.__conf2port = {1: Port.S1, 2: Port.S2, 3: Port.S3, 4: Port.S4, 'A': Port.A, 'B': Port.B, 'C': Port.C, 'D': Port.D}
 
+        self.__initSensors()
+        self.__initMotors()
+        
+        self.logger.info(self, 'Driving for Charlie initialized')
+    #TODO
+    def __repr__(self):
+        return "TODO"
+    #TODO
+    def __str__(self):
+        return "Charlie"   
+
+    def __initSensors(self):
         self.logger.debug(self, "Starting sensor initialisation...")
         try:
             self.__gyro = GyroSensor(self.__conf2port[self.__config['gyroSensorPort']]) if self.__config['gyroSensorPort'] != 0 else 0
@@ -36,6 +48,8 @@ class Charlie():
         except Exception as exception:
             self.logger.error(self, "Failed to initialize the Touch-Sensor - Are u sure it's connected to Port %s?" % exception, exception)
         self.logger.debug(self, "Sensor initialisation done")
+
+    def __initMotors(self):
         self.logger.debug(self, "Starting motor initialisation...")
         if self.__config['robotType'] == 'NORMAL':
             try:
@@ -62,15 +76,8 @@ class Charlie():
                 self.__fLMotor = Motor(self.__conf2port[self.__config['frontLeftMotorPort']], Direction.CLOCKWISE if (not self.__config['frontLeftMotorInverted']) else Direction.COUNTERCLOCKWISE) if (self.__config['frontLeftMotorPort'] != 0) else 0
                 self.__bLMotor = Motor(self.__conf2port[self.__config['backLeftMotorPort']], Direction.CLOCKWISE if (not self.__config['backLeftMotorInverted']) else Direction.COUNTERCLOCKWISE) if (self.__config['backLeftMotorPort'] != 0) else 0
             except Exception as exception:
-                self.logger.error(self, "Failed to initialize movement motors for robot type %s - Are u sure they\'re all connected? Errored at Port" % config['robotType'], exception)
+                self.logger.error(self, "Failed to initialize movement motors for robot type %s - Are u sure they\'re all connected? Errored at Port" % self.__config['robotType'], exception)
         self.logger.debug(self, "Motor initialisation done")
-        self.logger.info(self, 'Charlie initialized')
-    #TODO
-    def __repr__(self):
-        return "TODO"
-    #TODO
-    def __str__(self):
-        return "Charlie"   
 
     def execute(self, params):
         '''Starts the different Driving modules according to the given parameters'''
