@@ -25,10 +25,13 @@ def parseConfig(configPath):
         else:
             print(exception, type(exception), str(exception))
 
-    for key in keys: 
-        element = values[keys.index(key)]
-        if str(type(element)) == "<class 'str'>":
-            configDict[key] = int(element) if element.isdigit() else element
-        else:
-            configDict[key] = element
+    for key in keys:
+        try:
+            element = int(values[keys.index(key)])
+        except:
+            try:
+                element = float(values[keys.index(key)])
+            except:
+                element = values[keys.index(key)]
+        configDict[key] = element
     return configDict
