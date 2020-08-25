@@ -11,7 +11,7 @@ class Charlie():
         self.brick = brick
         self.logger = logger
 
-        self.__conf2port = {1: Port.S1, 2: Port.S2, 3: Port.S3, 4: Port.S4}
+        self.__conf2port = {1: Port.S1, 2: Port.S2, 3: Port.S3, 4: Port.S4, 'A': Port.A, 'B': Port.B, 'C': Port.C, 'D': Port.D}
 
         self.logger.debug(self, "Starting sensor initialisation...")
         try:
