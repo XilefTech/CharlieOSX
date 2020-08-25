@@ -26,5 +26,9 @@ def parseConfig(configPath):
             print(exception, type(exception), str(exception))
 
     for key in keys: 
-        configDict[key] = values[keys.index(key)]
+        element = values[keys.index(key)]
+        if str(type(element)) == "<class 'str'>":
+            configDict[key] = int(element) if element.isdigit() else element
+        else:
+            configDict[key] = element
     return configDict
