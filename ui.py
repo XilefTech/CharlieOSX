@@ -30,116 +30,58 @@ class UI:
         _thread.start_new_thread(__playSoundFile, (file, ))
 
     def mainLoop(self):
-        menuState, position, oldPos = 0, 0, 0
-        selected = False
+        self.menuState, self.position, self.oldPos = 0, 0, 0
+        self.selected = False
+        self.dataCache = []
         self.toAnimate = [10, 20, 30, 40, 50]
-        loop, selected = True, False
-        self.drawMenu(int(menuState))
+        loop, self.selected = True, False
+        self.drawMenu(int(self.menuState))
         keys = list(self.__settings['options'].keys())
         self.__storeSettings(self.__settings, self.__settingsPath)
         while loop:
-            if menuState == 10:
+            if self.menuState == 10:
                 if len(self.__config['profileNames']) > 99:
                     logger.error(self, 'Maximum of runs exceeded. Please lower your number of runs to a maximum of 99', '')
-                    menuState = menuState / 10
+                    self.menuState = self.menuState / 10
                 
-            elif menuState > 100 and menuState < 200:
-                pass
-
-            elif menuState == 50: #settings Menu
-                if Button.UP in self.brick.buttons.pressed() and selected:
-                    if self.__settings['options'][keys[position]] < self.__settings['values']['max'][keys[position]]:
-                        self.__settings['options'][keys[position]] += 1
-                    elif self.__settings['options'][keys[position]] == self.__settings['values']['max'][keys[position]]:
-                        self.__settings['options'][keys[position]] = self.__settings['values']['min'][keys[position]]
-                    self.__sound(self.__click)
-                    self.drawSettings(position, self.__settings, selected)
-                if Button.DOWN in self.brick.buttons.pressed() and selected:
-                    if self.__settings['options'][keys[position]] > self.__settings['values']['min'][keys[position]]:
-                        self.__settings['options'][keys[position]] -= 1
-                    elif self.__settings['options'][keys[position]] == self.__settings['values']['min'][keys[position]]:
-                        self.__settings['options'][keys[position]] = self.__settings['values']['max'][keys[position]]
-                    self.__sound('assets/media/click.wav')
-                    self.drawSettings(position, self.__settings, selected)
+            elif self.menuState > 100 and self.menuState < 200:
                 if Button.CENTER in self.brick.buttons.pressed():
-                    self.logger.debug(self, 'Center button pressed from %s' % selected)
-                    if selected:
+                    self.logger.debug(self, 'Center button pressed from %s' % self.selected)
+                    if self.selected:
+                        self.profileHelper.setProfileData(self.__config['profileNames'][menuState - 100], self.dataCache)
+                    self.selected = not self.selected
+                    self.drawMenu(menuState, position=self.position, selected=self.selected)
+                    time.sleep(0.3)
+
+            elif self.menuState == 50: #settings Menu
+                if Button.UP in self.brick.buttons.pressed() and selected:
+                    if self.__settings['options'][keys[self.position]] < self.__settings['values']['max'][keys[self.position]]:
+                        self.__settings['options'][keys[self.position]] += 1
+                    elif self.__settings['options'][keys[self.position]] == self.__settings['values']['max'][keys[self.position]]:
+                        self.__settings['options'][keys[self.position]] = self.__settings['values']['min'][keys[self.position]]
+                    self.__sound(self.__click)
+                    self.drawSettings(self.position, self.__settings, self.selected)
+                if Button.DOWN in self.brick.buttons.pressed() and self.selected:
+                    if self.__settings['options'][keys[self.position]] > self.__settings['values']['min'][keys[self.position]]:
+                        self.__settings['options'][keys[self.position]] -= 1
+                    elif self.__settings['options'][keys[self.position]] == self.__settings['values']['min'][keys[self.position]]:
+                        self.__settings['options'][keys[self.position]] = self.__settings['values']['max'][keys[self.position]]
+                    self.__sound('assets/media/click.wav')
+                    self.drawSettings(self.position, self.__settings, self.selected)
+                if Button.CENTER in self.brick.buttons.pressed():
+                    self.logger.debug(self, 'Center button pressed from %s' % self.selected)
+                    if self.selected:
                         self.__storeSettings(self.__settings, self.__settingsPath)
                         self.__applySettings(self.__settings)
-                    selected = not selected
-                    self.drawMenu(menuState, position = position, selected = selected)
+                    self.selected = not self.selected
+                    self.drawMenu(self.menuState, position=self.position, selected=self.selected)
                     time.sleep(0.3)
             
-            if Button.RIGHT in self.brick.buttons.pressed() and not selected:
-                self.logger.debug(self, 'Right button triggered at %s' % menuState)
-                menuState = menuState * 10
-                if menuState in self.toAnimate:
-                    self.__sound(self.__confirm)
-                    time.sleep(0.08)
-                    position = 0
-                    self.animate(menuState, True)
-                if menuState == 100:
-                    self.__sound(self.__click)
-                    menuState += position + 1
-                else:
-                    self.__sound(self.__click)
-                self.drawMenu(menuState, position = position, selected = selected)
-                time.sleep(0.4)
-
-            if Button.LEFT in self.brick.buttons.pressed() and not selected:
-                self.logger.debug(self, 'Left button triggered at %s' % menuState)
-                if menuState in self.toAnimate:
-                    self.__sound(self.__confirm)
-                    time.sleep(0.08)
-                    self.animate(menuState, False)
-                elif menuState > 100 and menuState < 200:
-                    self.__sound(self.__click)
-                    menuState = 100
-                else:
-                    self.__sound(self.__click)
-                menuState = int(menuState / 10)
-                self.drawMenu(menuState, position = position, selected = selected)
-                time.sleep(0.4)
-
-            if Button.UP in self.brick.buttons.pressed() and not selected:
-                self.logger.debug(self, 'Up button triggered at %s with position of %s' % (menuState, position))
-                self.__sound(self.__click)
-                if menuState == 50 and position == 0:
-                    position = len(self.__settings['options']) - 1
-                elif menuState == 50:
-                    position -= 1
-                elif (menuState == 10 or (menuState > 100 and menuState < 200)) and position == 0:
-                    position = len(self.__config['profileNames']) - 1
-                elif menuState == 10 or (menuState > 100 and menuState < 200):
-                    position -= 1
-                elif menuState in [0, 1]:
-                    menuState = 5
-                else:
-                    menuState -= 1
-                self.drawMenu(menuState, position = position, selected = selected)
-                time.sleep(0.3)
-
-            if Button.DOWN in self.brick.buttons.pressed() and not selected:
-                self.logger.debug(self, 'Down button triggered at %s with position of %s' % (menuState, position))
-                self.__sound(self.__click)
-                if menuState == 50 and position == len(self.__settings['options']) - 1:
-                    position = 0
-                elif menuState == 50:
-                    position += 1
-                elif (menuState == 10 or (menuState > 100 and menuState < 200)) and position == len(self.__config['profileNames']) - 1:
-                    position = 0
-                elif menuState == 10 or (menuState > 100 and menuState < 200):
-                    position += 1
-                elif menuState in [0, 5]:
-                    menuState = 1
-                else:
-                    menuState += 1
-                self.drawMenu(menuState, position = position, selected = selected)
-                time.sleep(0.3)
+            self._buttonActions()
 
             if self.logger.getScreenRefreshNeeded() == 1:
                 self.logger.setScreenRefreshNeeded(0)
-                menuState = menuState / 10
+                self.menuState = self.menuState / 10
 
     def drawMenu(self, menuState, **kwargs):
         menus = {0: 'assets/graphics/menus/mainMenu.png',
@@ -295,11 +237,9 @@ class UI:
                 if value + i > len(llist):
                     pass
                 elif value + i == pos:
-                    #self.brick.screen.draw_box(26, 29 + i * 20, 168, 46 + i * 20, r = 3, fill = True, color = Color.WHITE)
                     self.brick.screen.draw_box(26, 29 + i * 20, 168, 46 + i * 20, r = 3, fill = False, color = Color.BLACK)
                     self.brick.screen.draw_text(29, 30 + i * 20, llist[value + i], text_color = Color.BLACK, background_color = None) if (value + i != len(llist)) else self.brick.screen.draw_image(90, 30 + i * 20, 'assets/graphics/misc/plus-button_selected.png', transparent = Color.RED)
                 else:
-                    #self.brick.screen.draw_box(26, 29 + i * 20, 170, 46 + i * 20, fill = True, color = Color.WHITE)
                     self.brick.screen.draw_text(29, 30 + i * 20, llist[value + i], text_color = Color.BLACK, background_color = Color.WHITE) if (value + i != len(llist)) else self.brick.screen.draw_image(80, 30 + (i - 1) * 20, 'assets/graphics/misc/plus-button.png', transparent = Color.RED)
                 i += 1
         llist.append('')
@@ -318,6 +258,7 @@ class UI:
             drawOptions(pos - 3)
         elif pos == len(llist) - 1:
             drawOptions(pos - 4)
+        llist.pop()
 
     def __storeSettings(self, data, path):
         try:
@@ -331,3 +272,76 @@ class UI:
         self.brick.speaker.set_volume(settings['options']['Audio-Volume'] * 0.9, 'Beep')
         self.brick.speaker.set_volume(settings['options']['EFX-Volume'] * 0.9, 'PCM')
         self.logger.debug(self, 'Applied settings')
+
+    def _buttonActions(self):
+        if not self.selected:
+            if Button.RIGHT in self.brick.buttons.pressed():
+                self.logger.debug(self, 'Right button triggered at %s' % self.menuState)
+                self.menuState = self.menuState * 10
+                if self.menuState in self.toAnimate:
+                    self.__sound(self.__confirm)
+                    time.sleep(0.08)
+                    self.position = 0
+                    self.animate(self.menuState, True)
+                elif self.menuState == 100:
+                    self.__sound(self.__click)
+                    self.menuState += self.position + 1
+                    self.position = 0
+                    self.dataCache = self.profileHelper.getProfileData(self.__config['profileNames'][self.menuState - 100])
+                else:
+                    self.__sound(self.__click)
+                self.drawMenu(self.menuState, position=self.position, selected=self.selected)
+                time.sleep(0.4)
+
+            if Button.LEFT in self.brick.buttons.pressed():
+                self.logger.debug(self, 'Left button triggered at %s' % self.menuState)
+                if self.menuState in self.toAnimate:
+                    self.__sound(self.__confirm)
+                    time.sleep(0.08)
+                    self.animate(self.menuState, False)
+                elif self.menuState > 100 and self.menuState < 200:
+                    self.__sound(self.__click)
+                    self.menuState = 100
+                else:
+                    self.__sound(self.__click)
+                self.menuState = int(self.menuState / 10)
+                self.drawMenu(self.menuState, position=self.position, selected=self.selected)
+                time.sleep(0.4)
+
+            if Button.UP in self.brick.buttons.pressed():
+                self.logger.debug(self, 'Up button triggered at %s with position of %s' % (self.menuState, self.position))
+                self.__sound(self.__click)
+                if self.menuState == 50 and position == 0:
+                    self.position = len(self.__settings['options']) - 1
+                elif self.menuState == 50:
+                    self.position -= 1
+                elif (self.menuState == 10 or (self.menuState > 100 and self.menuState < 200)) and self.position == 0:
+                    self.position = len(self.__config['profileNames']) - 1
+                elif self.menuState == 10 or (self.menuState > 100 and self.menuState < 200):
+                    self.position -= 1
+                elif self.menuState in [0, 1]:
+                    self.menuState = 5
+                else:
+                    self.menuState -= 1
+                self.drawMenu(self.menuState, position=self.position, selected=self.selected)
+                time.sleep(0.3)
+
+            if Button.DOWN in self.brick.buttons.pressed():
+                self.logger.debug(self, 'Down button triggered at %s with position of %s' % (self.menuState, self.position))
+                self.__sound(self.__click)
+                if self.menuState == 50 and self.position == len(self.__settings['options']) - 1:
+                    self.position = 0
+                elif self.menuState == 50:
+                    self.position += 1
+                elif self.menuState == 10 and self.position == len(self.__config['profileNames']) - 1:
+                    self.position = 0
+                elif (self.menuState > 100 and self.menuState < 200) and self.position == len(self.profileHelper.getProfileData(self.__config['profileNames'][self.menuState - 100])):
+                    self.position = 0
+                elif self.menuState == 10 or (self.menuState > 100 and self.menuState < 200):
+                    self.position += 1
+                elif self.menuState in [0, 5]:
+                    self.menuState = 1
+                else:
+                    self.menuState += 1
+                self.drawMenu(self.menuState, position=self.position, selected=self.selected)
+                time.sleep(0.3)
