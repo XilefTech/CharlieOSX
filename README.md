@@ -1,4 +1,4 @@
-*Disclaimer: Everything in this Repository is still experimental and WIP.
+*Disclaimer: Everything in this Repository is still experimental and WIP. Nothing is expected to fully work.
 I'm still far away from a final version.*
 
 # CharlieOSX

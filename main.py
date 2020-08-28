@@ -22,3 +22,6 @@ tools.doIntersect(lineMap)"""
 ### example code to start CharlieOSX and it's menu-system
 os = CharlieOSX('config.cfg', 'settings.json', '')
 os.ui.mainLoop()
+
+### example for driving straight
+os.robot.straight(100, 20)
