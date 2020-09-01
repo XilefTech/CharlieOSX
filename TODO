@@ -10,3 +10,6 @@ o cleanup of imports
 + error messaging loadsettings
 + automatic region detection based on ip location + timezone time adjustment 
 + add side buttons for value input for higher steps
++ gyro inverted settings
++ driving support for 2 wheel balancing robots
++ gears option in config and motor init
