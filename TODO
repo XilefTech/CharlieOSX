@@ -12,4 +12,5 @@ o cleanup of imports
 + add side buttons for value input for higher steps
 + gyro inverted settings
 + driving support for 2 wheel balancing robots
-+ gears option in config and motor init
++ gears option for motors in config and motor init
++ add content to the main menu and 'unopened' sub-menu pages
