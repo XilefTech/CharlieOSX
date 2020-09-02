@@ -156,11 +156,7 @@ class Charlie():
             # turn the angle
             if deg > 0:
                 while self.__gyro.angle() - startValue < deg:
-                    if self.__config['robotType'] == 'NORMAL':
-                        __lMotor.dc(speed)
-                    else:
-                        __fLMotor.dc(speed)
-                        __bLMotor.dc(speed)
+                    turnLeftMotor(speed)
                     # slow down to not overshoot
                     if not self.__gyro.angle() - startValue < deg * 0.6:
                         speed = speed - _map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
@@ -170,11 +166,7 @@ class Charlie():
                         return
             else:
                 while self.__gyro.angle() - startValue > deg:
-                    if self.__config['robotType'] == 'NORMAL':
-                        __lMotor.dc(-speed)
-                    else:
-                        __fLMotor.dc(-speed)
-                        __bLMotor.dc(-speed)
+                    turnLeftMotor(-speed)
                     # slow down to not overshoot
                     if not self.__gyro.angle() - startValue > deg * 0.6:
                         speed = speed - _map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
@@ -190,11 +182,7 @@ class Charlie():
             # turn the angle
             if deg > 0:
                 while self.__gyro.angle() - startValue < deg:
-                    if self.__config['robotType'] == 'NORMAL':
-                        __rMotor.dc(-speed)
-                    else:
-                        __fRMotor.dc(-speed)
-                        __bRMotor.dc(-speed)
+                    turnRightMotor(-speed)
                     # slow down to not overshoot
                     if not self.__gyro.angle() - startValue < deg * 0.6:
                         speed = speed - _map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
@@ -204,11 +192,7 @@ class Charlie():
                         return
             else:
                 while self.__gyro.angle() - startValue > deg:
-                    if self.__config['robotType'] == 'NORMAL':
-                        __rMotor.dc(speed)
-                    else:
-                        __fRMotor.dc(speed)
-                        __bRMotor.dc(speed)
+                    turnRightMotor(speed)
                     # slow down to not overshoot
                     if not self.__gyro.angle() - startValue > deg * 0.6:
                         speed = speed - _map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
@@ -222,14 +206,8 @@ class Charlie():
             # turn the angle
             if deg > 0:
                 while self.__gyro.angle() - startValue < deg:
-                    if self.__config['robotType'] == 'NORMAL':
-                        __rMotor.dc(-speed / 2)
-                        __lMotor.dc(speed / 2)
-                    else:
-                        __fRMotor.dc(-speed / 2)
-                        __bRMotor.dc(-speed / 2)
-                        __fLMotor.dc(speed / 2)
-                        __bLMotor.dc(speed / 2)
+                    turnLeftMotor(speed / 2)
+                    turnRightMotor(-speed / 2)
                     # slow down to not overshoot
                     if not self.__gyro.angle() - startValue < deg * 0.6:
                         speed = speed - _map(deg, 1, 360, 10, 0.01) if speed > 40 else speed
@@ -240,14 +218,8 @@ class Charlie():
 
             else:
                 while self.__gyro.angle() - startValue > deg:
-                    if self.__config['robotType'] == 'NORMAL':
-                        __rMotor.dc(speed / 2)
-                        __lMotor.dc(-speed / 2)
-                    else:
-                        __fRMotor.dc(speed / 2)
-                        __bRMotor.dc(speed / 2)
-                        __fLMotor.dc(-speed / 2)
-                        __bLMotor.dc(-speed / 2)
+                    turnLeftMotor(-speed / 2)
+                    turnRightMotor(speed / 2)
                     # slow down to not overshoot
                     if not self.__gyro.angle() - startValue > deg * 0.6:
                         speed = speed - _map(deg, 1, 360, 10, 0.01) if speed > 40 else speed
@@ -255,6 +227,20 @@ class Charlie():
                     # cancel if button pressed
                     if any(self.brick.buttons()):
                         return
+
+    def turnLeftMotor(self,speed):
+        if self.__config['robotType'] == 'NORMAL':
+            __lMotor.dc(speed)
+        else:
+            __fLMotor.dc(speed)
+            __bLMotor.dc(speed)
+
+    def turnRightMotor(self,speed):
+        if self.__config['robotType'] == 'NORMAL':
+            __rMotor.dc(speed)
+        else:
+            __fRMotor.dc(speed)
+            __bRMotor.dc(speed)
 
     def straight(self, speed, dist, *args):
         """drives forward with speed in a straight line, corrected by the self.__gyro when in normal or allwheel mode"""
