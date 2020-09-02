@@ -125,7 +125,15 @@ class Charlie():
             mode, arg1, arg2, arg3 = pparams.pop(0), pparams.pop(
                 0), pparams.pop(0), pparams.pop(0)
 
-            methods = {4: self.turn(),5: self.action(),7: self.straight(),9: self.intervall(),11: self.curve(),12: self.toColor(),15: self.toWall()}
+            methods = {
+                4: self.turn(),
+                5: self.action(),
+                7: self.straight(),
+                9: self.intervall(),
+                11: self.curve(),
+                12: self.toColor(),
+                15: self.toWall()
+            }
 
             methods[mode](arg1, arg2, arg3)
 
