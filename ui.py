@@ -45,6 +45,7 @@ class UI:
         self.__storeSettings(self.__settings, self.__settingsPath)
         while loop:
 <<<<<<< HEAD
+<<<<<<< HEAD
             #
             #
             # Would refactor if statements into different functions -> code mode readable
@@ -75,6 +76,8 @@ class UI:
                         self.__settings['options'][keys[position]
                                                    ] = self.__settings['values']['max'][keys[position]]
 =======
+=======
+>>>>>>> 9c09c686d7d17149d5c07debe0141f5bf4a1ca14
             if self.menuState == 10:
                 if len(self.__config['profileNames']) > 99:
                     logger.error(self, 'Maximum of runs exceeded. Please lower your number of runs to a maximum of 99', '')
@@ -102,6 +105,7 @@ class UI:
                         self.__settings['options'][keys[self.position]] -= 1
                     elif self.__settings['options'][keys[self.position]] == self.__settings['values']['min'][keys[self.position]]:
                         self.__settings['options'][keys[self.position]] = self.__settings['values']['max'][keys[self.position]]
+<<<<<<< HEAD
 >>>>>>> 394fd1dbca5130a236ef9750288d293b97f4c709
                     self.__sound('assets/media/click.wav')
                     self.drawSettings(self.position, self.__settings, self.selected)
@@ -189,6 +193,11 @@ class UI:
                 self.drawMenu(menuState, position=position, selected=selected)
                 time.sleep(0.3)
 =======
+=======
+                    self.__sound('assets/media/click.wav')
+                    self.drawSettings(self.position, self.__settings, self.selected)
+                if Button.CENTER in self.brick.buttons.pressed():
+>>>>>>> 9c09c686d7d17149d5c07debe0141f5bf4a1ca14
                     self.logger.debug(self, 'Center button pressed from %s' % self.selected)
                     if self.selected:
                         self.__storeSettings(self.__settings, self.__settingsPath)
@@ -198,7 +207,11 @@ class UI:
                     time.sleep(0.3)
             
             self._buttonActions()
+<<<<<<< HEAD
 >>>>>>> 394fd1dbca5130a236ef9750288d293b97f4c709
+=======
+
+>>>>>>> 9c09c686d7d17149d5c07debe0141f5bf4a1ca14
 
             if self.logger.getScreenRefreshNeeded() == 1:
                 self.logger.setScreenRefreshNeeded(0)
@@ -380,22 +393,19 @@ class UI:
                     pass
                 elif value + i == pos:
 <<<<<<< HEAD
+<<<<<<< HEAD
                     # self.brick.screen.draw_box(26, 29 + i * 20, 168, 46 + i * 20, r = 3, fill = True, color = Color.WHITE)
+=======
+>>>>>>> 9c09c686d7d17149d5c07debe0141f5bf4a1ca14
                     self.brick.screen.draw_box(
                         26, 29 + i * 20, 168, 46 + i * 20, r=3, fill=False, color=Color.BLACK)
                     self.brick.screen.draw_text(29, 30 + i * 20, llist[value + i], text_color=Color.BLACK, background_color=None) if (value + i != len(
                         llist)) else self.brick.screen.draw_image(90, 30 + i * 20, 'assets/graphics/misc/plus-button_selected.png', transparent=Color.RED)
                 else:
-                    # self.brick.screen.draw_box(26, 29 + i * 20, 170, 46 + i * 20, fill = True, color = Color.WHITE)
-
-                    #
-                    #
-                    # WThat does the if-else-statement do?
-                    #
-                    #
                     self.brick.screen.draw_text(
                         29, 30 + i * 20, llist[value + i], text_color=Color.BLACK, background_color=Color.WHITE) if (value + i != len(llist)) else self.brick.screen.draw_image(
                         80, 30 + (i - 1) * 20, 'assets/graphics/misc/plus-button.png', transparent=Color.RED)
+<<<<<<< HEAD
 =======
                     self.brick.screen.draw_box(26, 29 + i * 20, 168, 46 + i * 20, r = 3, fill = False, color = Color.BLACK)
                     self.brick.screen.draw_text(29, 30 + i * 20, llist[value + i], text_color = Color.BLACK, background_color = None) if (value + i != len(llist)) else self.brick.screen.draw_image(90, 30 + i * 20, 'assets/graphics/misc/plus-button_selected.png', transparent = Color.RED)
@@ -403,6 +413,8 @@ class UI:
                     self.brick.screen.draw_text(29, 30 + i * 20, llist[value + i], text_color = Color.BLACK, background_color = Color.WHITE) if (value + i != len(llist)) else self.brick.screen.draw_image(80, 30 + (i - 1) * 20, 'assets/graphics/misc/plus-button.png', transparent = Color.RED)
                 i += 1
 >>>>>>> 394fd1dbca5130a236ef9750288d293b97f4c709
+=======
+>>>>>>> 9c09c686d7d17149d5c07debe0141f5bf4a1ca14
         llist.append('')
 
         self.brick.screen.set_font(Font(family='arial', size=12))
