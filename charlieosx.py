@@ -11,10 +11,10 @@ class CharlieOSX:
     '''Head- and Main Class of CharlieOSX'''
     def __init__(self, configPath, settingsPath, logfilePath):
         self.__settings = self.loadSettings(settingsPath)
-        self.__logfilePath = logfilePath
         self.brick = EV3Brick()
+        self.logger = Logger(self.__settings, logfilePath, self.brick)
         self.__config = parseConfig(configPath)
-        self.logger = Logger(self.__config, self.__settings, self.__logfilePath, self.brick)
+        self.logger = Logger(self.__settings, logfilePath, self.brick)
         self.robot = Charlie(self.__config, self.__settings, self.brick, self.logger)
         self.ui = UI(self.__config, self.__settings, self.brick, self.logger, settingsPath)
         self.applySettings(self.__settings)
