@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-from pybricks.ev3devices import (
-    Motor, TouchSensor, ColorSensor, InfraredSensor, UltrasonicSensor, GyroSensor)
-=======
+
 import math
 from pybricks.ev3devices import (Motor, TouchSensor, ColorSensor, InfraredSensor, UltrasonicSensor, GyroSensor)
 >>>>>>> 394fd1dbca5130a236ef9750288d293b97f4c709
@@ -109,7 +106,6 @@ class Charlie():
                 self.__bLMotor = Motor(self.__conf2port[self.__config['backLeftMotorPort']], Direction.CLOCKWISE if (
                     not self.__config['backLeftMotorInverted']) else Direction.COUNTERCLOCKWISE) if (self.__config['backLeftMotorPort'] != 0) else 0
             except Exception as exception:
-<<<<<<< HEAD
                 self.logger.error(
                     self, "Failed to initialize movement motors for robot type %s - Are u sure they\'re all connected? Errored at Port" % config['robotType'], exception)
         self.logger.debug(self, "Motor initialisation done")
@@ -122,22 +118,15 @@ class Charlie():
 
     def __str__(self):
         return "Charlie"
-=======
-                self.logger.error(self, "Failed to initialize movement motors for robot type %s - Are u sure they\'re all connected? Errored at Port" % self.__config['robotType'], exception)
-        self.logger.debug(self, "Motor initialisation done")
->>>>>>> 394fd1dbca5130a236ef9750288d293b97f4c709
+
 
     def execute(self, params):
         '''Starts the different Driving modules according to the given parameters'''
 
-<<<<<<< HEAD
         if self.__brick.battery.voltage()() <= 7500:
             self.logger.warn("Please charge the battery. Only %sV left. We recommend least 7.5 Volts for accurate and repeatable results." %
                              self.brick.battery.voltage() * 0.001)
-=======
-        if self.brick.battery.voltage() <= 7500:
-            self.logger.warn("Please charge the battery. Only %sV left. We recommend least 7.5 Volts for accurate and repeatable results." % self.brick.battery.voltage() * 0.001)
->>>>>>> 394fd1dbca5130a236ef9750288d293b97f4c709
+
             return
         if self.__gyro == 0:
             self.logger.error(self, "Cannot drive without gyro", '')
@@ -197,13 +186,10 @@ class Charlie():
                         speed = speed - \
                             _map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
 
-<<<<<<< HEAD
+
                     # cancel if button pressed
                     if any(self.brick.buttons()):
-=======
-                    #cancel if button pressed
-                    if any(self.brick.buttons.pressed()):
->>>>>>> 394fd1dbca5130a236ef9750288d293b97f4c709
+
                         return
             else:
                 while self.__gyro.angle() - startValue > deg:
@@ -217,13 +203,8 @@ class Charlie():
                         speed = speed - \
                             _map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
 
-<<<<<<< HEAD
-                    # cancel if button pressed
-                    if any(self.brick.buttons()):
-=======
                     #cancel if button pressed
                     if any(self.brick.buttons.pressed()):
->>>>>>> 394fd1dbca5130a236ef9750288d293b97f4c709
                         return
 
         # turn only with right motor
@@ -243,15 +224,9 @@ class Charlie():
                         speed = speed - \
                             _map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
 
-<<<<<<< HEAD
-                    # cancel if button pressed
-                    if any(self.brick.buttons()):
-                        return
-=======
                     #cancel if button pressed
                     if any(self.brick.buttons.pressed()):
                         return                 
->>>>>>> 394fd1dbca5130a236ef9750288d293b97f4c709
             else:
                 while self.__gyro.angle() - startValue > deg:
                     if self.__config['robotType'] == 'NORMAL':
@@ -261,18 +236,10 @@ class Charlie():
                         __bRMotor.dc(speed)
                     # slow down to not overshoot
                     if not self.__gyro.angle() - startValue > deg * 0.6:
-<<<<<<< HEAD
-                        speed = speed - \
-                            _map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
-
-                    # cancel if button pressed
-                    if any(self.brick.buttons()):
-=======
                         speed = speed - _map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
                     
                     #cancel if button pressed
                     if any(self.brick.buttons.pressed()):
->>>>>>> 394fd1dbca5130a236ef9750288d293b97f4c709
                         return
 
         # turn with both motors
@@ -348,15 +315,9 @@ class Charlie():
 
                         self.__rMotor.dc(rSpeed)
                         self.__lMotor.dc(lSpeed)
-<<<<<<< HEAD
-                        # cancel if button pressed
-                        if any(self.brick.buttons()):
-                            return
-=======
                         #cancel if button pressed
                         if any(self.brick.buttons.pressed()):
                                 return
->>>>>>> 394fd1dbca5130a236ef9750288d293b97f4c709
                 else:
                     while revs < __rMotor.angle() / 360:
                         # if not driving staright correct it
@@ -403,15 +364,9 @@ class Charlie():
                         self.__bRMotor.dc(rSpeed)
                         self.__fLMotor.dc(lSpeed)
                         self.__bLMotor.dc(lSpeed)
-<<<<<<< HEAD
-                        # cancel if button pressed
-                        if any(self.brick.buttons()):
-                            return
-=======
                         #cancel if button pressed
                         if any(self.brick.buttons.pressed()):
                                 return
->>>>>>> 394fd1dbca5130a236ef9750288d293b97f4c709
                 else:
                     while revs < self.__fRMotor.angle() / 360:
                         # if not driving staright correct it
@@ -433,15 +388,9 @@ class Charlie():
                         self.__bRMotor.dc(rSpeed)
                         self.__fLMotor.dc(lSpeed)
                         self.__bLMotor.dc(lSpeed)
-<<<<<<< HEAD
-                        # cancel if button pressed
-                        if any(self.brick.buttons()):
-                            return
-=======
                         #cancel if button pressed
                         if any(self.brick.buttons.pressed()):
                                 return
->>>>>>> 394fd1dbca5130a236ef9750288d293b97f4c709
         else:
             self.__fRMotor.reset_angle(0)
             # convert the input (cm) to revs
@@ -581,13 +530,8 @@ class Charlie():
             rSpeed = speedSlow
             self.__rMotor.run_angle(rSpeed, revs2 * 360, Stop.COAST, False)
             self.__lMotor.run_angle(lSpeed, revs1 * 360 + 5, Stop.COAST, False)
-<<<<<<< HEAD
-            # turn
-            while self.__gyro.angle() - startValue < deg and not any(self.brick.buttons()):
-=======
             #turn
             while self.__gyro.angle() - startValue < deg and not any(self.brick.buttons.pressed()):
->>>>>>> 394fd1dbca5130a236ef9750288d293b97f4c709
                 pass
 
         else:
@@ -596,13 +540,8 @@ class Charlie():
             lSpeed = speedSlow
             self.__rMotor.run_angle(rSpeed, revs1 * 360 + 5, Stop.COAST, False)
             self.__lMotor.run_angle(lSpeed, revs2 * 360, Stop.COAST, False)
-<<<<<<< HEAD
-            # turn
-            while self.__gyro.angle() + startValue > deg and not any(self.brick.buttons()):
-=======
             #turn
             while self.__gyro.angle() + startValue > deg and not any(self.brick.buttons.pressed()):
->>>>>>> 394fd1dbca5130a236ef9750288d293b97f4c709
                 pass
 
     def toColor(self, speed, color, side):
@@ -669,15 +608,9 @@ class Charlie():
             lSpeed = speed
             rWhite = False
             lWhite = False
-<<<<<<< HEAD
-
-            while (rLight.color() != color or lLight.color() != color) and not any(self.brick.buttons()):
-                # if drive to color black drive until back after white to not recognize colors on the field as lines
-=======
             
             while (rLight.color() != color or lLight.color() != color) and not any(self.brick.buttons.pressed()):
                 #if drive to color black drive until back after white to not recognize colors on the field as lines
->>>>>>> 394fd1dbca5130a236ef9750288d293b97f4c709
                 if color == Color.BLACK:
                     if rLight.color() == Color.WHITE:
                         rWhite = True
