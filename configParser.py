@@ -1,4 +1,17 @@
+'''
+This file is just to offload some code and make it more organized.
+The only method in this file is parseConfig()
+'''
 def parseConfig(configPath):
+    '''
+        Loads the data from a config file based on my somewhat own syntax.
+        
+        Args:
+            configPath (str): the path to the config file
+
+        Returns:
+            dict: The config from the file as a dict
+    '''
     keys, values = [], []
     tempArr = []
     configDict = {}
@@ -20,10 +33,7 @@ def parseConfig(configPath):
                     keys.append(l[:l.find(':')])
                     arrMode = 1
     except Exception as exception:
-        if str(exception) == '[Errno 2] ENOENT':
-            print(exception)
-        else:
-            print(exception, type(exception), str(exception))
+        print(exception, type(exception), str(exception))
 
     for key in keys:
         try:
