@@ -8,7 +8,21 @@ from collections import OrderedDict
 
 
 class CharlieOSX:
-    '''Head- and Main Class of CharlieOSX'''
+    '''
+    CharlieOSX is the Head-Class of this project.
+    Here all the other classes get initialited accordingly and all strings come together.
+    Also this class should be used to access all the subclasses and its functions.
+
+    Args:
+        configPath (str): The path to the config file. Default: 'config.cfg'
+        settingsPath (str): The path to the settings file. Default: 'settings.json'
+        logfilePath (str): The path to the folder for the log files. Default: ''
+    Attributes: 
+        brick (EV3Brick): EV3Brick class
+        logger (Logger): Logger class
+        robot (Charlie): Robot class
+        ui (UI): UI class
+    '''
     def __init__(self, configPath, settingsPath, logfilePath):
         self.__settings = self.loadSettings(settingsPath)
         self.brick = EV3Brick()
@@ -26,6 +40,13 @@ class CharlieOSX:
         return "CharlieOSX"   
 
     def storeSettings(self, data, path):
+        '''
+        Stores given data as a Json stream into a file at the given path
+        
+        Args:
+            data (dict): The Settings dict that sould be stored
+            path (str): The path to the settings file
+        '''
         try:
             with open(path, 'w') as f:
                 f.write(json.dumps(data, sort_keys = False))
@@ -34,11 +55,25 @@ class CharlieOSX:
             self.logger.error(self, 'Failed to store settings to %s' % path, exception)
 
     def applySettings(self, settings):
+        '''
+        Applies the settings from the given dict to (currently only) the volume of sounds.
+        In other places, the data is often directly taken from the dict.
+        
+        Args:
+            settings (dict): The Settings dict that sould be used for applying the settings
+        '''
         self.brick.speaker.set_volume(settings['options']['Audio-Volume'] * 0.9, 'Beep')
         self.brick.speaker.set_volume(settings['options']['EFX-Volume'] * 0.9, 'PCM')
         self.logger.debug(self, 'Applied settings')
 
     def loadSettings(self, settingsPath):
+        '''
+        Loads the settings from the given Json file into a dict.
+        If the given file does not exist, it will restore the default settings and create a new file with them.
+        
+        Args:
+            settingsPath (str): The path to the Json file to read from.
+        '''
         order = ['Debug Driving', 'Audio-Volume', 'EFX-Volume', 'Logging-level', 'Show Warnings', 'Show Errors']
         try:
             with open(settingsPath, 'r') as f:
