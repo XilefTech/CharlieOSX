@@ -6,10 +6,9 @@ from pybricks.parameters import (Port, Direction)
 class Charlie():
     '''This is the main class of the robot. It contains all the functions CharlieOSX has to offer'''
 
-    def __init__(self, config, settings, brick, logger):
+    def __init__(self, config, brick, logger):
         logger.info(self, 'Starting initialisation of Charlie')
         self.__config = config
-        self.__settings = settings
 
         self.brick = brick
         self.logger = logger

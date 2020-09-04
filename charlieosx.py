@@ -17,6 +17,7 @@ class CharlieOSX:
         configPath (str): The path to the config file. Default: 'config.cfg'
         settingsPath (str): The path to the settings file. Default: 'settings.json'
         logfilePath (str): The path to the folder for the log files. Default: ''
+
     Attributes: 
         brick (EV3Brick): EV3Brick class
         logger (Logger): Logger class
@@ -29,7 +30,7 @@ class CharlieOSX:
         self.logger = Logger(self.__settings, logfilePath, self.brick)
         self.__config = parseConfig(configPath)
         self.logger = Logger(self.__settings, logfilePath, self.brick)
-        self.robot = Charlie(self.__config, self.__settings, self.brick, self.logger)
+        self.robot = Charlie(self.__config, self.brick, self.logger)
         self.ui = UI(self.__config, self.__settings, self.brick, self.logger, settingsPath)
         self.applySettings(self.__settings)
     #TODO
