@@ -107,7 +107,6 @@ class Charlie():
                     self, "Failed to initialize movement motors for robot type %s - Are u sure they\'re all connected? Errored at Port" % self.__config['robotType'], exception)
         self.logger.debug(self, "Motor initialisation done")
         self.logger.info(self, 'Charlie initialized')
-    # TODO
 
     def execute(self, params):
         '''
@@ -148,16 +147,6 @@ class Charlie():
             self.__gearingPortMotor.run_target(300, 0, Stop.HOLD, True)  # reset gearing
 
         time.sleep(0.3)
-
-    def breakMotors(self):
-        if self.__config['robotType'] == 'NORMAL':
-            lMotor.run_angle(100, 0, Stop.HOLD, False)
-            rMotor.run_angle(100, 0, Stop.HOLD, False)
-        else:
-            fRMotor.run_angle(100, 0, Stop.HOLD, False)
-            bRMotor.run_angle(100, 0, Stop.HOLD, False)
-            fLMotor.run_angle(100, 0, Stop.HOLD, False)
-            bLMotor.run_angle(100, 0, Stop.HOLD, False)
 
     def turn(self, speed, deg, port):
         '''
@@ -249,20 +238,6 @@ class Charlie():
                     # cancel if button pressed
                     if any(self.brick.buttons()):
                         return
-
-    def turnLeftMotor(self,speed):
-        if self.__config['robotType'] == 'NORMAL':
-            __lMotor.dc(speed)
-        else:
-            __fLMotor.dc(speed)
-            __bLMotor.dc(speed)
-
-    def turnRightMotor(self,speed):
-        if self.__config['robotType'] == 'NORMAL':
-            __rMotor.dc(speed)
-        else:
-            __fRMotor.dc(speed)
-            __bRMotor.dc(speed)
 
     def straight(self, speed, dist, *args):
         '''
@@ -686,5 +661,57 @@ class Charlie():
                             self.__aMotor2.dc(0)
                             return
 
+    def turnLeftMotor(self, speed):
+        '''
+        Sub-method for driving the left Motor(s)
+
+        Args:
+            speed (int): the speed to drive the motor at
+        '''
+
+        if self.__config['robotType'] == 'NORMAL':
+            __lMotor.dc(speed)
+        else:
+            __fLMotor.dc(speed)
+            __bLMotor.dc(speed)
+
+    def turnRightMotor(self, speed):
+        '''
+        Sub-method for driving the right Motor(s)
+
+        Args:
+            speed (int): the speed to drive the motor at
+        '''
+
+        if self.__config['robotType'] == 'NORMAL':
+            __rMotor.dc(speed)
+        else:
+            __fRMotor.dc(speed)
+            __bRMotor.dc(speed)
+
+    def breakMotors(self):
+        '''Sub-method for breaking all the motors'''
+        if self.__config['robotType'] == 'NORMAL':
+            lMotor.run_angle(100, 0, Stop.HOLD, False)
+            rMotor.run_angle(100, 0, Stop.HOLD, False)
+        else:
+            fRMotor.run_angle(100, 0, Stop.HOLD, False)
+            bRMotor.run_angle(100, 0, Stop.HOLD, False)
+            fLMotor.run_angle(100, 0, Stop.HOLD, False)
+            bLMotor.run_angle(100, 0, Stop.HOLD, False)
+
     def _map(x, in_min, in_max, out_min, out_max):
+        '''
+        Converts a given number in the range of two numbers to a number in the range of two other numbers
+
+        Args:
+            x (int): the input number that should be converted
+            in_min (int): The minimal point of the range of input number
+            in_max (int): The maximal point of the range of input number
+            out_min (int): The minimal point of the range of output number
+            out_max (int): The maximal point of the range of output number
+
+        Returns:
+        int: a number between out_min and out_max, de
+        '''
         return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
