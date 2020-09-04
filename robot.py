@@ -304,11 +304,10 @@ class Charlie():
                     while revs > self.__fRMotor.angle() / 360:
                         # if not driving staright correct it
                         if self.__gyro.angle() - startValue > 0:
-                            lSpeed = speed - \
-                                abs(self.__gyro.angle() - startValue) * \ correctionStrength
+                            lSpeed = speed - abs(self.__gyro.angle() - startValue) * correctionStrength
                             rSpeed = speed
                         elif self.__gyro.angle() - startValue < 0:
-                            rSpeed = speed - \ abs(self.__gyro.angle() - startValue) * \ correctionStrength
+                            rSpeed = speed - abs(self.__gyro.angle() - startValue) * correctionStrength
                             lSpeed = speed
                         else:
                             lSpeed = speed
@@ -325,12 +324,10 @@ class Charlie():
                     while revs < self.__fRMotor.angle() / 360:
                         # if not driving staright correct it
                         if self.__gyro.angle() - startValue < 0:
-                            rSpeed = speed + \
-                                abs(self.__gyro.angle() - startValue) * \ correctionStrength
+                            rSpeed = speed + abs(self.__gyro.angle() - startValue) * correctionStrength
                             lSpeed = speed
                         elif self.__gyro.angle() - startValue > 0:
-                            lSpeed = speed + \
-                                abs(self.__gyro.angle() - startValue) * \ correctionStrength
+                            lSpeed = speed + abs(self.__gyro.angle() - startValue) * correctionStrength
                             rSpeed = speed
                         else:
                             lSpeed = speed
