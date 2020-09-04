@@ -4,7 +4,15 @@ from pybricks.parameters import (Port, Direction)
 
 
 class Charlie():
-    '''This is the main class of the robot. It contains all the functions CharlieOSX has to offer'''
+    '''
+    Charlie is the class responsible for driving,
+    Robot-Movement and general Real-world interaction of the robot with Sensors and motors.
+
+    Args:
+        config (dict): The parsed config
+        brick (EV3Brick): EV3Brick for getting button input
+        logger (Logger): Logger for logging
+    '''
 
     def __init__(self, config, brick, logger):
         logger.info(self, 'Starting initialisation of Charlie')
@@ -22,11 +30,12 @@ class Charlie():
     #TODO
     def __repr__(self):
         return "TODO"
-    #TODO
+
     def __str__(self):
         return "Charlie"   
 
     def __initSensors(self):
+        '''Sub-method for initializing Sensors.'''
         self.logger.debug(self, "Starting sensor initialisation...")
         try:
             self.__gyro = GyroSensor(self.__conf2port[self.__config['gyroSensorPort']]) if self.__config['gyroSensorPort'] != 0 else 0
@@ -54,6 +63,7 @@ class Charlie():
         self.logger.debug(self, "Sensor initialisation done")
 
     def __initMotors(self):
+        '''Sub-method for initializing Motors.'''
         self.logger.debug(self, "Starting motor initialisation...")
         if self.__config['robotType'] == 'NORMAL':
             try:
@@ -99,16 +109,13 @@ class Charlie():
         self.logger.info(self, 'Charlie initialized')
     # TODO
 
-    def __repr__(self):
-        return "TODO"
-    # TODO
-
-    def __str__(self):
-        return "Charlie"
-
-
     def execute(self, params):
-        '''Starts the different Driving modules according to the given parameters'''
+        '''
+        This function interprets the number codes from the given array and executes the driving methods accordingly
+
+        Args:
+            params (array): The array of number code arrays to be executed
+        '''
 
         if self.__brick.battery.voltage() <= 7500:
             self.logger.warn("Please charge the battery. Only %sV left. We recommend least 7.5 Volts for accurate and repeatable results." %
@@ -153,7 +160,15 @@ class Charlie():
             bLMotor.run_angle(100, 0, Stop.HOLD, False)
 
     def turn(self, speed, deg, port):
-        """turns deg with speed. port indicates with wich motor(s)"""
+        '''
+        Used to turn the motor on the spot using either one or both Motors for turning (2 or 4 in case of ALLWHEEL and MECANUM)
+
+        Args:
+            speed (int): the speed to drive at
+            deg (int): the angle to turn
+            port (int): the motor(s) to turn with
+        '''
+
         startValue = self.__gyro.angle()
 
         # turn only with left motor
@@ -250,7 +265,14 @@ class Charlie():
             __bRMotor.dc(speed)
 
     def straight(self, speed, dist, *args):
-        """drives forward with speed in a straight line, corrected by the self.__gyro when in normal or allwheel mode"""
+        '''
+        Drives the Robot in a straight line.
+        Also it self-corrects while driving with the help of a gyro-sensor. This is used to make the Robot more accurate
+
+        Args:
+            speed (int): the speed to drive at
+            dist (int): the distance in cm to drive
+        '''
         if self.__config['robotType'] != 'MECANUM':
             correctionStrength = 2  # how strongly the self will correct. 2 = default, 0 = nothing
             startValue = self.__gyro.angle()
@@ -403,7 +425,15 @@ class Charlie():
                 self.__bLMotor.run_angle(speed, revs * -360, Stop.COAST, True)
 
     def intervall(self, speed, revs, count):
-        """drives revs forward and backward with speed count times"""
+        '''
+        Drives forwads and backwards x times.
+
+        Args:
+            speed (int): the speed to drive at
+            revs (int): the distance (in motor revolutions) to drive
+            count (int): how many times it should repeat the driving
+        '''
+
         speed = speed * 1.7 * 6  # speed in deg/s to %
         # move count times forwards and backwards
         for i in range(count + 1):
@@ -446,7 +476,14 @@ class Charlie():
                         return
 
     def curve(self, speed, revs1, deg):
-        """Drives in a curve deg over revs with speed"""
+        '''
+        Drives forwads and backwards x times.
+
+        Args:
+            speed (int): the speed to drive at
+            revs1 (int): the distance (in motor revolutions) for the outer wheel to drive
+            deg (int): how much of a circle it should drive
+        '''
         speed = speed * 1.7 * 6  # speed to deg/s from %
 
         # gyro starting point
@@ -484,7 +521,14 @@ class Charlie():
                 pass
 
     def toColor(self, speed, color, side):
-        """Drives until the self drives to a color line with speed"""
+        '''
+        Drives forward until the given colorSensor sees a given color.
+
+        Args:
+            speed (int): the speed to drive at
+            color (int): the color to look for (0 = Black, 1 = White)
+            side (int): which side's color sensor should be used
+        '''
         # sets color to a value that the colorSensor can work with
         if color == 0:
             color = Color.BLACK
@@ -565,7 +609,12 @@ class Charlie():
                     lSpeed = 0
 
     def toWall(self, speed, *args):
-        """drives backwards with speed until it reaches a wall"""
+        '''
+        Drives until a pressure sensor is pressed
+
+        Args:
+            speed (int): the speed to drive at
+        '''
         while not touch.pressed():
             if self.__config['robotType'] == 'NORMAL':
                 self.__rMotor.dc(- abs(speed))
@@ -583,7 +632,14 @@ class Charlie():
         self.__rMotor.dc(0)
 
     def action(self, speed, revs, port):
-        """rotates the port for revs revulutions with a speed of speed"""
+        '''
+        Doesn't drive the robot, but drives the action motors
+
+        Args:
+            speed (int): the speed to turn the motor at
+            revs (int): how long to turn the motor for
+            port (int): which one of the motors should be used
+        '''
         if self.__config['useGearing']:
             speed = speed * 1.7 * 6  # speed to deg/s from %
             self.__gearingPortMotor.run_target(

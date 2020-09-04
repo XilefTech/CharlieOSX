@@ -1,6 +1,13 @@
 import os
 
 class ProfileHelper():
+    '''
+    ProfileHelper is a helper class to load and save the profiles to a file and load them from that file.
+
+    Args:
+        logger (Logger): initialized Logger class used for logging
+        config (dict): The path to the config file.
+    '''
     def __init__(self, logger, config):
         logger.info(self, 'Initialisating ProfileHelper...')
         self.logger = logger
@@ -17,6 +24,9 @@ class ProfileHelper():
         return 'ProfileHelper'
 
     def loadProfiles(self):
+        '''
+        Loads the data from all the Profiles stored on the brick.
+        '''
         self.logger.info(self, 'Loading profiles...')
         try:
             if not self.foldername in os.listdir():
@@ -36,7 +46,10 @@ class ProfileHelper():
             self.logger.error(self, 'Failed to load Profiles', exception)
         os.chdir('..')
 
-    def saveProfiles(self):
+    def _saveProfiles(self):
+        '''
+        Saves the data of all the Profiles to the brick.
+        '''
         self.logger.info(self, 'Saving profiles....')
         try:
             if not self.foldername in os.listdir():
@@ -59,7 +72,26 @@ class ProfileHelper():
         os.chdir('..')
 
     def getProfileData(self, profile):
+        '''
+        Function to get the data of a given profile. WIP
+
+        Args:
+            profile (str): The name of the profile
+
+        Returns:
+        array: The array of number code arrays frome the given profile
+        '''
         try:
             return self._data[profile]
         except KeyError as excpetion:
             self.logger.warn(self, 'Couldn\'t get profile data for %s: No such profile in data' % str(exception))
+    
+    def setProfileData(self, profile, data):
+        '''
+        Function to set the data of a given profile. WIP
+
+        Args:
+            profile (str): The name of the profile
+            data (array): The array with the data
+        '''
+        self._saveProfiles()
