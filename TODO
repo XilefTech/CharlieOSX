@@ -14,3 +14,6 @@ o cleanup of imports
 + driving support for 2 wheel balancing robots
 + gears option for motors in config and motor init
 + add content to the main menu and 'unopened' sub-menu pages
+o intervall() distance input in cm
+o define curve() with radius of circle instead of outer wheel distance
++ add more possibilities for colors to toColor()
