@@ -7,6 +7,18 @@ from pybricks.media.ev3dev import Image, ImageFile, Font, SoundFile
 
 
 class UI:
+    '''
+    CharlieOSX is the Head-Class of this project.
+    Here all the other classes get initialited accordingly and all strings come together.
+    Also this class should be used to access all the subclasses and its functions.
+
+    Args:
+        config (str): (dict): The parsed config
+        settings (dict): The parsed settings.
+        brick (EV3Brick): EV3Brick Class
+        logger (Logger): Logger for logging
+        settingsPath (str): The path to the settings file.
+    '''
     def __init__(self, config, settings, brick, logger, settingsPath):
         logger.info(self, 'Starting UI initialisation')
         self.__config = config
@@ -20,21 +32,26 @@ class UI:
         self.__sound_lock = _thread.allocate_lock()
         self.logger.info(self, 'UI initialized')
     # TODO
-
     def __repr__(self):
         return "TODO"
-    # TODO
 
     def __str__(self):
         return "UI"
 
     def __sound(self, file):
+        '''
+        This private method is used for playing a sound in a separate thread so that other code can be executed simultaneously.
+
+        Args:
+            file (str / SoundFile): The path to the soundfile to play
+        '''
         def __playSoundFile(soundFile):
             with self.__sound_lock:
                 self.brick.speaker.play_file(soundFile)
         _thread.start_new_thread(__playSoundFile, (file, ))
 
     def mainLoop(self):
+        '''Mainloop basically brings all the sub-components of the ui together.'''
         self.menuState, self.position, self.oldPos = 0, 0, 0
         self.selected = False
         self.dataCache = []
@@ -84,12 +101,22 @@ class UI:
             
             self._buttonActions()
 
-
             if self.logger.getScreenRefreshNeeded() == 1:
                 self.logger.setScreenRefreshNeeded(0)
                 self.menuState = self.menuState / 10
 
     def drawMenu(self, menuState, **kwargs):
+        '''
+        This draws the menu.
+        According to the given menuState, it selects the right things to draw
+
+        Args:
+            menuState (int): The position, where the menu is at
+
+        Keyword-Args:
+            position (int): Sub-position (used for some sub-menus with lists in them)
+            selected (Bool): Wether the menu is in 'selected' state or not
+        '''
         menus = {0: 'assets/graphics/menus/mainMenu.png',
                  1: 'assets/graphics/menus/programmingMainMenu.png',
                  2: 'assets/graphics/menus/testingMainMenu.png',
@@ -99,51 +126,53 @@ class UI:
                  }
         try:
             if menuState in range(0, 6):
-                self.brick.screen.draw_image(
-                    0, 0, menus[menuState], transparent=Color.RED)
+                self.brick.screen.draw_image(0, 0, menus[menuState], transparent=Color.RED)
             elif menuState == 10:
-                self.drawList(kwargs['position'],
-                              self.__config['profileNames'])
+                self.drawList(kwargs['position'], self.__config['profileNames'])
             elif menuState == 50:
-                self.drawSettings(kwargs['position'],
-                                  self.__settings, kwargs['selected'])
+                self.drawSettings(kwargs['position'], self.__settings, kwargs['selected'])
             elif menuState > 100 and menuState < 200:
-                self.drawExtendableList(kwargs['position'], self.profileHelper.getProfileData(
-                    self.__config['profileNames'][menuState - 100]))
+                self.drawExtendableList(kwargs['position'], self.profileHelper.getProfileData(self.__config['profileNames'][menuState - 100]))
         except Exception as exception:
-            self.logger.error(self, "Could not draw menu: %s:" %
-                              type(exception).__name__, exception)
+            self.logger.error(self, "Could not draw menu: %s:" % type(exception).__name__, exception)
 
     def drawScrollBar(self, totalLength, pos):
-        self.brick.screen.draw_box(
-            171, 25, 177, 127, r=2, fill=False, color=Color.BLACK)
-        self.brick.screen.draw_box(
-            172, 26, 176, 126, r=2, fill=True, color=Color.WHITE)
-        self.brick.screen.draw_box(173, 27 + 102 / totalLength * pos, 175,
-                                   23 + 102 / totalLength * (pos + 1), r=1, fill=True, color=Color.BLACK)
+        '''
+        Draws a scroll bar on the side of the screen
+
+        Args:
+            totalLength (int): The total amount of positions for the scroll bar to be in
+            pos (int): the current position of the scroll bar
+        '''
+        self.brick.screen.draw_box(171, 25, 177, 127, r=2, fill=False, color=Color.BLACK)
+        self.brick.screen.draw_box(172, 26, 176, 126, r=2, fill=True, color=Color.WHITE)
+        self.brick.screen.draw_box(173, 27 + 102 / totalLength * pos, 175, 23 + 102 / totalLength * (pos + 1), r=1, fill=True, color=Color.BLACK)
 
     def drawSettings(self, pos, settings, selected):
+        '''
+        Function to draw the settings-menu
+
+        Args:
+            pos (int): The position in the settings menu
+            settings (int): The settings dict to get names and values from
+            selected (bool): Wether or not the current option is selected
+        '''
         def drawOptions(value, *args):
-            '''Subfunction that draws the 5 current options on the screen'''
+            '''Subfunction that draws the 5 currenty visible options on the screen'''
             for i in range(5):
                 if value + i == pos:
                     if selected:
-                        self.brick.screen.draw_box(
-                            26, 29 + i * 20, 168, 46 + i * 20, r=3, fill=True, color=Color.BLACK)
+                        self.brick.screen.draw_box(26, 29 + i * 20, 168, 46 + i * 20, r=3, fill=True, color=Color.BLACK)
                         self.brick.screen.draw_text(29, 30 + i * 20, '%s: %s' % (keys[value + i], settings['options'][keys[value + i]]), text_color=Color.WHITE, background_color=None) if settings['types'][keys[value + i]] == 'int' else self.brick.screen.draw_text(
                             29, 30 + i * 20, '%s: %s' % (keys[value + i], bool(settings['options'][keys[value + i]])), text_color=Color.WHITE, background_color=None)
                     else:
-                        self.brick.screen.draw_box(
-                            26, 29 + i * 20, 168, 46 + i * 20, r=3, fill=True, color=Color.WHITE)
-                        self.brick.screen.draw_box(
-                            26, 29 + i * 20, 168, 46 + i * 20, r=3, fill=False, color=Color.BLACK)
+                        self.brick.screen.draw_box(26, 29 + i * 20, 168, 46 + i * 20, r=3, fill=True, color=Color.WHITE)
+                        self.brick.screen.draw_box(26, 29 + i * 20, 168, 46 + i * 20, r=3, fill=False, color=Color.BLACK)
                         self.brick.screen.draw_text(29, 30 + i * 20, '%s: %s' % (keys[value + i], settings['options'][keys[value + i]]), text_color=Color.BLACK, background_color=None) if settings['types'][keys[value + i]] == 'int' else self.brick.screen.draw_text(
                             29, 30 + i * 20, '%s: %s' % (keys[value + i], bool(settings['options'][keys[value + i]])), text_color=Color.BLACK, background_color=None)
                 else:
-                    self.brick.screen.draw_box(
-                        26, 29 + i * 20, 170, 46 + i * 20, fill=True, color=Color.WHITE)
-                    self.brick.screen.draw_text(29, 30 + i * 20, '%s: %s' % (keys[value + i], settings['options'][keys[value + i]]), text_color=Color.BLACK, background_color=Color.WHITE) if settings['types'][keys[value + i]
-                                                                                                                                                                                                                ] == 'int' else self.brick.screen.draw_text(29, 30 + i * 20, '%s: %s' % (keys[value + i], bool(settings['options'][keys[value + i]])), text_color=Color.BLACK, background_color=Color.WHITE)
+                    self.brick.screen.draw_box(26, 29 + i * 20, 170, 46 + i * 20, fill=True, color=Color.WHITE)
+                    self.brick.screen.draw_text(29, 30 + i * 20, '%s: %s' % (keys[value + i], settings['options'][keys[value + i]]), text_color=Color.BLACK, background_color=Color.WHITE) if settings['types'][keys[value + i]] == 'int' else self.brick.screen.draw_text(29, 30 + i * 20, '%s: %s' % (keys[value + i], bool(settings['options'][keys[value + i]])), text_color=Color.BLACK, background_color=Color.WHITE)
 
         keys = list(settings['options'].keys())
         self.brick.screen.set_font(Font(family='arial', size=13))
@@ -162,6 +191,13 @@ class UI:
             drawOptions(pos - 4)
 
     def animate(self, state, direction):
+        '''
+        Animates the transition between the main-menu-pages and the submenu-pages
+
+        Args:
+            state (int): The menu-transition to animate
+            direction (bool): wether it should play the animation forwards or backwards
+        '''
         menus = {10: 'mainProgram',
                  20: 'mainTest',
                  30: 'mainRemote',
@@ -185,6 +221,14 @@ class UI:
                     self, "Could not animate menu: ", str(exception))
 
     def drawDictlist(self, pos, dictlist, selected):
+        '''
+        Draws a dictionary on the screen with formatting "Key: Value"
+
+        Args:
+            pos (int): the current position in the dictionary
+            dictlist (bool): the dict to draw
+            selected (bool): wether or not the current element is selected
+        '''
         def drawOptions(value, *args):
             '''Subfunction that draws the 5 current options on the screen'''
             for i in range(5):
@@ -224,7 +268,14 @@ class UI:
             drawOptions(pos - 4)
 
     def drawList(self, pos, llist):
-        def drawOptions(value, *args):
+        '''
+        Draws a list on the screen
+
+        Args:
+            pos (int): the current position in the list
+            llist (bool): the list to draw
+        '''
+        def drawOptions(value):
             '''Subfunction that draws the 5 current options on the screen'''
             for i in range(5):
                 if value + i == pos:
@@ -256,6 +307,14 @@ class UI:
             drawOptions(pos - 4)
 
     def drawExtendableList(self, pos, llist):
+        '''
+        Draws a list on the screen.
+        At the end of the list, ther will be a + symbol placed that is used for making the list 'extendable'
+
+        Args:
+            pos (int): the current position in the list
+            llist (bool): the list to draw
+        '''
         def drawOptions(value, *args):
             '''Subfunction that draws the 5 current options on the screen'''
             self.brick.screen.draw_box(
