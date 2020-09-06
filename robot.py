@@ -239,7 +239,7 @@ class Charlie():
                     if any(self.brick.buttons()):
                         return
 
-    def straight(self, speed, dist, *args):
+    def straight(self, speed, dist, ang):
         '''
         Drives the Robot in a straight line.
         Also it self-corrects while driving with the help of a gyro-sensor. This is used to make the Robot more accurate
@@ -255,90 +255,48 @@ class Charlie():
             # convert the input (cm) to revs
             revs = dist / (self.__config['wheelDiameter'] * math.pi) / 2
 
+            motor = self.__rMotor if self.__config['robotType'] == 'Normal' else self.__fRMotor
+
             # drive
-            if self.__config['robotType'] == 'NORMAL':
-                self.__rMotor.reset_angle(0)
-                if revs > 0:
-                    while revs > self.__rMotor.angle() / 360:
-                        # if not driving staright correct it
-                        if self.__gyro.angle() - startValue > 0:
-                            lSpeed = speed - abs(self.__gyro.angle() - startValue) * correctionStrength
-                            rSpeed = speed
-                        elif self.__gyro.angle() - startValue < 0:
-                            rSpeed = speed - abs(self.__gyro.angle() - startValue) * correctionStrength
-                            lSpeed = speed
-                        else:
-                            lSpeed = speed
-                            rSpeed = speed
+            motor.reset_angle(0)
+            if revs > 0:
+                while revs > motor.angle() / 360:
+                    # if not driving staright correct it
+                    if self.__gyro.angle() - startValue > 0:
+                        lSpeed = speed - abs(self.__gyro.angle() - startValue) * correctionStrength
+                        rSpeed = speed
+                    elif self.__gyro.angle() - startValue < 0:
+                        rSpeed = speed - abs(self.__gyro.angle() - startValue) * correctionStrength
+                        lSpeed = speed
+                    else:
+                        lSpeed = speed
+                        rSpeed = speed
 
-                        self.__rMotor.dc(rSpeed)
-                        self.__lMotor.dc(lSpeed)
-                        
-                        #cancel if button pressed
-                        if any(self.brick.buttons.pressed()):
-                                return
-
-                else:
-                    while revs < __rMotor.angle() / 360:
-                        # if not driving staright correct it
-                        if self.__gyro.angle() - startValue < 0:
-                            rSpeed = speed + abs(self.__gyro.angle() - startValue) * correctionStrength
-                            lSpeed = speed
-                        elif self.__gyro.angle() - startValue > 0:
-                            lSpeed = speed + abs(self.__gyro.angle() - startValue) * correctionStrength
-                            rSpeed = speed
-                        else:
-                            lSpeed = speed
-                            rSpeed = speed
-
-                        self.__rMotor.dc(-rSpeed)
-                        self.__lMotor.dc(-lSpeed)
-                        # cancel if button pressed
-                        if any(self.brick.buttons()):
+                    self.turnLeftMotor(lSpeed)
+                    self.turnRightMotor(rSpeed)
+                    
+                    #cancel if button pressed
+                    if any(self.brick.buttons.pressed()):
                             return
+            else:
+                while revs < motor.angle() / 360:
+                    # if not driving staright correct it
+                    if self.__gyro.angle() - startValue < 0:
+                        rSpeed = speed + abs(self.__gyro.angle() - startValue) * correctionStrength
+                        lSpeed = speed
+                    elif self.__gyro.angle() - startValue > 0:
+                        lSpeed = speed + abs(self.__gyro.angle() - startValue) * correctionStrength
+                        rSpeed = speed
+                    else:
+                        lSpeed = speed
+                        rSpeed = speed
 
-            elif self.__config['robotType'] == 'ALLWHEEL':
-                self.__fRMotor.reset_angle(0)
-                if revs > 0:
-                    while revs > self.__fRMotor.angle() / 360:
-                        # if not driving staright correct it
-                        if self.__gyro.angle() - startValue > 0:
-                            lSpeed = speed - abs(self.__gyro.angle() - startValue) * correctionStrength
-                            rSpeed = speed
-                        elif self.__gyro.angle() - startValue < 0:
-                            rSpeed = speed - abs(self.__gyro.angle() - startValue) * correctionStrength
-                            lSpeed = speed
-                        else:
-                            lSpeed = speed
-                            rSpeed = speed
+                    self.turnLeftMotor(-lSpeed)
+                    self.turnRightMotor(-rSpeed)
+                    # cancel if button pressed
+                    if any(self.brick.buttons()):
+                        return
 
-                        self.__fRMotor.dc(rSpeed)
-                        self.__bRMotor.dc(rSpeed)
-                        self.__fLMotor.dc(lSpeed)
-                        self.__bLMotor.dc(lSpeed)
-                        #cancel if button pressed
-                        if any(self.brick.buttons.pressed()):
-                                return
-                else:
-                    while revs < self.__fRMotor.angle() / 360:
-                        # if not driving staright correct it
-                        if self.__gyro.angle() - startValue < 0:
-                            rSpeed = speed + abs(self.__gyro.angle() - startValue) * correctionStrength
-                            lSpeed = speed
-                        elif self.__gyro.angle() - startValue > 0:
-                            lSpeed = speed + abs(self.__gyro.angle() - startValue) * correctionStrength
-                            rSpeed = speed
-                        else:
-                            lSpeed = speed
-                            rSpeed = speed
-
-                        self.__fRMotor.dc(rSpeed)
-                        self.__bRMotor.dc(rSpeed)
-                        self.__fLMotor.dc(lSpeed)
-                        self.__bLMotor.dc(lSpeed)
-                        #cancel if button pressed
-                        if any(self.brick.buttons.pressed()):
-                                return
         else:
             self.__fRMotor.reset_angle(0)
             # convert the input (cm) to revs

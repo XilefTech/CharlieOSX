@@ -12,7 +12,7 @@ Next:
     + gears option for motors in config and motor init
     o define curve() with radius of circle instead of outer wheel distance
     + add more possibilities for colors to toColor()
-    + cleanup and compacting of straight()
+    o some extensive testing and fixing of errors
 
     Logging:
     o cleanup of Logger
