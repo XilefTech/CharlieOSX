@@ -1,19 +1,36 @@
-+ make straightMecanum() abortalble with brick buttons
-+ add function to set a speed to all driving motors in robot.py
-o cleanup of Logger
-+ documentation throughout the whole program
-+ add posibility for only one colorSensor in Front through config and robot.py
-+ line following mode
-o cleanup of imports
-+ use sensors only when connected
-+ do configParser error handling porperly
-+ error messaging loadsettings
-+ automatic region detection based on ip location + timezone time adjustment 
-+ add side buttons for value input for higher steps
-+ gyro inverted settings
-+ driving support for 2 wheel balancing robots
-+ gears option for motors in config and motor init
-+ add content to the main menu and 'unopened' sub-menu pages
-o intervall() distance input in cm
-o define curve() with radius of circle instead of outer wheel distance
-+ add more possibilities for colors to toColor()
+Next:
+    UI:
+    + add side buttons for value input for higher steps
+    + add content to the main menu and 'unopened' sub-menu pages
+
+    Robot:
+    + make straightMecanum() abortalble with brick buttons
+    + add function to set a speed to all driving motors in robot.py
+    + add posibility for only one colorSensor in Front through config and robot.py
+    + line following mode
+    + use sensors only when connected
+    + make inverted gyro usable through setting
+
+    + gears option for motors in config and motor init
+    o intervall() distance input in cm
+    o define curve() with radius of circle instead of outer wheel distance
+    + add more possibilities for colors to toColor()
+
+    Logging:
+    o cleanup of Logger
+    + do configParser error handling porperly
+    + error messaging loadsettings
+
+Far-Off:
+    Robot:
+    + driving support for 2 wheel balancing robots
+
+    Logging:
+    + automatic region detection based on ip location + timezone time adjustment
+
+
+
+
+
+
+
