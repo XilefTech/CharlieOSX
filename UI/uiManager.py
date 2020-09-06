@@ -2,6 +2,9 @@ from profileHelper import ProfileHelper
 from pybricks.parameters import Button, Color
 from pybricks.media.ev3dev import Image, ImageFile, Font, SoundFile
 
+from UI import UIObject
+
+
 class UIManager:
     def __init__(self, config, settings, brick, logger, settingsPath):
 
@@ -22,10 +25,9 @@ class UIManager:
 
         self.UIObjects = []
 
-
-    def addObject(self,UIObject):
+    def addObject(self, UIObject):
         self.UIObjects.append(UIObject)
 
     def draw(self):
         for UIObject in self.UIObjects:
-            UIObject.draw();
+            UIObject.draw()
