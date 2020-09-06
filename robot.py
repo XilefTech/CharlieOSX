@@ -253,8 +253,7 @@ class Charlie():
             startValue = self.__gyro.angle()
 
             # convert the input (cm) to revs
-            revs = dist / (self.__config['wheelDiameter'] * math.pi)
-            revs = revs / 2
+            revs = dist / (self.__config['wheelDiameter'] * math.pi) / 2
 
             # drive
             if self.__config['robotType'] == 'NORMAL':
@@ -396,15 +395,17 @@ class Charlie():
                 self.__fLMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
                 self.__bLMotor.run_angle(speed, revs * -360, Stop.COAST, True)
 
-    def intervall(self, speed, revs, count):
+    def intervall(self, speed, dist, count):
         '''
         Drives forwads and backwards x times.
 
         Args:
             speed (int): the speed to drive at
-            revs (int): the distance (in motor revolutions) to drive
+            revs (int): the distance (in cm) to drive
             count (int): how many times it should repeat the driving
         '''
+        # convert the input (cm) to revs
+        revs = dist / (self.__config['wheelDiameter'] * math.pi) / 2
 
         speed = speed * 1.7 * 6  # speed in deg/s to %
         # move count times forwards and backwards
