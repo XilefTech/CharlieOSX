@@ -628,13 +628,13 @@ class Charlie():
     def breakMotors(self):
         '''Sub-method for breaking all the motors'''
         if self.__config['robotType'] == 'NORMAL':
-            lMotor.run_angle(100, 0, Stop.HOLD, False)
-            rMotor.run_angle(100, 0, Stop.HOLD, False)
+            lMotor.hold()
+            rMotor.hold()
         else:
-            fRMotor.run_angle(100, 0, Stop.HOLD, False)
-            bRMotor.run_angle(100, 0, Stop.HOLD, False)
-            fLMotor.run_angle(100, 0, Stop.HOLD, False)
-            bLMotor.run_angle(100, 0, Stop.HOLD, False)
+            fRMotor.hold()
+            bRMotor.hold()
+            fLMotor.hold()
+            bLMotor.hold()
 
     def _map(x, in_min, in_max, out_min, out_max):
         '''
