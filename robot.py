@@ -514,48 +514,20 @@ class Charlie():
             # if drive to color black drive until back after white to not recognize colors on the field as lines
             if color == Color.BLACK:
                 while lLight.color() != Color.WHITE and not any(self.brick.buttons.pressed()):
-                    if robotType == 'NORMAL':
-                        self.__rMotor.dc(speed)
-                        self.__lMotor.dc(speed)
-                    else:
-                        self.__fRMotor.dc(speed)
-                        self.__bRMotor.dc(speed)
-                        self.__fLMotor.dc(speed)
-                        self.__bLMotor.dc(speed)
+                    self.turnBothMotors(speed)
 
             while lLight.color() != color and not any(self.brick.buttons.pressed()):
-                if robotType == 'NORMAL':
-                    self.__rMotor.dc(speed)
-                    self.__lMotor.dc(speed)
-                else:
-                    self.__fRMotor.dc(speed)
-                    self.__bRMotor.dc(speed)
-                    self.__fLMotor.dc(speed)
-                    self.__bLMotor.dc(speed)
+                self.turnBothMotors(speed)
 
         # only drive till right colorSensor
         elif side == 3:
             # if drive to color black drive until back after white to not recognize colors on the field as lines
             if color == Color.BLACK:
                 while rLight.color() != Color.WHITE and not any(self.brick.buttons.pressed()):
-                    if robotType == 'NORMAL':
-                        self.__rMotor.dc(speed)
-                        self.__lMotor.dc(speed)
-                    else:
-                        self.__fRMotor.dc(speed)
-                        self.__bRMotor.dc(speed)
-                        self.__fLMotor.dc(speed)
-                        self.__bLMotor.dc(speed)
+                    self.turnBothMotors(speed)
 
             while rLight.color() != color and not any(self.brick.buttons.pressed()):
-                if robotType == 'NORMAL':
-                    self.__rMotor.dc(speed)
-                    self.__lMotor.dc(speed)
-                else:
-                    self.__fRMotor.dc(speed)
-                    self.__bRMotor.dc(speed)
-                    self.__fLMotor.dc(speed)
-                    self.__bLMotor.dc(speed)
+                self.turnBothMotors(speed)
 
         # drive untill both colorSensors
         elif side == 23:
@@ -588,20 +560,12 @@ class Charlie():
             speed (int): the speed to drive at
         '''
         while not touch.pressed():
-            if self.__config['robotType'] == 'NORMAL':
-                self.__rMotor.dc(- abs(speed))
-                self.__lMotor.dc(- abs(speed))
-            else:
-                self.__fRMotor.dc(- abs(speed))
-                self.__bRMotor.dc(- abs(speed))
-                self.__fLMotor.dc(- abs(speed))
-                self.__bLMotor.dc(- abs(speed))
+            self.turnBothMotors(- abs(speed))
 
             if any(self.brick.buttons()):
                 break
 
-        self.__lMotor.dc(0)
-        self.__rMotor.dc(0)
+        self.turnBothMotors(0)
 
     def action(self, speed, revs, port):
         '''
@@ -685,6 +649,22 @@ class Charlie():
         else:
             __fRMotor.dc(speed)
             __bRMotor.dc(speed)
+
+    def turnBothMotors(self, speed):
+        '''
+        Submethod for setting a motor.dc() to all motors
+        
+        Args:
+            speed (int): the speed (in percent) to set the motors to
+        '''
+        if self.__config['robotType'] == 'NORMAL':
+                    self.__rMotor.dc(speed)
+                    self.__lMotor.dc(speed)
+                else:
+                    self.__fRMotor.dc(speed)
+                    self.__bRMotor.dc(speed)
+                    self.__fLMotor.dc(speed)
+                    self.__bLMotor.dc(speed)
 
     def breakMotors(self):
         '''Sub-method for breaking all the motors'''

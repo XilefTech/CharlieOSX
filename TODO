@@ -5,7 +5,6 @@ Next:
 
     Robot:
     + make straightMecanum() abortalble with brick buttons
-    + add function to set a speed to all driving motors in robot.py
     + add posibility for only one colorSensor in Front through config and robot.py
     + line following mode
     + use sensors only when connected
@@ -14,6 +13,7 @@ Next:
     o intervall() distance input in cm
     o define curve() with radius of circle instead of outer wheel distance
     + add more possibilities for colors to toColor()
+    + cleanup and compacting of straight()
 
     Logging:
     o cleanup of Logger
@@ -24,10 +24,3 @@ Far-Off:
 
     Logging:
     + automatic region detection based on ip location + timezone time adjustment
-
-
-
-
-
-
-
