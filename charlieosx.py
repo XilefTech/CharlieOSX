@@ -74,6 +74,7 @@ class CharlieOSX:
         Args:
             settingsPath (str): The path to the Json file to read from.
         '''
+        print('[%s] [Debug]' % '[ChalieOSX]', 'Started loading settings')
         order = ['Debug Driving', 'Audio-Volume', 'EFX-Volume', 'Logging-level', 'Show Warnings', 'Show Errors']
         try:
             with open(settingsPath, 'r') as f:
@@ -84,9 +85,10 @@ class CharlieOSX:
                     sorted_settings['options'][order[i]] = settings['options'][order[i]]
                 sorted_settings['values'] = settings['values']
                 sorted_settings['types'] = settings['types']
+            print('[%s] [Debug]' % '[ChalieOSX}', 'Successfully loaded settings')
             return sorted_settings
         except Exception as exception:
-            print('No settings found, falling back to default values \t caused by:', exception)
+            print('[%s] [Debug]' % '[ChalieOSX]', 'No settings found, falling back to default values \t caused by:', exception)
             settings = OrderedDict({'options': OrderedDict({'Debug Driving': 2, 'Audio-Volume': 80, 'EFX-Volume': 25, 'Logging-level': 0, 'Show Warnings': True, 'Show Errors': True}),
                                     'values': {
                                         'min': {'Debug Driving': 0, 'Audio-Volume': 0, 'EFX-Volume': 0, 'Logging-level': 0, 'Show Warnings': False, 'Show Errors': False},
