@@ -10,7 +10,6 @@ Next:
     + line following mode
     + use sensors only when connected
     + make inverted gyro usable through setting
-
     + gears option for motors in config and motor init
     o intervall() distance input in cm
     o define curve() with radius of circle instead of outer wheel distance
@@ -18,7 +17,6 @@ Next:
 
     Logging:
     o cleanup of Logger
-    + do configParser error handling porperly
     + error messaging loadsettings
 
 Far-Off:
