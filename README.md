@@ -9,7 +9,9 @@ CharlieOSX is a Project, meant to be used in all kinds of driving Lego Mindstorm
 CharlieOSX offers a wide feature set with the two main things being:
 1. Highly accurate and self-correcting driving methods based on gyro-sensor data
 2. An on-Brick GUI for Programing, testing and using of programs without the need of a computer at all.
+
 It will be FLL-Ready (as soon as the basic feature set is fully implemented and tested).
+
 Also it will help you to improve your movements through showing important data in the screen while driving. (Not implemented yet)
 
 ### How to use CharlieOSX with your robot:
