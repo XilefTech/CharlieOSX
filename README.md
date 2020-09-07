@@ -4,6 +4,8 @@ I'm still far away from a final version.*
 # CharlieOSX
 *By XilefTech from the "Lego Spirits"*
 
+![Image of the Main Menu](https://i.pinimg.com/474x/38/bf/b9/38bfb9bd54bc9f610f0fcf08225d95ac.jpg)
+
 #### Summary
 CharlieOSX is a Project, meant to be used in all kinds of driving Lego Mindstorms EV3 Robots, with support for other types of robots maybe coming in the future.
 CharlieOSX offers a wide feature set with the two main things being:
