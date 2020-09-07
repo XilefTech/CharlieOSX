@@ -265,7 +265,7 @@ class Charlie():
             # convert the input (cm) to revs
             revs = dist / (self.__config['wheelDiameter'] * math.pi) / 2
 
-            motor = self.__rMotor if self.__config['robotType'] == 'Normal' else self.__fRMotor
+            motor = self.__rMotor if self.__config['robotType'] == 'NORMAL' else self.__fRMotor
 
             # drive
             motor.reset_angle(0)
@@ -627,13 +627,13 @@ class Charlie():
             speed (int): the speed (in percent) to set the motors to
         '''
         if self.__config['robotType'] == 'NORMAL':
-                    self.__rMotor.dc(speed)
-                    self.__lMotor.dc(speed)
-                else:
-                    self.__fRMotor.dc(speed)
-                    self.__bRMotor.dc(speed)
-                    self.__fLMotor.dc(speed)
-                    self.__bLMotor.dc(speed)
+            self.__rMotor.dc(speed)
+            self.__lMotor.dc(speed)
+        else:
+            self.__fRMotor.dc(speed)
+            self.__bRMotor.dc(speed)
+            self.__fLMotor.dc(speed)
+            self.__bLMotor.dc(speed)
 
     def breakMotors(self):
         '''Sub-method for breaking all the motors'''
