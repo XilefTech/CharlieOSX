@@ -67,41 +67,51 @@ class Charlie():
         self.logger.debug(self, "Starting motor initialisation...")
         if self.__config['robotType'] == 'NORMAL':
             try:
-                self.__lMotor = Motor(self.__conf2port[self.__config['leftMotorPort']], Direction.CLOCKWISE if (
-                    not self.__config['leftMotorInverted']) else Direction.COUNTERCLOCKWISE)
-                self.__rMotor = Motor(self.__conf2port[self.__config['rightMotorPort']], Direction.CLOCKWISE if (
-                    not self.__config['rightMotorInverted']) else Direction.COUNTERCLOCKWISE)
+                self.__lMotor = Motor(self.__conf2port[self.__config['leftMotorPort']],
+                    Direction.CLOCKWISE if (not self.__config['leftMotorInverted']) else Direction.COUNTERCLOCKWISE,
+                    gears = self.__config['leftMotorGears'])
+                self.__rMotor = Motor(self.__conf2port[self.__config['rightMotorPort']],
+                    Direction.CLOCKWISE if (not self.__config['rightMotorInverted']) else Direction.COUNTERCLOCKWISE,
+                    gears = self.__config['rightMotorGears'])
             except Exception as exception:
                 self.logger.error(
                     self, "Failed to initialize movement motors for robot type NORMAL - Are u sure they\'re all connected?", exception)
             if self.__config['useGearing']:
                 try:
-                    self.__gearingPortMotor = Motor(self.__conf2port[self.__config['gearingSelectMotorPort']], Direction.CLOCKWISE if (
-                        not self.__config['gearingSelectMotorPortInverted']) else Direction.COUNTERCLOCKWISE)
-                    self.__gearingTurnMotor = Motor(self.__conf2port[self.__config['gearingTurnMotorPort']], Direction.CLOCKWISE if (
-                        not self.__config['gearingTurnMotorPortInverted']) else Direction.COUNTERCLOCKWISE)
+                    self.__gearingPortMotor = Motor(self.__conf2port[self.__config['gearingSelectMotorPort']],
+                        Direction.CLOCKWISE if (not self.__config['gearingSelectMotorInverted']) else Direction.COUNTERCLOCKWISE,
+                        gears = self.__config['gearingSelectMotorGears'])
+                    self.__gearingTurnMotor = Motor(self.__conf2port[self.__config['gearingTurnMotorPort']],
+                        Direction.CLOCKWISE if (not self.__config['gearingTurnMotorInverted']) else Direction.COUNTERCLOCKWISE,
+                        gears = self.__config['gearingTurnMotorGears'])
                 except Exception as exception:
                     self.logger.error(
                         self, "Failed to initialize action motors for the gearing - Are u sure they\'re all connected?", exception)
             else:
                 try:
-                    self.__aMotor1 = Motor(self.__conf2port[self.__config['firstActionMotorPort']], Direction.CLOCKWISE if (
-                        not self.__config['firstActionMotorInverted']) else Direction.COUNTERCLOCKWISE) if (self.__config['firstActionMotorPort'] != 0) else 0
-                    self.__aMotor2 = Motor(self.__conf2port[self.__config['secondActionMotorPort']], Direction.CLOCKWISE if (
-                        not self.__config['secondActionMotorInverted']) else Direction.COUNTERCLOCKWISE) if (self.__config['secondActionMotorPort'] != 0) else 0
+                    self.__aMotor1 = Motor(self.__conf2port[self.__config['firstActionMotorPort']],
+                        Direction.CLOCKWISE if (not self.__config['firstActionMotorInverted']) else Direction.COUNTERCLOCKWISE,
+                        gears = self.__config['firstActionMotorGears']) if (self.__config['firstActionMotorPort'] != 0) else 0
+                    self.__aMotor2 = Motor(self.__conf2port[self.__config['secondActionMotorPort']],
+                        Direction.CLOCKWISE if (not self.__config['secondActionMotorInverted']) else Direction.COUNTERCLOCKWISE,
+                        gears = self.__config['secondActionMotorGears']) if (self.__config['secondActionMotorPort'] != 0) else 0
                 except Exception as exception:
                     self.logger.error(
                         self, "Failed to initialize action motors - Are u sure they\'re all connected?", exception)
         else:
             try:
-                self.__fRMotor = Motor(self.__conf2port[self.__config['frontRightMotorPort']], Direction.CLOCKWISE if (
-                    not self.__config['frontRightMotorInverted']) else Direction.COUNTERCLOCKWISE) if (self.__config['frontRightMotorPort'] != 0) else 0
-                self.__bRMotor = Motor(self.__conf2port[self.__config['backRightMotorPort']], Direction.CLOCKWISE if (
-                    not self.__config['backRightMotorInverted']) else Direction.COUNTERCLOCKWISE) if (self.__config['backRightMotorPort'] != 0) else 0
-                self.__fLMotor = Motor(self.__conf2port[self.__config['frontLeftMotorPort']], Direction.CLOCKWISE if (
-                    not self.__config['frontLeftMotorInverted']) else Direction.COUNTERCLOCKWISE) if (self.__config['frontLeftMotorPort'] != 0) else 0
-                self.__bLMotor = Motor(self.__conf2port[self.__config['backLeftMotorPort']], Direction.CLOCKWISE if (
-                    not self.__config['backLeftMotorInverted']) else Direction.COUNTERCLOCKWISE) if (self.__config['backLeftMotorPort'] != 0) else 0
+                self.__fRMotor = Motor(self.__conf2port[self.__config['frontRightMotorPort']],
+                Direction.CLOCKWISE if (not self.__config['frontRightMotorInverted']) else Direction.COUNTERCLOCKWISE,
+                gears = self.__config['frontRightMotorGears']) if (self.__config['frontRightMotorPort'] != 0) else 0
+                self.__bRMotor = Motor(self.__conf2port[self.__config['backRightMotorPort']],
+                Direction.CLOCKWISE if (not self.__config['backRightMotorInverted']) else Direction.COUNTERCLOCKWISE,
+                gears = self.__config['backRightMotorGears']) if (self.__config['backRightMotorPort'] != 0) else 0
+                self.__fLMotor = Motor(self.__conf2port[self.__config['frontLeftMotorPort']],
+                Direction.CLOCKWISE if (not self.__config['frontLeftMotorInverted']) else Direction.COUNTERCLOCKWISE,
+                gears = self.__config['frontLeftMotorGears']) if (self.__config['frontLeftMotorPort'] != 0) else 0
+                self.__bLMotor = Motor(self.__conf2port[self.__config['backLeftMotorPort']],
+                Direction.CLOCKWISE if (not self.__config['backLeftMotorInverted']) else Direction.COUNTERCLOCKWISE,
+                gears = self.__config['backLeftMotorGears']) if (self.__config['backLeftMotorPort'] != 0) else 0
             except Exception as exception:
                 self.logger.error(
                     self, "Failed to initialize movement motors for robot type %s - Are u sure they\'re all connected? Errored at Port" % self.__config['robotType'], exception)
