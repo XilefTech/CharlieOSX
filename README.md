@@ -4,9 +4,13 @@ I'm still far away from a final version.*
 # CharlieOSX
 *By XilefTech from the "Lego Spirits"*
 
-CharlieOSX is the best choice as a program for your specific robot.
-Just fill in your robot Parameters in the config.py file and everything else like driving and robot handling is set up automatically.
-
+#### Summary
+CharlieOSX is a Project, meant to be used in all kinds of driving Lego Mindstorms EV3 Robots, with support for other types of robots maybe coming in the future.
+CharlieOSX offers a wide feature set with the two main things being:
+1. Highly accurate and self-correcting driving methods based on gyro-sensor data
+2. An on-Brick GUI for Programing, testing and using of programs without the need of a computer at all.
+It will be FLL-Ready (as soon as the basic feature set is fully implemented and tested).
+Also it will help you to improve your movements through showing important data in the screen while driving. (Not implemented yet)
 
 ### How to use CharlieOSX with your robot:
 1. Download and open this project in VS code
