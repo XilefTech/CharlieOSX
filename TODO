@@ -13,9 +13,13 @@ Next:
     o define curve() with radius of circle instead of outer wheel distance
     + add more possibilities for colors to toColor()
     o some extensive testing and fixing of errors
+    + add on-screen output of sensor-and motor data during driving
 
     Logging:
     o cleanup of Logger
+
+    Configparser:
+    + add support for one-line arrays and nested arrays
 
 Far-Off:
     Robot:
