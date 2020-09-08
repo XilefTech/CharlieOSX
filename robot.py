@@ -600,10 +600,10 @@ class Charlie():
         '''
 
         if self.__config['robotType'] == 'NORMAL':
-            __lMotor.dc(speed)
+            self.__lMotor.dc(speed)
         else:
-            __fLMotor.dc(speed)
-            __bLMotor.dc(speed)
+            self.__fLMotor.dc(speed)
+            self.__bLMotor.dc(speed)
 
     def turnRightMotor(self, speed):
         '''
@@ -614,10 +614,10 @@ class Charlie():
         '''
 
         if self.__config['robotType'] == 'NORMAL':
-            __rMotor.dc(speed)
+            self.__rMotor.dc(speed)
         else:
-            __fRMotor.dc(speed)
-            __bRMotor.dc(speed)
+            self.__fRMotor.dc(speed)
+            self.__bRMotor.dc(speed)
 
     def turnBothMotors(self, speed):
         '''
@@ -638,13 +638,13 @@ class Charlie():
     def breakMotors(self):
         '''Sub-method for breaking all the motors'''
         if self.__config['robotType'] == 'NORMAL':
-            lMotor.hold()
-            rMotor.hold()
+            self.__lMotor.hold()
+            self.__rMotor.hold()
         else:
-            fRMotor.hold()
-            bRMotor.hold()
-            fLMotor.hold()
-            bLMotor.hold()
+            self.__fRMotor.hold()
+            self.__bRMotor.hold()
+            self.__fLMotor.hold()
+            self.__bLMotor.hold()
 
     def _map(x, in_min, in_max, out_min, out_max):
         '''
