@@ -6,7 +6,7 @@ from UI.rect import Rectangle
 
 
 class UIObject:
-    def __init__(self, brick, logger, rect: Rectangle):
+    def __init__(self, brick, logger, bounds: Rectangle):
 
         # Needed stuf
 
@@ -14,8 +14,7 @@ class UIObject:
         self.logger = logger
 
         # UI Stuff
-        self.rect = rect
+        self.bounds = bounds
 
     def draw(self):
-        self.brick.screen.draw_box(
-            self.x, self.y, self.width, self.height, r=3, fill=True, color=Color.RED)
+        pass
