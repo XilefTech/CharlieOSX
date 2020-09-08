@@ -5,21 +5,21 @@ Next:
 
     Robot:
     + make straightMecanum() abortalble with brick buttons
-    + add function to set a speed to all driving motors in robot.py
     + add posibility for only one colorSensor in Front through config and robot.py
     + line following mode
     + use sensors only when connected
     + make inverted gyro usable through setting
-
     + gears option for motors in config and motor init
-    o intervall() distance input in cm
     o define curve() with radius of circle instead of outer wheel distance
     + add more possibilities for colors to toColor()
+    o some extensive testing and fixing of errors
+    + add on-screen output of sensor-and motor data during driving
 
     Logging:
     o cleanup of Logger
-    + do configParser error handling porperly
-    + error messaging loadsettings
+
+    Configparser:
+    + add support for one-line arrays and nested arrays
 
 Far-Off:
     Robot:
@@ -27,10 +27,3 @@ Far-Off:
 
     Logging:
     + automatic region detection based on ip location + timezone time adjustment
-
-
-
-
-
-
-

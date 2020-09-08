@@ -67,41 +67,51 @@ class Charlie():
         self.logger.debug(self, "Starting motor initialisation...")
         if self.__config['robotType'] == 'NORMAL':
             try:
-                self.__lMotor = Motor(self.__conf2port[self.__config['leftMotorPort']], Direction.CLOCKWISE if (
-                    not self.__config['leftMotorInverted']) else Direction.COUNTERCLOCKWISE)
-                self.__rMotor = Motor(self.__conf2port[self.__config['rightMotorPort']], Direction.CLOCKWISE if (
-                    not self.__config['rightMotorInverted']) else Direction.COUNTERCLOCKWISE)
+                self.__lMotor = Motor(self.__conf2port[self.__config['leftMotorPort']],
+                    Direction.CLOCKWISE if (not self.__config['leftMotorInverted']) else Direction.COUNTERCLOCKWISE,
+                    gears = self.__config['leftMotorGears'])
+                self.__rMotor = Motor(self.__conf2port[self.__config['rightMotorPort']],
+                    Direction.CLOCKWISE if (not self.__config['rightMotorInverted']) else Direction.COUNTERCLOCKWISE,
+                    gears = self.__config['rightMotorGears'])
             except Exception as exception:
                 self.logger.error(
                     self, "Failed to initialize movement motors for robot type NORMAL - Are u sure they\'re all connected?", exception)
             if self.__config['useGearing']:
                 try:
-                    self.__gearingPortMotor = Motor(self.__conf2port[self.__config['gearingSelectMotorPort']], Direction.CLOCKWISE if (
-                        not self.__config['gearingSelectMotorPortInverted']) else Direction.COUNTERCLOCKWISE)
-                    self.__gearingTurnMotor = Motor(self.__conf2port[self.__config['gearingTurnMotorPort']], Direction.CLOCKWISE if (
-                        not self.__config['gearingTurnMotorPortInverted']) else Direction.COUNTERCLOCKWISE)
+                    self.__gearingPortMotor = Motor(self.__conf2port[self.__config['gearingSelectMotorPort']],
+                        Direction.CLOCKWISE if (not self.__config['gearingSelectMotorInverted']) else Direction.COUNTERCLOCKWISE,
+                        gears = self.__config['gearingSelectMotorGears'])
+                    self.__gearingTurnMotor = Motor(self.__conf2port[self.__config['gearingTurnMotorPort']],
+                        Direction.CLOCKWISE if (not self.__config['gearingTurnMotorInverted']) else Direction.COUNTERCLOCKWISE,
+                        gears = self.__config['gearingTurnMotorGears'])
                 except Exception as exception:
                     self.logger.error(
                         self, "Failed to initialize action motors for the gearing - Are u sure they\'re all connected?", exception)
             else:
                 try:
-                    self.__aMotor1 = Motor(self.__conf2port[self.__config['firstActionMotorPort']], Direction.CLOCKWISE if (
-                        not self.__config['firstActionMotorInverted']) else Direction.COUNTERCLOCKWISE) if (self.__config['firstActionMotorPort'] != 0) else 0
-                    self.__aMotor2 = Motor(self.__conf2port[self.__config['secondActionMotorPort']], Direction.CLOCKWISE if (
-                        not self.__config['secondActionMotorInverted']) else Direction.COUNTERCLOCKWISE) if (self.__config['secondActionMotorPort'] != 0) else 0
+                    self.__aMotor1 = Motor(self.__conf2port[self.__config['firstActionMotorPort']],
+                        Direction.CLOCKWISE if (not self.__config['firstActionMotorInverted']) else Direction.COUNTERCLOCKWISE,
+                        gears = self.__config['firstActionMotorGears']) if (self.__config['firstActionMotorPort'] != 0) else 0
+                    self.__aMotor2 = Motor(self.__conf2port[self.__config['secondActionMotorPort']],
+                        Direction.CLOCKWISE if (not self.__config['secondActionMotorInverted']) else Direction.COUNTERCLOCKWISE,
+                        gears = self.__config['secondActionMotorGears']) if (self.__config['secondActionMotorPort'] != 0) else 0
                 except Exception as exception:
                     self.logger.error(
                         self, "Failed to initialize action motors - Are u sure they\'re all connected?", exception)
         else:
             try:
-                self.__fRMotor = Motor(self.__conf2port[self.__config['frontRightMotorPort']], Direction.CLOCKWISE if (
-                    not self.__config['frontRightMotorInverted']) else Direction.COUNTERCLOCKWISE) if (self.__config['frontRightMotorPort'] != 0) else 0
-                self.__bRMotor = Motor(self.__conf2port[self.__config['backRightMotorPort']], Direction.CLOCKWISE if (
-                    not self.__config['backRightMotorInverted']) else Direction.COUNTERCLOCKWISE) if (self.__config['backRightMotorPort'] != 0) else 0
-                self.__fLMotor = Motor(self.__conf2port[self.__config['frontLeftMotorPort']], Direction.CLOCKWISE if (
-                    not self.__config['frontLeftMotorInverted']) else Direction.COUNTERCLOCKWISE) if (self.__config['frontLeftMotorPort'] != 0) else 0
-                self.__bLMotor = Motor(self.__conf2port[self.__config['backLeftMotorPort']], Direction.CLOCKWISE if (
-                    not self.__config['backLeftMotorInverted']) else Direction.COUNTERCLOCKWISE) if (self.__config['backLeftMotorPort'] != 0) else 0
+                self.__fRMotor = Motor(self.__conf2port[self.__config['frontRightMotorPort']],
+                Direction.CLOCKWISE if (not self.__config['frontRightMotorInverted']) else Direction.COUNTERCLOCKWISE,
+                gears = self.__config['frontRightMotorGears']) if (self.__config['frontRightMotorPort'] != 0) else 0
+                self.__bRMotor = Motor(self.__conf2port[self.__config['backRightMotorPort']],
+                Direction.CLOCKWISE if (not self.__config['backRightMotorInverted']) else Direction.COUNTERCLOCKWISE,
+                gears = self.__config['backRightMotorGears']) if (self.__config['backRightMotorPort'] != 0) else 0
+                self.__fLMotor = Motor(self.__conf2port[self.__config['frontLeftMotorPort']],
+                Direction.CLOCKWISE if (not self.__config['frontLeftMotorInverted']) else Direction.COUNTERCLOCKWISE,
+                gears = self.__config['frontLeftMotorGears']) if (self.__config['frontLeftMotorPort'] != 0) else 0
+                self.__bLMotor = Motor(self.__conf2port[self.__config['backLeftMotorPort']],
+                Direction.CLOCKWISE if (not self.__config['backLeftMotorInverted']) else Direction.COUNTERCLOCKWISE,
+                gears = self.__config['backLeftMotorGears']) if (self.__config['backLeftMotorPort'] != 0) else 0
             except Exception as exception:
                 self.logger.error(
                     self, "Failed to initialize movement motors for robot type %s - Are u sure they\'re all connected? Errored at Port" % self.__config['robotType'], exception)
@@ -239,7 +249,7 @@ class Charlie():
                     if any(self.brick.buttons()):
                         return
 
-    def straight(self, speed, dist, *args):
+    def straight(self, speed, dist, ang):
         '''
         Drives the Robot in a straight line.
         Also it self-corrects while driving with the help of a gyro-sensor. This is used to make the Robot more accurate
@@ -253,93 +263,50 @@ class Charlie():
             startValue = self.__gyro.angle()
 
             # convert the input (cm) to revs
-            revs = dist / (self.__config['wheelDiameter'] * math.pi)
-            revs = revs / 2
+            revs = dist / (self.__config['wheelDiameter'] * math.pi) / 2
+
+            motor = self.__rMotor if self.__config['robotType'] == 'NORMAL' else self.__fRMotor
 
             # drive
-            if self.__config['robotType'] == 'NORMAL':
-                self.__rMotor.reset_angle(0)
-                if revs > 0:
-                    while revs > self.__rMotor.angle() / 360:
-                        # if not driving staright correct it
-                        if self.__gyro.angle() - startValue > 0:
-                            lSpeed = speed - abs(self.__gyro.angle() - startValue) * correctionStrength
-                            rSpeed = speed
-                        elif self.__gyro.angle() - startValue < 0:
-                            rSpeed = speed - abs(self.__gyro.angle() - startValue) * correctionStrength
-                            lSpeed = speed
-                        else:
-                            lSpeed = speed
-                            rSpeed = speed
+            motor.reset_angle(0)
+            if revs > 0:
+                while revs > motor.angle() / 360:
+                    # if not driving staright correct it
+                    if self.__gyro.angle() - startValue > 0:
+                        lSpeed = speed - abs(self.__gyro.angle() - startValue) * correctionStrength
+                        rSpeed = speed
+                    elif self.__gyro.angle() - startValue < 0:
+                        rSpeed = speed - abs(self.__gyro.angle() - startValue) * correctionStrength
+                        lSpeed = speed
+                    else:
+                        lSpeed = speed
+                        rSpeed = speed
 
-                        self.__rMotor.dc(rSpeed)
-                        self.__lMotor.dc(lSpeed)
-                        
-                        #cancel if button pressed
-                        if any(self.brick.buttons.pressed()):
-                                return
-
-                else:
-                    while revs < __rMotor.angle() / 360:
-                        # if not driving staright correct it
-                        if self.__gyro.angle() - startValue < 0:
-                            rSpeed = speed + abs(self.__gyro.angle() - startValue) * correctionStrength
-                            lSpeed = speed
-                        elif self.__gyro.angle() - startValue > 0:
-                            lSpeed = speed + abs(self.__gyro.angle() - startValue) * correctionStrength
-                            rSpeed = speed
-                        else:
-                            lSpeed = speed
-                            rSpeed = speed
-
-                        self.__rMotor.dc(-rSpeed)
-                        self.__lMotor.dc(-lSpeed)
-                        # cancel if button pressed
-                        if any(self.brick.buttons()):
+                    self.turnLeftMotor(lSpeed)
+                    self.turnRightMotor(rSpeed)
+                    
+                    #cancel if button pressed
+                    if any(self.brick.buttons.pressed()):
                             return
+            else:
+                while revs < motor.angle() / 360:
+                    # if not driving staright correct it
+                    if self.__gyro.angle() - startValue < 0:
+                        rSpeed = speed + abs(self.__gyro.angle() - startValue) * correctionStrength
+                        lSpeed = speed
+                    elif self.__gyro.angle() - startValue > 0:
+                        lSpeed = speed + abs(self.__gyro.angle() - startValue) * correctionStrength
+                        rSpeed = speed
+                    else:
+                        lSpeed = speed
+                        rSpeed = speed
 
-            elif self.__config['robotType'] == 'ALLWHEEL':
-                self.__fRMotor.reset_angle(0)
-                if revs > 0:
-                    while revs > self.__fRMotor.angle() / 360:
-                        # if not driving staright correct it
-                        if self.__gyro.angle() - startValue > 0:
-                            lSpeed = speed - abs(self.__gyro.angle() - startValue) * correctionStrength
-                            rSpeed = speed
-                        elif self.__gyro.angle() - startValue < 0:
-                            rSpeed = speed - abs(self.__gyro.angle() - startValue) * correctionStrength
-                            lSpeed = speed
-                        else:
-                            lSpeed = speed
-                            rSpeed = speed
+                    self.turnLeftMotor(-lSpeed)
+                    self.turnRightMotor(-rSpeed)
+                    # cancel if button pressed
+                    if any(self.brick.buttons()):
+                        return
 
-                        self.__fRMotor.dc(rSpeed)
-                        self.__bRMotor.dc(rSpeed)
-                        self.__fLMotor.dc(lSpeed)
-                        self.__bLMotor.dc(lSpeed)
-                        #cancel if button pressed
-                        if any(self.brick.buttons.pressed()):
-                                return
-                else:
-                    while revs < self.__fRMotor.angle() / 360:
-                        # if not driving staright correct it
-                        if self.__gyro.angle() - startValue < 0:
-                            rSpeed = speed + abs(self.__gyro.angle() - startValue) * correctionStrength
-                            lSpeed = speed
-                        elif self.__gyro.angle() - startValue > 0:
-                            lSpeed = speed + abs(self.__gyro.angle() - startValue) * correctionStrength
-                            rSpeed = speed
-                        else:
-                            lSpeed = speed
-                            rSpeed = speed
-
-                        self.__fRMotor.dc(rSpeed)
-                        self.__bRMotor.dc(rSpeed)
-                        self.__fLMotor.dc(lSpeed)
-                        self.__bLMotor.dc(lSpeed)
-                        #cancel if button pressed
-                        if any(self.brick.buttons.pressed()):
-                                return
         else:
             self.__fRMotor.reset_angle(0)
             # convert the input (cm) to revs
@@ -396,15 +363,17 @@ class Charlie():
                 self.__fLMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
                 self.__bLMotor.run_angle(speed, revs * -360, Stop.COAST, True)
 
-    def intervall(self, speed, revs, count):
+    def intervall(self, speed, dist, count):
         '''
         Drives forwads and backwards x times.
 
         Args:
             speed (int): the speed to drive at
-            revs (int): the distance (in motor revolutions) to drive
+            revs (int): the distance (in cm) to drive
             count (int): how many times it should repeat the driving
         '''
+        # convert the input (cm) to revs
+        revs = dist / (self.__config['wheelDiameter'] * math.pi) / 2
 
         speed = speed * 1.7 * 6  # speed in deg/s to %
         # move count times forwards and backwards
@@ -514,48 +483,20 @@ class Charlie():
             # if drive to color black drive until back after white to not recognize colors on the field as lines
             if color == Color.BLACK:
                 while lLight.color() != Color.WHITE and not any(self.brick.buttons.pressed()):
-                    if robotType == 'NORMAL':
-                        self.__rMotor.dc(speed)
-                        self.__lMotor.dc(speed)
-                    else:
-                        self.__fRMotor.dc(speed)
-                        self.__bRMotor.dc(speed)
-                        self.__fLMotor.dc(speed)
-                        self.__bLMotor.dc(speed)
+                    self.turnBothMotors(speed)
 
             while lLight.color() != color and not any(self.brick.buttons.pressed()):
-                if robotType == 'NORMAL':
-                    self.__rMotor.dc(speed)
-                    self.__lMotor.dc(speed)
-                else:
-                    self.__fRMotor.dc(speed)
-                    self.__bRMotor.dc(speed)
-                    self.__fLMotor.dc(speed)
-                    self.__bLMotor.dc(speed)
+                self.turnBothMotors(speed)
 
         # only drive till right colorSensor
         elif side == 3:
             # if drive to color black drive until back after white to not recognize colors on the field as lines
             if color == Color.BLACK:
                 while rLight.color() != Color.WHITE and not any(self.brick.buttons.pressed()):
-                    if robotType == 'NORMAL':
-                        self.__rMotor.dc(speed)
-                        self.__lMotor.dc(speed)
-                    else:
-                        self.__fRMotor.dc(speed)
-                        self.__bRMotor.dc(speed)
-                        self.__fLMotor.dc(speed)
-                        self.__bLMotor.dc(speed)
+                    self.turnBothMotors(speed)
 
             while rLight.color() != color and not any(self.brick.buttons.pressed()):
-                if robotType == 'NORMAL':
-                    self.__rMotor.dc(speed)
-                    self.__lMotor.dc(speed)
-                else:
-                    self.__fRMotor.dc(speed)
-                    self.__bRMotor.dc(speed)
-                    self.__fLMotor.dc(speed)
-                    self.__bLMotor.dc(speed)
+                self.turnBothMotors(speed)
 
         # drive untill both colorSensors
         elif side == 23:
@@ -588,20 +529,12 @@ class Charlie():
             speed (int): the speed to drive at
         '''
         while not touch.pressed():
-            if self.__config['robotType'] == 'NORMAL':
-                self.__rMotor.dc(- abs(speed))
-                self.__lMotor.dc(- abs(speed))
-            else:
-                self.__fRMotor.dc(- abs(speed))
-                self.__bRMotor.dc(- abs(speed))
-                self.__fLMotor.dc(- abs(speed))
-                self.__bLMotor.dc(- abs(speed))
+            self.turnBothMotors(- abs(speed))
 
             if any(self.brick.buttons()):
                 break
 
-        self.__lMotor.dc(0)
-        self.__rMotor.dc(0)
+        self.turnBothMotors(0)
 
     def action(self, speed, revs, port):
         '''
@@ -686,16 +619,32 @@ class Charlie():
             __fRMotor.dc(speed)
             __bRMotor.dc(speed)
 
+    def turnBothMotors(self, speed):
+        '''
+        Submethod for setting a motor.dc() to all motors
+        
+        Args:
+            speed (int): the speed (in percent) to set the motors to
+        '''
+        if self.__config['robotType'] == 'NORMAL':
+            self.__rMotor.dc(speed)
+            self.__lMotor.dc(speed)
+        else:
+            self.__fRMotor.dc(speed)
+            self.__bRMotor.dc(speed)
+            self.__fLMotor.dc(speed)
+            self.__bLMotor.dc(speed)
+
     def breakMotors(self):
         '''Sub-method for breaking all the motors'''
         if self.__config['robotType'] == 'NORMAL':
-            lMotor.run_angle(100, 0, Stop.HOLD, False)
-            rMotor.run_angle(100, 0, Stop.HOLD, False)
+            lMotor.hold()
+            rMotor.hold()
         else:
-            fRMotor.run_angle(100, 0, Stop.HOLD, False)
-            bRMotor.run_angle(100, 0, Stop.HOLD, False)
-            fLMotor.run_angle(100, 0, Stop.HOLD, False)
-            bLMotor.run_angle(100, 0, Stop.HOLD, False)
+            fRMotor.hold()
+            bRMotor.hold()
+            fLMotor.hold()
+            bLMotor.hold()
 
     def _map(x, in_min, in_max, out_min, out_max):
         '''

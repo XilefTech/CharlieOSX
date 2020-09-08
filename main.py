@@ -21,4 +21,4 @@ os = CharlieOSX('config.cfg', 'settings.json', '')
 os.ui.mainLoop()
 
 ### example for driving straight
-os.robot.straight(100, 20)
+os.robot.straight(100, 20, 0)

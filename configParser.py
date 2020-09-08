@@ -2,7 +2,7 @@
 This file is just to offload some code and make it more organized.
 The only method in this file is parseConfig()
 '''
-def parseConfig(configPath):
+def parseConfig(configPath, logger):
     '''
         Loads the data from a config file based on my somewhat own syntax.
         
@@ -12,6 +12,8 @@ def parseConfig(configPath):
         Returns:
             dict: The config from the file as a dict
     '''
+    self = 'ConfigParser'
+    logger.info(self, 'Started config parsing')
     keys, values = [], []
     tempArr = []
     configDict = {}
@@ -33,7 +35,7 @@ def parseConfig(configPath):
                     keys.append(l[:l.find(':')])
                     arrMode = 1
     except Exception as exception:
-        print(exception, type(exception), str(exception))
+        logger.error(self, exception, type(exception), str(exception))
 
     for key in keys:
         try:
@@ -49,4 +51,5 @@ def parseConfig(configPath):
                 else:
                     element = values[keys.index(key)]
         configDict[key] = element
+    logger.info(self, 'Finished config parsing')
     return configDict
