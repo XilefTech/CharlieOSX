@@ -28,9 +28,16 @@ def parseConfig(configPath, logger):
                     tempArr = []
                 elif arrMode == 1 and l.find('#') == -1 and l != '':
                     tempArr.append(l[l.find('-') + 2:])
-                elif l.find('#') == -1 and l != '' and l.find('{') == -1:
+                elif l.find('#') == -1 and l != '' and l.find('{') == -1: # normal entry
                     keys.append(l[:l.find(':')])
-                    values.append(l[l.find(':') + 2:])
+                    value = l[l.find(':') + 2:]
+                    if value.find('[') != -1 and value.find(']') != -1:
+                        array = []
+
+                        #array.append()
+                        values.append(array)
+                    else:
+                        values.append(value)
                 elif l.find('#') == -1 and l != '':
                     keys.append(l[:l.find(':')])
                     arrMode = 1
