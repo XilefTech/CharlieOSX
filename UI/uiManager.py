@@ -1,3 +1,5 @@
+import _thread
+
 from profileHelper import ProfileHelper
 from pybricks.parameters import Button, Color
 from pybricks.media.ev3dev import Image, ImageFile, Font, SoundFile
@@ -24,7 +26,7 @@ class UIManager:
         # UI Stuff
 
         self.UIObjects = []
-
+    
     def addObject(self, UIObject):
         self.UIObjects.append(UIObject)
 
