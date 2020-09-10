@@ -17,10 +17,12 @@ It will be FLL-Ready (as soon as the basic feature set is fully implemented and 
 Also it will help you to improve your movements through showing important data in the screen while driving. (Not implemented yet)
 
 ### How to use CharlieOSX with your robot:
-1. Download and open this project in VS code
-2. Open the config.py file and fill in everything that is needed about your robot
-3. You can now add as many execute() functions as you like to the end of the main.py file with an array with the number codes. *Note: you can add multiple commands directly after each other in the array and the robot will drive them all*
-4. Just download and the robot will execute your instructions
+1. Install Ev3dev ev3dev.org
+
+2. Download and open this project in VS code
+3. Open the config.py file and fill in everything that is needed about your robot
+4. You can now add as many execute() functions as you like to the end of the main.py file with an array with the number codes. *Note: you can add multiple commands directly after each other in the array and the robot will drive them all*
+5. Just download and the robot will execute your instructions
 
 #### Features
 |Feature       | Status     |
