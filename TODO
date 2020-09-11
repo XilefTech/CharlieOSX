@@ -20,6 +20,7 @@ Next:
 
     Configparser:
     + add support for one-line arrays and nested arrays
+    o Cleanup
 
 Far-Off:
     Robot:
