@@ -17,7 +17,7 @@ It will be FLL-Ready (as soon as the basic feature set is fully implemented and 
 Also it will help you to improve your movements through showing important data in the screen while driving. (Not implemented yet)
 
 ### How to use CharlieOSX with your robot:
-1. Install [Ev3dev](ev3dev.org/docs/getting-started) or [Pybricks](https://docs.pybricks.com/en/latest/start_ev3.html), with pybricks being the recommended one
+1. Install [Ev3dev](ev3dev.org/docs/getting-started) or [Pybricks](https://docs.pybricks.com/en/latest/start_ev3.html).
 
 2. Download and open this project in VS code
 3. Open the config.py file and fill in everything that is needed about your robot
