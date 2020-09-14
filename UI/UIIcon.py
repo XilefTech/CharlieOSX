@@ -1,5 +1,5 @@
 from UI.UIObject import UIObject
-from UI.rect import Rectangle
+from UI.rect import Box
 
 
 class UIIcon(UIObject):
@@ -7,7 +7,7 @@ class UIIcon(UIObject):
         UIObject.__init__(brick, logger, Rectangle(0, y, 10, 10))
         self.icon = icon
 
-        self.container = Rectangle(
+        self.container = Box(
             self.bounds.width, 0, self.brick.screen.width, self.brick.screen.height)
 
     def drawIcon(self):
