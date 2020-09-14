@@ -4,6 +4,8 @@ from pybricks.media.ev3dev import Image, ImageFile, Font, SoundFile
 
 from UI import UIObject
 
+from UI import UIIcon
+
 
 class UIManager:
     def __init__(self, config, settings, brick, logger, settingsPath):
@@ -24,6 +26,16 @@ class UIManager:
         # UI Stuff
 
         self.UIObjects = []
+        self.UIIcons = [
+            "./icons/1.png",
+            "./icons/2.png",
+            "./icons/3.png",
+            "./icons/4.png",
+            "./icons/5.png",
+        ]
+
+        for i in range(len(self.UIIcons)):
+            self.addObject(UIIcon(self.brick, self.logger, i, self.UIIcons[i]))
 
     def addObject(self, UIObject):
         self.UIObjects.append(UIObject)

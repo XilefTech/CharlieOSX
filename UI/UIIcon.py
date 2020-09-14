@@ -1,5 +1,5 @@
 from UI.UIObject import UIObject
-from UI.rect import Rectangle
+from UI.rect import Box
 
 
 class UIIcon(UIObject):
@@ -15,4 +15,5 @@ class UIIcon(UIObject):
                                    fill=true, color=Color.RED)
 
     def drawContainer(self):
+        # Draw Border
         pass
