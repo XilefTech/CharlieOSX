@@ -1,4 +1,4 @@
-from UI.UIObject import UIObject
+from UI.uiObject import UIObject
 from UI.tools import Box
 
 
