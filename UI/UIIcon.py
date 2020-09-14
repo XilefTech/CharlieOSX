@@ -11,6 +11,7 @@ class UIIcon(UIObject):
             self.bounds.width, 0, self.brick.screen.width, self.brick.screen.height)
 
     def drawIcon(self):
+        # draw self at (y coord x height)
         self.brick.screen.draw_box(self.bounds.x, self.bounds.y, self.bounds.width, self.bounds.height, r=0,
                                    fill=true, color=Color.RED)
 
