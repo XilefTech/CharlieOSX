@@ -6,7 +6,7 @@ from UI.rect import Box
 
 
 class UIObject:
-    def __init__(self, brick, logger, bounds: Rectangle):
+    def __init__(self, brick, logger, bounds: Box):
 
         # Needed stuf
 

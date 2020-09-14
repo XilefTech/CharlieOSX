@@ -1,3 +1,5 @@
+import _thread
+
 from profileHelper import ProfileHelper
 from pybricks.parameters import Button, Color
 from pybricks.media.ev3dev import Image, ImageFile, Font, SoundFile
@@ -36,6 +38,18 @@ class UIManager:
 
         for i in range(len(self.UIIcons)):
             self.addObject(UIIcon(self.brick, self.logger, i, self.UIIcons[i]))
+
+    def __sound(self, file):
+        '''
+        This private method is used for playing a sound in a separate thread so that other code can be executed simultaneously.
+
+        Args:
+            file (str / SoundFile): The path to the soundfile to play
+        '''
+        def __playSoundFile(soundFile):
+            with self.__sound_lock:
+                self.brick.speaker.play_file(soundFile)
+        _thread.start_new_thread(__playSoundFile, (file, ))
 
     def addObject(self, UIObject):
         self.UIObjects.append(UIObject)
