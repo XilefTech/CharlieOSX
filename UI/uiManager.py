@@ -24,18 +24,22 @@ class UIManager:
         #self.logger.info(self, 'UI initialized')
 
         # UI Stuff
+        # self.UIObjects = []
+        # self.UIIcons = [
+        #     "./icons/1.png",
+        #     "./icons/2.png",
+        #     "./icons/3.png",
+        #     "./icons/4.png",
+        #     "./icons/5.png",
+        # ]
 
-        self.UIObjects = []
-        self.UIIcons = [
-            "./icons/1.png",
-            "./icons/2.png",
-            "./icons/3.png",
-            "./icons/4.png",
-            "./icons/5.png",
-        ]
-
-        for i in range(len(self.UIIcons)):
-            self.addObject(UIIcon(self.brick, self.logger, i, self.UIIcons[i]))
+        # for i in range(len(self.UIIcons)):
+        #     self.addObject(UIIcon(self.brick, self.logger, i, self.UIIcons[i]))
+        mainMenu = Menu('sidebar')
+        x = Box(0, 5, 20, 20)
+        y = UIObject(self.brick, x, 'img', (0, 0), 'assets/graphics/menus/programmingMainMenu.png')
+        mainMenu.addObject(y)
+        mainMenu.draw()
 
     def __sound(self, file):
         '''
