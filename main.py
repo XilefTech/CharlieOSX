@@ -6,6 +6,8 @@ from pybricks.ev3devices import (Motor, TouchSensor, ColorSensor, InfraredSensor
 from pybricks.parameters import (Port, Stop, Direction, Button, Color, SoundFile, ImageFile, Align)
 from pybricks.tools import print, StopWatch
 from charlieosx import CharlieOSX
+from UI.rect import Rectangle
+from UI.UIObject import UIObject
      
 ### things, I'm sometimes using to test things - can be ignored
 """
@@ -17,8 +19,13 @@ tools.doIntersect(lineMap)"""
 
 
 ### example code to start CharlieOSX and it's menu-system
-os = CharlieOSX('config.cfg', 'settings.json', '')
-os.ui.mainLoop()
+#os = CharlieOSX('config.cfg', 'settings.json', '')
+#os.ui.mainLoop()
 
 ### example for driving straight
-os.robot.straight(100, 20, 0)
+#os.robot.straight(100, 20, 0)
+
+from UI.uiManager import UIManager
+x = UIManager('','',EV3Brick(),'')
+print(x)
+time.sleep(10)
