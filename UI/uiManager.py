@@ -6,6 +6,8 @@ from pybricks.media.ev3dev import Image, ImageFile, Font, SoundFile
 
 from UI import UIObject
 
+from UI import UIIcon
+
 
 class UIManager:
     def __init__(self, config, settings, brick, logger, settingsPath):
@@ -26,7 +28,17 @@ class UIManager:
         # UI Stuff
 
         self.UIObjects = []
-    
+        self.UIIcons = [
+            "./icons/1.png",
+            "./icons/2.png",
+            "./icons/3.png",
+            "./icons/4.png",
+            "./icons/5.png",
+        ]
+
+        for i in range(len(self.UIIcons)):
+            self.addObject(UIIcon(self.brick, self.logger, i, self.UIIcons[i]))
+
     def __sound(self, file):
         '''
         This private method is used for playing a sound in a separate thread so that other code can be executed simultaneously.
@@ -38,7 +50,7 @@ class UIManager:
             with self.__sound_lock:
                 self.brick.speaker.play_file(soundFile)
         _thread.start_new_thread(__playSoundFile, (file, ))
-    
+
     def addObject(self, UIObject):
         self.UIObjects.append(UIObject)
 

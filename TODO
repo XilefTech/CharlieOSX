@@ -9,7 +9,6 @@ Next:
     + line following mode
     + use sensors only when connected
     + make inverted gyro usable through setting
-    + gears option for motors in config and motor init
     o define curve() with radius of circle instead of outer wheel distance
     + add more possibilities for colors to toColor()
     o some extensive testing and fixing of errors
@@ -19,7 +18,7 @@ Next:
     o cleanup of Logger
 
     Configparser:
-    + add support for one-line arrays and nested arrays
+    o Cleanup
 
 Far-Off:
     Robot:
