@@ -12,16 +12,16 @@ from UI import UIIcon
 class UIManager:
     def __init__(self, config, settings, brick, logger):
         # needed Stuff
-        logger.info(self, 'Starting UI initialisation')
+        #logger.info(self, 'Starting UI initialisation')
         self.__config = config
         self.__settings = settings
         self.__click = 'assets/media/click.wav'
         self.__confirm = 'assets/media/confirm.wav'
         self.brick = brick
         self.logger = logger
-        self.profileHelper = ProfileHelper(self.logger, self.__config)
+        #self.profileHelper = ProfileHelper(self.logger, self.__config)
         self.__sound_lock = _thread.allocate_lock()
-        self.logger.info(self, 'UI initialized')
+        #self.logger.info(self, 'UI initialized')
 
         # UI Stuff
 
