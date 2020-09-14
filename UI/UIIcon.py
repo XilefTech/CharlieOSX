@@ -1,5 +1,5 @@
 from UI.UIObject import UIObject
-from UI.box import Box
+from UI.tools import Box
 
 
 class UIIcon(UIObject):
