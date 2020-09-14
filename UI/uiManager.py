@@ -10,13 +10,11 @@ from UI import UIIcon
 
 
 class UIManager:
-    def __init__(self, config, settings, brick, logger, settingsPath):
-
+    def __init__(self, config, settings, brick, logger):
         # needed Stuff
         logger.info(self, 'Starting UI initialisation')
         self.__config = config
         self.__settings = settings
-        self.__settingsPath = settingsPath
         self.__click = 'assets/media/click.wav'
         self.__confirm = 'assets/media/confirm.wav'
         self.brick = brick
