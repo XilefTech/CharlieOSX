@@ -1,4 +1,4 @@
-from UI.UIObject import UIObject
+from UI.uiObject import UIObject
 
 
 class Menu():
@@ -18,7 +18,7 @@ class Menu():
     def rasterize(self):
         return 'WIP'
 
-class Box:
+class Box():
     def __init__(self, x, y, width, height):
         self.x = x
         self.y = y
