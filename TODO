@@ -13,6 +13,7 @@ Next:
     + add more possibilities for colors to toColor()
     o some extensive testing and fixing of errors
     + add on-screen output of sensor-and motor data during driving
+    + Acoustic Feedback while driving
 
     Logging:
     o cleanup of Logger
