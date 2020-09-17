@@ -8,7 +8,6 @@ Next:
     + add posibility for only one colorSensor in Front through config and robot.py
     + line following mode
     + use sensors only when connected
-    + make inverted gyro usable through setting
     o define curve() with radius of circle instead of outer wheel distance
     + add more possibilities for colors to toColor()
     o some extensive testing and fixing of errors
