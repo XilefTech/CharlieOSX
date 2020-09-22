@@ -4,8 +4,8 @@ from profileHelper import ProfileHelper
 from pybricks.parameters import Button, Color
 from pybricks.media.ev3dev import Image, ImageFile, Font, SoundFile
 
-from UI.uiObject import UIObject
-from UI import UIIcon
+from UI.UIObject import UIObject
+#from UI import UIIcon
 from UI.tools import Menu, Box
 
 
