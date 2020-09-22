@@ -6,8 +6,9 @@ from pybricks.media.ev3dev import Image, ImageFile, Font, SoundFile
 
 
 class UIObject:
-    def __init__(self, brick, bounds: Box, contentType, contentPosition, content):
+    def __init__(self, name: str, brick, bounds: Box, contentType, contentPosition: tuple, content):
         #self.logger = logger
+        self.name = name
         self.brick = brick
         self.bounds = bounds
         self.contentType = contentType
