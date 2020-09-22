@@ -1,4 +1,4 @@
-from UI.uiObject import UIObject
+from UI.UIObject import UIObject
 
 
 class Menu():
@@ -12,8 +12,11 @@ class Menu():
         self.objects.append(object)
 
     def draw(self):
-        for i in self.objects:
-            i.draw()
+        if self.type != 'sidebar':
+            for i in self.objects:
+                i.draw()
+        else:
+            self.objects[0].draw()
 
     def rasterize(self):
         return 'WIP'
