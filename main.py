@@ -6,8 +6,7 @@ from pybricks.ev3devices import (Motor, TouchSensor, ColorSensor, InfraredSensor
 from pybricks.parameters import (Port, Stop, Direction, Button, Color, SoundFile, ImageFile, Align)
 from pybricks.tools import print, StopWatch
 from charlieosx import CharlieOSX
-from UI.rect import Rectangle
-from UI.UIObject import UIObject
+from UI.uiManager import UIManager
      
 ### things, I'm sometimes using to test things - can be ignored
 """
