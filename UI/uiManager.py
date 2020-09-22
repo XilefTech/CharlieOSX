@@ -36,9 +36,13 @@ class UIManager:
         # for i in range(len(self.UIIcons)):
         #     self.addObject(UIIcon(self.brick, self.logger, i, self.UIIcons[i]))
         mainMenu = Menu('sidebar')
-        x = Box(0, 5, 20, 20)
-        y = UIObject(self.brick, x, 'img', (0, 0), 'assets/graphics/menus/programmingMainMenu.png')
-        mainMenu.addObject(y)
+        #y = UIObject(self.brick, x, 'img', (0, 0), 'assets/graphics/menus/programmingMainMenu.png')
+        mainMenu.addObject(UIObject('programming', self.brick, Box(0, 5, 20, 20), 'img', (0, 0), 'assets/graphics/menus/programmingMainMenu.png'))
+        mainMenu.addObject(UIObject('testing', self.brick, Box(0, 25, 20, 20), 'img', (0, 0), 'assets/graphics/menus/testingMainMenu.png'))
+        mainMenu.addObject(UIObject('remote', self.brick, Box(0, 45, 20, 20), 'img', (0, 0), 'assets/graphics/menus/remoteMainMenu.png'))
+        mainMenu.addObject(UIObject('competition', self.brick, Box(0, 65, 20, 20), 'img', (0, 0), 'assets/graphics/menus/competitionMainMenu.png'))
+        mainMenu.addObject(UIObject('settings', self.brick, Box(0, 85, 20, 20), 'img', (0, 0), 'assets/graphics/menus/settingsMainMenu.png'))
+        mainMenu.rasterize()
         mainMenu.draw()
 
     def __sound(self, file):
