@@ -52,7 +52,6 @@ def parseConfig(configPath, logger):
                                 array[index] = int(x)
                             except: 
                                 pass
-                        print(array)
                         values.append(array)
                     else:
                         values.append(value)
