@@ -40,7 +40,7 @@ class Charlie():
         '''Sub-method for initializing Sensors.'''
         self.logger.debug(self, "Starting sensor initialisation...")
         try:
-            self.__gyro = GyroSensor(self.__conf2port[self.__config['gyroSensorPort']]) if self.__config['gyroSensorPort'] != 0 else 0
+            self.__gyro = GyroSensor(self.__conf2port[self.__config['gyroSensorPort']], positive_direction = Direction.CLOCKWISE if not self.__config['gyroInverted'] else Direction.COUNTERCLOCKWISE) if self.__config['gyroSensorPort'] != 0 else 0
             self.logger.debug(self, 'Gyrosensor initialized sucessfully on port %s' % self.__config['gyroSensorPort'])
         except Exception as exception:
             self.__gyro = 0
