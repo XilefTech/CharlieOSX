@@ -1,6 +1,6 @@
-import math
+import math, _thread, time
 from pybricks.ev3devices import (Motor, TouchSensor, ColorSensor, InfraredSensor, UltrasonicSensor, GyroSensor)
-from pybricks.parameters import (Port, Direction)
+from pybricks.parameters import (Port, Direction, Color)
 
 
 class Charlie():
@@ -25,6 +25,8 @@ class Charlie():
 
         self.__initSensors()
         self.__initMotors()
+        self.__screenRoutine = False
+        self.showDetails()
         
         self.logger.info(self, 'Driving for Charlie initialized')
     #TODO
@@ -118,6 +120,35 @@ class Charlie():
         self.logger.debug(self, "Motor initialisation done")
         self.logger.info(self, 'Charlie initialized')
 
+    def showDetails(self):
+        '''
+        Processes sensor data in a separate thread and shows 
+        '''
+        threadLock = _thread.allocate_lock()
+        def __screenPrintRoutine():
+            while True:
+                if self.__gyro.angle() > 360:
+                    ang = self.__gyro.angle() - 360
+                else:
+                    ang = self.__gyro.angle()
+                speedRight = self.__rMotor.speed() if self.__config['robotType'] == 'NORMAL' else self.__fRMotor.speed()
+                speedRight = speedRight / 360   # from deg/s to revs/sec
+                speedRight = speedRight * (self.__config['wheelDiameter'] * math.pi)    # from revs/sec to cm/sec
+                speedLeft = self.__lMotor.speed() if self.__config['robotType'] == 'NORMAL' else self.__fLMotor.speed()
+                speedLeft = speedLeft / 360   # from deg/s to revs/sec
+                speedLeft = speedLeft * (self.__config['wheelDiameter'] * math.pi)    # from revs/sec to cm/sec
+
+                if self.__screenRoutine:
+                    self.brick.screen.draw_text(5, 10, 'Robot-Angle: %s' % ang, text_color=Color.BLACK, background_color=Color.WHITE)
+                    self.brick.screen.draw_text(5, 50, 'Right Motor Speed: %s' % ang, text_color=Color.BLACK, background_color=Color.WHITE)
+                    self.brick.screen.draw_text(5, 90, 'Left Motor Speed: %s' % ang, text_color=Color.BLACK, background_color=Color.WHITE)
+                print('lol', self.__screenRoutine, self.__rMotor.angle())
+                time.sleep(0.1)
+
+
+        with threadLock:
+            _thread.start_new_thread(__screenPrintRoutine, ())
+
     def execute(self, params):
         '''
         This function interprets the number codes from the given array and executes the driving methods accordingly
@@ -151,7 +182,7 @@ class Charlie():
             mode, arg1, arg2, arg3 = pparams.pop(0), pparams.pop(
                 0), pparams.pop(0), pparams.pop(0)
 
-
+            
             print('here?')
             methods[mode](arg1, arg2, arg3)
 
