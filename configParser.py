@@ -22,47 +22,49 @@ def parseConfig(configPath, logger):
         with open(configPath, 'r') as f:
             for line in f:
                 l = line.rstrip()
-                if l == '}':
-                    arrMode = 0
-                    values.append(tempArr)
-                    tempArr = []
+                if l.find('#') == -1 and l != '':
+                    if l == '}': # array end
+                        arrMode = 0
+                        values.append(tempArr)
+                        tempArr = []
 
-                elif arrMode == 1 and l.find('#') == -1 and l != '':
-                    tempArr.append(l[l.find('-') + 2:])
+                    elif arrMode == 1: # array entry
+                        tempArr.append(l[l.find('-') + 2:])
 
-                elif l.find('#') == -1 and l != '' and l.find('{') == -1: # normal entry
-                    keys.append(l[:l.find(':')])
-                    value = l[l.find(':') + 2:]
+                    elif l.find('{') == -1: # normal entry
+                        keys.append(l[:l.find(':')])
+                        value = l[l.find(':') + 2:]
 
-                    if value.find('[') != -1 and value.find(']') != -1:
-                        value = value[1:len(value) - 1] # cut off first set of brackets []
-                        array = value.split(', ')
-                        array = [] if array == [''] else array # delete string in array if empty
-                        for index, x in enumerate(array):
-                            if x.find('[') != -1 and x.find(']') != -1: # look for nested array
-                                x = x[1:len(x) - 1] # cut off first set of brackets []
-                                arr = x.split(', ')
-                                for idx, y in enumerate(array):   # convert ints to ints from str
-                                    try:
-                                        arr[index] = int(y)
-                                    except: 
-                                        pass
-                            
-                            try:
-                                array[index] = int(x)
-                            except: 
-                                pass
-                        values.append(array)
-                    else:
-                        values.append(value)
+                        if value.find('[') != -1 and value.find(']') != -1:
+                            value = value[1:len(value) - 1] # cut off first set of brackets []
+                            array = value.split(', ')
+                            array = [] if array == [''] else array # delete string in array if empty
+                            for index, x in enumerate(array):
+                                if x.find('[') != -1 and x.find(']') != -1: # look for nested array
+                                    x = x[1:len(x) - 1] # cut off first set of brackets []
+                                    arr = x.split(', ')
+                                    for idx, y in enumerate(array):   # convert ints to ints from str
+                                        try:
+                                            arr[index] = int(y)
+                                        except: 
+                                            pass
+                                
+                                try:
+                                    array[index] = int(x)
+                                except: 
+                                    pass
+                            values.append(array)
+                        else:
+                            values.append(value)
 
-                elif l.find('#') == -1 and l != '':
-                    keys.append(l[:l.find(':')])
-                    arrMode = 1
+                    else: # array begin
+                        keys.append(l[:l.find(':')])
+                        arrMode = 1
+
     except Exception as exception:
         logger.error(self, 'Error while Parsing config:', exception)
 
-    for key in keys:
+    for key in keys: # convert strings to correct data type
         try:
             element = int(values[keys.index(key)])
         except:
