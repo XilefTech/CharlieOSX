@@ -1,6 +1,7 @@
 import math, _thread, time
 from pybricks.ev3devices import (Motor, TouchSensor, ColorSensor, InfraredSensor, UltrasonicSensor, GyroSensor)
 from pybricks.parameters import (Port, Direction, Color)
+from pybricks.media.ev3dev import Font
 
 
 class Charlie():
@@ -40,7 +41,7 @@ class Charlie():
         '''Sub-method for initializing Sensors.'''
         self.logger.debug(self, "Starting sensor initialisation...")
         try:
-            self.__gyro = GyroSensor(self.__conf2port[self.__config['gyroSensorPort']], positive_direction = Direction.CLOCKWISE if not self.__config['gyroInverted'] else Direction.COUNTERCLOCKWISE) if self.__config['gyroSensorPort'] != 0 else 0
+            self.__gyro = GyroSensor(self.__conf2port[self.__config['gyroSensorPort']], Direction.CLOCKWISE if not self.__config['gyroInverted'] else Direction.COUNTERCLOCKWISE) if self.__config['gyroSensorPort'] != 0 else 0
             self.logger.debug(self, 'Gyrosensor initialized sucessfully on port %s' % self.__config['gyroSensorPort'])
         except Exception as exception:
             self.__gyro = 0
@@ -139,10 +140,10 @@ class Charlie():
                 speedLeft = speedLeft * (self.__config['wheelDiameter'] * math.pi)    # from revs/sec to cm/sec
 
                 if self.__screenRoutine:
+                    self.brick.screen.set_font(Font(family = 'arial', size = 16))
                     self.brick.screen.draw_text(5, 10, 'Robot-Angle: %s' % ang, text_color=Color.BLACK, background_color=Color.WHITE)
-                    self.brick.screen.draw_text(5, 50, 'Right Motor Speed: %s' % ang, text_color=Color.BLACK, background_color=Color.WHITE)
-                    self.brick.screen.draw_text(5, 90, 'Left Motor Speed: %s' % ang, text_color=Color.BLACK, background_color=Color.WHITE)
-                print('lol', self.__screenRoutine, self.__rMotor.angle())
+                    self.brick.screen.draw_text(5, 40, 'Right Motor Speed: %s' % ang, text_color=Color.BLACK, background_color=Color.WHITE)
+                    self.brick.screen.draw_text(5, 70, 'Left Motor Speed: %s' % ang, text_color=Color.BLACK, background_color=Color.WHITE)
                 time.sleep(0.1)
 
 
@@ -182,8 +183,6 @@ class Charlie():
             mode, arg1, arg2, arg3 = pparams.pop(0), pparams.pop(
                 0), pparams.pop(0), pparams.pop(0)
 
-            
-            print('here?')
             methods[mode](arg1, arg2, arg3)
 
         self.breakMotors()
@@ -305,7 +304,7 @@ class Charlie():
             # drive
             motor.reset_angle(0)
             if revs > 0:
-                while revs > motor.angle() / 360:
+                while revs > (motor.angle() / 360):
                     # if not driving staright correct it
                     if self.__gyro.angle() - startValue > 0:
                         lSpeed = speed - abs(self.__gyro.angle() - startValue) * correctionStrength
@@ -322,7 +321,7 @@ class Charlie():
                     
                     #cancel if button pressed
                     if any(self.brick.buttons.pressed()):
-                            return
+                        return
             else:
                 while revs < motor.angle() / 360:
                     # if not driving staright correct it
