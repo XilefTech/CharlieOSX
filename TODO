@@ -20,6 +20,8 @@ Next:
     Configparser:
     o Cleanup
 
+    o fixe prefix typo for first 2 log entrys 
+
 Far-Off:
     Robot:
     + driving support for 2 wheel balancing robots
