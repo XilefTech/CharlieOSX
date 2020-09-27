@@ -4,6 +4,7 @@ Next:
     + add content to the main menu and 'unopened' sub-menu pages
 
     Robot:
+    + add config entry for motor type
     + make straightMecanum() abortalble with brick buttons
     + add posibility for only one colorSensor in Front through config and robot.py
     + line following mode
