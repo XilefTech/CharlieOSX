@@ -162,8 +162,8 @@ class Charlie():
             params (array): The array of number code arrays to be executed
         '''
 
-        if self.brick.battery.voltage() <= 7500:
-            self.logger.warn("Please charge the battery. Only %sV left. We recommend least 7.5 Volts for accurate and repeatable results." %
+        if self.brick.battery.voltage() <= 7600:
+            self.logger.warn("Please charge the battery. Only %sV left. We recommend least 7.6 Volts for accurate and repeatable results." %
                              self.brick.battery.voltage() * 0.001)
             return
         if self.__gyro == 0:
