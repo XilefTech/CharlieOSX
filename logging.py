@@ -161,6 +161,7 @@ class Logger:
             self.__logFile.write('%s [%s] [Error] %s: %s: %s\n' % (self.getFormattedTime(), str(method), msg, type(exception).__name__, str(exception)))
         
         if self.__settings['options']['Show Errors']:
+            exception = str(exception)
             self.__sound(SoundFile.GENERAL_ALERT)
             self.__brick.screen.draw_image(26, 24, 'assets/graphics/notifications/error.png', transparent = Color.RED)
             self.__brick.screen.set_font(Font(family = 'arial', size = 7))

@@ -76,7 +76,7 @@ class UI:
                     time.sleep(0.3)
 
             elif self.menuState == 50: #settings Menu
-                if Button.UP in self.brick.buttons.pressed() and selected:
+                if Button.UP in self.brick.buttons.pressed() and self.selected:
                     if self.__settings['options'][keys[self.position]] < self.__settings['values']['max'][keys[self.position]]:
                         self.__settings['options'][keys[self.position]] += 1
                     elif self.__settings['options'][keys[self.position]] == self.__settings['values']['max'][keys[self.position]]:
