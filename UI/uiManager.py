@@ -45,7 +45,7 @@ class UIManager:
         for i in range(len(self.UIIcons)):
             name = self.UIIcons[i].split('/')[2].split('.')[0]
             self.addObject(UIObject(name, self.brick, Box(
-                0, i, 30, 25), 'img', self.UIIcons[i]))
+                0, i, 30, 25), Box(4, 4, 4, 4), 'img', self.UIIcons[i]))
 
         self.draw()
 

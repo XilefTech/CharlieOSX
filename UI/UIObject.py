@@ -6,11 +6,12 @@ from pybricks.media.ev3dev import Image, ImageFile, Font, SoundFile
 
 
 class UIObject:
-    def __init__(self, name: str, brick, bounds: Box, contentType, content):
+    def __init__(self, name: str, contentType, brick, bounds: Box, padding: Box, content):
         # self.logger = logger
         self.name = name
         self.brick = brick
         self.bounds = bounds
+        self.padding = padding
         self.contentType = contentType
         self.content = content
         self.radius = 0
@@ -27,9 +28,9 @@ class UIObject:
     def draw(self):
         if self.contentType == 'img':
             self.brick.screen.draw_image(
-                self.bounds.x + 5, self.bounds.y + 4, self.content, transparent=Color.RED)
+                self.bounds.x + self.padding.x, self.bounds.y + self.padding.y, self.content, transparent=Color.RED)
             self.brick.screen.draw_box(
-                self.bounds.x, self.bounds.y, self.bounds.width+1, self.bounds.height, r=self.radius, fill=False, color=Color.BLACK)
+                self.bounds.x, self.bounds.y, self.bounds.width + self.padding.width, self.bounds.height + self.padding.height, r=self.radius, fill=False, color=Color.BLACK)
             if self.selected:
                 self.drawInfoBox()
 
