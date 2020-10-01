@@ -24,7 +24,6 @@ tools.doIntersect(lineMap)"""
 ### example for driving straight
 #os.robot.straight(100, 20, 0)
 
-from UI.uiManager import UIManager
 x = UIManager('','',EV3Brick(),'')
 print(x)
 time.sleep(10)
