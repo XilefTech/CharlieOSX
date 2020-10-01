@@ -1,4 +1,5 @@
 from UI.UIObject import UIObject
+from copy import copy
 
 
 class Menu():
@@ -7,9 +8,11 @@ class Menu():
     def __init__(self, type):
         self.type = type
         self.objects = []
+        self.raster = self.rasterize()
 
     def addObject(self, object: UIObject):
         self.objects.append(object)
+        self.raster = self.rasterize()
 
     def draw(self):
         if self.type != 'sidebar':
@@ -19,7 +22,18 @@ class Menu():
             self.objects[0].draw()
 
     def rasterize(self):
-        return 'WIP'
+        array = []
+        todo = copy(self.objects)
+        while todo != []:
+            x = todo.pop(0)
+            array.append([])
+            array[len(array) - 1].append(x)
+            for i in todo:
+                if i.bounds.getMidHeight() in range(x.bounds.y, x.bounds.y + x.bounds.height + 1):
+                    array[len(array) - 1].append(i)
+                    todo.pop(0)
+        
+        return array
 
 class Box():
     def __init__(self, x, y, width, height):
