@@ -1,9 +1,9 @@
+from pybricks.media.ev3dev import Image, ImageFile, Font, SoundFile
 import _thread
 import time
 import json
 from profileHelper import ProfileHelper
-from pybricks.parameters import Button, Color
-from pybricks.media.ev3dev import Image, ImageFile, Font, SoundFile
+1
 
 
 class UI:
