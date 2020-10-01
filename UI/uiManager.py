@@ -5,7 +5,6 @@ from pybricks.parameters import Button, Color
 from pybricks.media.ev3dev import Image, ImageFile, Font, SoundFile
 
 from UI.UIObject import UIObject
-#from UI import UIIcon
 from UI.tools import Menu, Box
 
 
@@ -42,8 +41,15 @@ class UIManager:
         mainMenu.addObject(UIObject('remote', self.brick, Box(0, 45, 20, 20), 'img', (0, 0), 'assets/graphics/menus/remoteMainMenu.png'))
         mainMenu.addObject(UIObject('competition', self.brick, Box(0, 65, 20, 20), 'img', (0, 0), 'assets/graphics/menus/competitionMainMenu.png'))
         mainMenu.addObject(UIObject('settings', self.brick, Box(0, 85, 20, 20), 'img', (0, 0), 'assets/graphics/menus/settingsMainMenu.png'))
-        mainMenu.rasterize()
+        print(mainMenu.rasterize())
         mainMenu.draw()
+
+        testSubmenu = Menu('normal')
+        testSubmenu.addObject(UIObject('testObject1', self.brick, Box(0, 85, 20, 20), 'img', (0, 0), 'assets/graphics/menus/settingsMainMenu.png'))
+        testSubmenu.addObject(UIObject('testObject2', self.brick, Box(0, 5, 20, 20), 'img', (0, 0), 'assets/graphics/menus/programmingMainMenu.png'))
+        testSubmenu.addObject(UIObject('testObject3', self.brick, Box(40, 5, 20, 20), 'img', (0, 0), 'assets/graphics/menus/programmingMainMenu.png'))
+        print(testSubmenu.rasterize())
+
 
     def __sound(self, file):
         '''
