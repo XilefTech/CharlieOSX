@@ -44,8 +44,10 @@ class UIManager:
 
         for i in range(len(self.UIIcons)):
             name = self.UIIcons[i].split('/')[2].split('.')[0]
-            self.addObject(UIObject(name, self.brick, Box(
-                0, i, 30, 25), Box(4, 4, 4, 4), 'img', self.UIIcons[i]))
+            self.addObject(UIObject(name, 'img', self.brick, Box(
+                0, i, 30, 25), (2, 1), self.UIIcons[i]))
+
+        self.UIObjects[self.currentObject].selected = True
 
         self.draw()
 
@@ -65,21 +67,21 @@ class UIManager:
         self.UIObjects.append(UIObject)
 
     def draw(self):
-
         for UIObject in self.UIObjects:
             UIObject.draw()
 
     def mainLoop(self):
         while self.loop:
             self.update()
-            self.draw()
 
     def update(self):
+        # for UIObject in self.UIObjects:
+        #     UIObject.update()
 
-        for UIObject in self.UIObjects:
-            UIObject.update()
-
-        self.checkButtons()
+        if self.brick.buttons.pressed():
+            self.brick.screen.clear()
+            self.checkButtons()
+            self.draw()
 
     def checkButtons(self):
         # print("Current Icon: " + str(self.currentObject))
@@ -93,7 +95,5 @@ class UIManager:
 
     def changeCurrentObj(self, num):
         self.UIObjects[self.currentObject].selected = False
-        self.UIObjects[self.currentObject].clear()
         self.currentObject += num
-        self.UIObjects[self.currentObject].clear()
         self.UIObjects[self.currentObject].selected = True
