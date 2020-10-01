@@ -2,10 +2,12 @@
 This file is just to offload some code and make it more organized.
 The only method in this file is parseConfig()
 '''
+
+
 def parseConfig(configPath, logger):
     '''
         Loads the data from a config file based on my somewhat own syntax.
-        
+
         Args:
             configPath (str): the path to the config file
 
@@ -30,29 +32,32 @@ def parseConfig(configPath, logger):
                 elif arrMode == 1 and l.find('#') == -1 and l != '':
                     tempArr.append(l[l.find('-') + 2:])
 
-                elif l.find('#') == -1 and l != '' and l.find('{') == -1: # normal entry
+                # normal entry
+                elif l.find('#') == -1 and l != '' and l.find('{') == -1:
                     keys.append(l[:l.find(':')])
                     value = l[l.find(':') + 2:]
 
                     if value.find('[') != -1 and value.find(']') != -1:
-                        value = value[1:len(value) - 1] # cut off first set of brackets []
+                        # cut off first set of brackets []
+                        value = value[1:len(value) - 1]
                         array = value.split(', ')
-                        array = [] if array == [''] else array # delete string in array if empty
+                        array = [] if array == [''] else array  # delete string in array if empty
                         for index, x in enumerate(array):
-                            if x.find('[') != -1 and x.find(']') != -1: # look for nested array
-                                x = x[1:len(x) - 1] # cut off first set of brackets []
+                            if x.find('[') != -1 and x.find(']') != -1:  # look for nested array
+                                # cut off first set of brackets []
+                                x = x[1:len(x) - 1]
                                 arr = x.split(', ')
-                                for idx, y in enumerate(array):   # convert ints to ints from str
+                                # convert ints to ints from str
+                                for idx, y in enumerate(array):
                                     try:
                                         arr[index] = int(y)
-                                    except: 
+                                    except:
                                         pass
-                            
+
                             try:
                                 array[index] = int(x)
-                            except: 
+                            except:
                                 pass
-                        print(array)
                         values.append(array)
                     else:
                         values.append(value)

@@ -9,40 +9,46 @@ from UI.tools import Menu, Box
 
 
 class UIManager:
-    def __init__(self, config, settings, brick, logger):
+    """
+        Basicly a Menu
+    """
+
+    def __init__(self, config, settings, brick, logger, settingsPath):
         # needed Stuff
         #logger.info(self, 'Starting UI initialisation')
         self.__config = config
         self.__settings = settings
         self.__click = 'assets/media/click.wav'
         self.__confirm = 'assets/media/confirm.wav'
+        self.__settingsPath = settingsPath
         self.brick = brick
         self.logger = logger
         #self.profileHelper = ProfileHelper(self.logger, self.__config)
         self.__sound_lock = _thread.allocate_lock()
         #self.logger.info(self, 'UI initialized')
 
-        # UI Stuff
-        # self.UIObjects = []
-        # self.UIIcons = [
-        #     "./icons/1.png",
-        #     "./icons/2.png",
-        #     "./icons/3.png",
-        #     "./icons/4.png",
-        #     "./icons/5.png",
-        # ]
+        self.loop = True
 
-        # for i in range(len(self.UIIcons)):
-        #     self.addObject(UIIcon(self.brick, self.logger, i, self.UIIcons[i]))
-        mainMenu = Menu('sidebar')
-        #y = UIObject(self.brick, x, 'img', (0, 0), 'assets/graphics/menus/programmingMainMenu.png')
-        mainMenu.addObject(UIObject('programming', self.brick, Box(0, 5, 20, 20), 'img', (0, 0), 'assets/graphics/menus/programmingMainMenu.png'))
-        mainMenu.addObject(UIObject('testing', self.brick, Box(0, 25, 20, 20), 'img', (0, 0), 'assets/graphics/menus/testingMainMenu.png'))
-        mainMenu.addObject(UIObject('remote', self.brick, Box(0, 45, 20, 20), 'img', (0, 0), 'assets/graphics/menus/remoteMainMenu.png'))
-        mainMenu.addObject(UIObject('competition', self.brick, Box(0, 65, 20, 20), 'img', (0, 0), 'assets/graphics/menus/competitionMainMenu.png'))
-        mainMenu.addObject(UIObject('settings', self.brick, Box(0, 85, 20, 20), 'img', (0, 0), 'assets/graphics/menus/settingsMainMenu.png'))
-        print(mainMenu.rasterize())
-        mainMenu.draw()
+        self.currentObject = 0
+
+        # UI Stuff
+        self.UIObjects = []
+        self.UIIcons = [
+            "UI/icons/Programming.png",
+            "UI/icons/Testing.png",
+            "UI/icons/Remote-Control.png",
+            "UI/icons/Competition-Mode.png",
+            "UI/icons/Settings.png",
+        ]
+
+        for i in range(len(self.UIIcons)):
+            name = self.UIIcons[i].split('/')[2].split('.')[0]
+            self.addObject(UIObject(name, 'img', self.brick, Box(
+                0, i, 30, 25), (2, 1), self.UIIcons[i]))
+
+        self.UIObjects[self.currentObject].selected = True
+
+        self.draw()
 
         testSubmenu = Menu('normal')
         testSubmenu.addObject(UIObject('testObject1', self.brick, Box(0, 85, 20, 20), 'img', (0, 0), 'assets/graphics/menus/settingsMainMenu.png'))
@@ -69,3 +75,31 @@ class UIManager:
     def draw(self):
         for UIObject in self.UIObjects:
             UIObject.draw()
+
+    def mainLoop(self):
+        while self.loop:
+            self.update()
+
+    def update(self):
+        # for UIObject in self.UIObjects:
+        #     UIObject.update()
+
+        if self.brick.buttons.pressed():
+            self.brick.screen.clear()
+            self.checkButtons()
+            self.draw()
+
+    def checkButtons(self):
+        # print("Current Icon: " + str(self.currentObject))
+
+        if Button.DOWN in self.brick.buttons.pressed():
+            if not self.currentObject == len(self.UIObjects) - 1:
+                self.changeCurrentObj(1)
+        elif Button.UP in self.brick.buttons.pressed():
+            if not self.currentObject == 0:
+                self.changeCurrentObj(-1)
+
+    def changeCurrentObj(self, num):
+        self.UIObjects[self.currentObject].selected = False
+        self.currentObject += num
+        self.UIObjects[self.currentObject].selected = True
