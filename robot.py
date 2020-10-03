@@ -1,6 +1,6 @@
 import math, _thread, time
 from pybricks.ev3devices import (Motor, TouchSensor, ColorSensor, InfraredSensor, UltrasonicSensor, GyroSensor)
-from pybricks.parameters import (Port, Direction, Color)
+from pybricks.parameters import (Port, Direction, Color, Stop)
 from pybricks.media.ev3dev import Font
 
 
