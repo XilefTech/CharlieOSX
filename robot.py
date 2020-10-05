@@ -304,7 +304,7 @@ class Charlie():
             startValue = self.__gyro.angle()
 
             # convert the input (cm) to revs
-            revs = dist / (self.__config['wheelDiameter'] * math.pi) / 2
+            revs = dist / (self.__config['wheelDiameter'] * math.pi)
 
             motor = self.__rMotor if self.__config['robotType'] == 'NORMAL' else self.__fRMotor
 
