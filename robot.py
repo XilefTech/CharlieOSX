@@ -304,11 +304,11 @@ class Charlie():
             dist (int): the distance in cm to drive
         '''
         if self.__config['robotType'] != 'MECANUM':
-            correctionStrength = 2  # how strongly the self will correct. 2 = default, 0 = nothing
+            correctionStrength = 2.5  # how strongly the self will correct. 2 = default, 0 = nothing
             startValue = self.__gyro.angle()
 
             # convert the input (cm) to revs
-            revs = dist / (self.__config['wheelDiameter'] * math.pi) / 2
+            revs = dist / (self.__config['wheelDiameter'] * math.pi)
 
             motor = self.__rMotor if self.__config['robotType'] == 'NORMAL' else self.__fRMotor
 
@@ -683,13 +683,14 @@ class Charlie():
     def breakMotors(self):
         '''Sub-method for breaking all the motors'''
         if self.__config['robotType'] == 'NORMAL':
-            self.__lMotor.brake()
-            self.__rMotor.brake()
+            self.__lMotor.hold()
+            self.__rMotor.hold()
         else:
-            self.__fRMotor.brake()
-            self.__bRMotor.brake()
-            self.__fLMotor.brake()
-            self.__bLMotor.brake()
+            self.__fRMotor.hold()
+            self.__bRMotor.hold()
+            self.__fLMotor.hold()
+            self.__bLMotor.hold()
+        time.sleep(0.2)
 
     def _map(self, x, in_min, in_max, out_min, out_max):
         '''
