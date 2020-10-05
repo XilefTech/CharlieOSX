@@ -300,7 +300,7 @@ class Charlie():
             dist (int): the distance in cm to drive
         '''
         if self.__config['robotType'] != 'MECANUM':
-            correctionStrength = 2  # how strongly the self will correct. 2 = default, 0 = nothing
+            correctionStrength = 2.5  # how strongly the self will correct. 2 = default, 0 = nothing
             startValue = self.__gyro.angle()
 
             # convert the input (cm) to revs
