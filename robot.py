@@ -142,9 +142,10 @@ class Charlie():
                 speedLeft = self.__lMotor.speed() if self.__config['robotType'] == 'NORMAL' else self.__fLMotor.speed()
                 speedLeft = speedLeft / 360   # from deg/s to revs/sec
                 speedLeft = speedLeft * (self.__config['wheelDiameter'] * math.pi)    # from revs/sec to cm/sec
-
+                
+                #self.brick.screen.set_font(Font(family = 'arial', size = 16))
                 if self.__screenRoutine:
-                    self.brick.screen.set_font(Font(family = 'arial', size = 16))
+                    print(self.__gyro.angle())
                     self.brick.screen.draw_text(5, 10, 'Robot-Angle: %s' % ang, text_color=Color.BLACK, background_color=Color.WHITE)
                     self.brick.screen.draw_text(5, 40, 'Right Motor Speed: %s' % ang, text_color=Color.BLACK, background_color=Color.WHITE)
                     self.brick.screen.draw_text(5, 70, 'Left Motor Speed: %s' % ang, text_color=Color.BLACK, background_color=Color.WHITE)
@@ -181,6 +182,8 @@ class Charlie():
         }
 
         self.__gyro.reset_angle(0)
+        self.__gyro.reset_angle(0)
+        time.sleep(0.1)
         self.__screenRoutine = True
         while params != [] and not any(self.brick.buttons.pressed()):
             pparams = params.pop(0)
@@ -214,8 +217,9 @@ class Charlie():
             # right motor off
             self.__rMotor.dc(0)
             # turn the angle
-            if deg > 0:
+            if deg > 0:     
                 while self.__gyro.angle() - startValue < deg:
+                    print(deg, self.__gyro.angle(), startValue)
                     self.turnLeftMotor(speed)
                     # slow down to not overshoot
                     if not self.__gyro.angle() - startValue < deg * 0.6:
