@@ -257,6 +257,7 @@ class Charlie():
                         return
             else:
                 while self.__gyro.angle() - startValue > deg:
+                    print(speed, self.min_speed, self.__gyro.angle())
                     self.turnRightMotor(speed)
                     # slow down to not overshoot
                     if not self.__gyro.angle() - startValue > deg * 0.6:
@@ -317,6 +318,7 @@ class Charlie():
             motor.reset_angle(0)
             if revs > 0:
                 while revs > (motor.angle() / 360):
+                    print(self.__gyro.angle())
                     # if not driving staright correct it
                     if self.__gyro.angle() - startValue > 0:
                         lSpeed = speed - abs(self.__gyro.angle() - startValue) * correctionStrength
@@ -462,7 +464,7 @@ class Charlie():
                     if any(self.brick.buttons.pressed()):
                         return
 
-    def curve(self, speed, revs1, deg):
+    def curve(self, speed, dist, deg):
         '''
         Drives forwads and backwards x times.
 
@@ -476,12 +478,16 @@ class Charlie():
         # gyro starting point
         startValue = self.__gyro.angle()
 
+        revs1 = dist / (self.__config['wheelDiameter'] * math.pi)
+        print(revs1, dist)
+
+
         # claculate revs for the second wheel
-        pathOutside = self.__config['wheelDiameter'] * 2 * math.pi * revs1
+        pathOutside = self.__config['wheelDiameter'] * math.pi * revs1
         rad1 = pathOutside / (math.pi * (deg / 180))
         rad2 = rad1 - self.__config['wheelDistance']
         pathInside = rad2 * math.pi * (deg/180)
-        revs2 = pathInside / (self.__config['wheelDiameter'] * 2 * math.pi)
+        revs2 = pathInside / (self.__config['wheelDiameter'] * math.pi)
 
         # claculate the speed for the second wheel
         relation = revs1 / revs2
@@ -499,12 +505,13 @@ class Charlie():
 
         else:
             # asign higher speed to outer wheel
-            rSpeed = speed
-            lSpeed = speedSlow
-            self.__rMotor.run_angle(rSpeed, revs1 * 360 + 5, Stop.COAST, False)
-            self.__lMotor.run_angle(lSpeed, revs2 * 360, Stop.COAST, False)
+            lSpeed = speed
+            rSpeed = speedSlow
+            self.__rMotor.run_angle(rSpeed, revs2 * 360 + 15, Stop.COAST, False)
+            self.__lMotor.run_angle(lSpeed, revs1 * 360, Stop.COAST, False)
             #turn
-            while self.__gyro.angle() + startValue > deg and not any(self.brick.buttons.pressed()):
+            while self.__gyro.angle() - startValue > deg and not any(self.brick.buttons.pressed()):
+                print(self.__gyro.angle() - startValue, self.__gyro.angle(), rSpeed, revs1, lSpeed, revs2, relation)
                 pass
 
     def toColor(self, speed, color, side):
