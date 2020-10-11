@@ -27,8 +27,10 @@ class Charlie():
         self.__initSensors()
         self.__initMotors()
 
-        self.min_speed = 30 # lage motor 20, medium motor
+        self.min_speed = 35 # lage motor 20, medium motor 30
         
+        self.__gyro.reset_angle(0)
+
         self.__screenRoutine = False
         self.showDetails()
 
