@@ -260,7 +260,7 @@ class Charlie():
                     self.turnRightMotor(speed)
                     # slow down to not overshoot
                     if not self.__gyro.angle() - startValue > deg * 0.6:
-                        speed = speed - self._map(deg, 1, 360, 10, 0.1) if speed > self.min_speed else self.min_speed
+                        speed = speed - self._map(deg, 1, 360, 10, 0.1) if speed > self.min_speed else self.min_speed + 5
                     
                     #cancel if button pressed
                     if any(self.brick.buttons.pressed()):
