@@ -221,7 +221,6 @@ class Charlie():
             # turn the angle
             if deg > 0:     
                 while self.__gyro.angle() - startValue < deg:
-                    print(deg, self.__gyro.angle(), startValue)
                     self.turnLeftMotor(speed)
                     # slow down to not overshoot
                     if not self.__gyro.angle() - startValue < deg * 0.6:
