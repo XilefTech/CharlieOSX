@@ -710,6 +710,7 @@ class Charlie():
         else:
             # turn motor 1
             if port == 1:
+                ang = self.__aMotor1.angle()
                 self.__aMotor1.run_angle(speed, revs * 360, Stop.HOLD, False)
                 if revs > 0:
                     while self.__aMotor1.angle() < revs * 360 - ang:
@@ -723,6 +724,7 @@ class Charlie():
                             return
             # turm motor 2
             elif port == 2:
+                ang = self.__aMotor2.angle()
                 self.__aMotor2.run_angle(speed, revs * 360, Stop.HOLD, False)
                 if revs > 0:
                     while self.__aMotor2.angle() < revs * 360 - ang:
