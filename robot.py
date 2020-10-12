@@ -293,6 +293,9 @@ class Charlie():
                         speed = speed - self._map(deg, 1, 360, 10, 0.01) if speed - self._map(deg, 1, 360, 10, 0.01) > self.min_speed * 2 - dualMotorbonus else self.min_speed * 2 - dualMotorbonus
 
                     # cancel if button pressed
+                    if any(self.brick.buttons.pressed()):
+                        return
+
     def absTurn(self, speed, deg, port):
         '''
         Used to turn the motor on the spot using either one or both Motors for turning (2 or 4 in case of ALLWHEEL and MECANUM)
