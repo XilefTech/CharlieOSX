@@ -689,8 +689,8 @@ class Charlie():
             revs (int): how long to turn the motor for
             port (int): which one of the motors should be used
         '''
+        speed = abs(speed) * 1.7 * 6  # speed to deg/s from %
         if self.__config['useGearing']:
-            speed = speed * 1.7 * 6  # speed to deg/s from %
             self.__gearingPortMotor.run_target(
                 300, port * 90, Stop.HOLD, True)  # select gearing Port
             ang = self.__gearingTurnMotor.angle()
