@@ -691,11 +691,9 @@ class Charlie():
         '''
         speed = abs(speed) * 1.7 * 6  # speed to deg/s from %
         if self.__config['useGearing']:
-            self.__gearingPortMotor.run_target(
-                300, port * 90, Stop.HOLD, True)  # select gearing Port
+            self.__gearingPortMotor.run_target(300, port * 90, Stop.HOLD, True)  # select gearing Port
             ang = self.__gearingTurnMotor.angle()
-            self.__gearingTurnMotor.run_angle(
-                speed, revs * 360, Stop.BRAKE, False)  # start turning the port
+            self.__gearingTurnMotor.run_angle(speed, revs * 360, Stop.BRAKE, False)  # start turning the port
             # cancel, if any brick button is pressed
             if revs > 0:
                 while self.__gearingTurnMotor.angle() < revs * 360 - ang:
