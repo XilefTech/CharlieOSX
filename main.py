@@ -7,18 +7,21 @@ from pybricks.parameters import (Port, Stop, Direction, Button, Color, SoundFile
 from pybricks.tools import print, StopWatch
 from charlieosx import CharlieOSX
      
-### things, I'm sometimes using to test things - can be ignored
-"""
-lineMap = {'height' : 300, 'width' : 1000,
-            'from' : (1, 1), 'to' : (1, 4), 
-            'obstacles' : [((2, 1), (4, 1))]}
-
-tools.doIntersect(lineMap)"""
+# os = CharlieOSX('config.cfg', 'settings.json', '')
 
 
-### example code to start CharlieOSX and it's menu-system
-os = CharlieOSX('config.cfg', 'settings.json', '')
-os.ui.mainLoop()
 
-### example for driving straight
-os.robot.straight(100, 20, 0)
+import picoweb
+
+app = picoweb.WebApp("app")
+
+@app.route("/")
+def index(req, resp):
+    yield from picoweb.start_response(resp, content_type = "text/html")
+ 
+    htmlFile = open('site.html', 'r')
+ 
+    for line in htmlFile:
+      yield from resp.awrite(line)
+ 
+app.run(debug=True, host = "192.168.178.52")
