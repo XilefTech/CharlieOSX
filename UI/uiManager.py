@@ -31,24 +31,24 @@ class UIManager:
 
         self.currentObject = 0
 
+        self.mainMenu = Menu('sidebar')
         # UI Stuff
         self.UIObjects = []
-        self.UIIcons = [
-            "UI/icons/Programming.png",
-            "UI/icons/Testing.png",
-            "UI/icons/Remote-Control.png",
-            "UI/icons/Competition-Mode.png",
-            "UI/icons/Settings.png",
+        UIIcons = [
+            "assets/graphics/menus/programming.png",
+            "assets/graphics/menus/testing.png",
+            "assets/graphics/menus/remote.png",
+            "assets/graphics/menus/competition.png",
+            "assets/graphics/menus/settings.png",
         ]
 
-        for i in range(len(self.UIIcons)):
-            name = self.UIIcons[i].split('/')[2].split('.')[0]
-            self.addObject(UIObject(name, 'img', self.brick, Box(
-                0, i, 30, 25), (2, 1), self.UIIcons[i]))
+        # for i in range(len(UIIcons)):
+        #     name = UIIcons[i].split('/')[3].split('.')[0]
+        #     self.mainMenu.addObject(UIObject(name, self.brick, Box(0, i, 30, 25), 'img', (2, 1), UIIcons[i]))
 
-        self.UIObjects[self.currentObject].selected = True
+        #self.UIObjects[self.currentObject].selected = True
 
-        self.draw()
+        # self.mainMenu.draw()
 
         testSubmenu = Menu('normal')
         testSubmenu.addObject(UIObject('testObject1', self.brick, Box(0, 85, 20, 20), 'img', (0, 0), 'assets/graphics/menus/settingsMainMenu.png'))
