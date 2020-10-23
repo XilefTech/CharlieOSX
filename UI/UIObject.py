@@ -31,10 +31,10 @@ class UIObject:
 
             self.brick.screen.draw_image(
                 self.bounds.x + self.padding[0], self.bounds.y + self.padding[1], self.content, transparent=Color.RED)
-            self.brick.screen.draw_box(
-                self.bounds.x, self.bounds.y, self.bounds.width + self.padding[0], self.bounds.height+self.padding[1], r=self.radius, fill=False, color=Color.BLACK)
-            if self.selected:
-                self.drawInfoBox()
+            # self.brick.screen.draw_box(
+            #     self.bounds.x, self.bounds.y, self.bounds.width + self.padding[0], self.bounds.height+self.padding[1], r=self.radius, fill=False, color=Color.BLACK)
+            
+
 
     def drawInfoBox(self):
         self.brick.screen.draw_box(
