@@ -11,17 +11,27 @@ from charlieosx import CharlieOSX
 
 
 
-import picoweb
+import picoweb, _thread
 
 app = picoweb.WebApp("app")
 
 @app.route("/")
 def index(req, resp):
     yield from picoweb.start_response(resp, content_type = "text/html")
- 
+  
     htmlFile = open('site.html', 'r')
- 
+  
     for line in htmlFile:
-      yield from resp.awrite(line)
+        yield from resp.awrite(line)
  
-app.run(debug=True, host = "192.168.178.52")
+
+weblock = _thread.allocate_lock()
+
+def runWebserver():
+    with weblock:
+        app.run(debug=True, host = "192.168.178.52")
+_thread.start_new_thread(runWebserver, ())
+
+
+while True:
+    time.sleep(5)
