@@ -131,7 +131,9 @@ font-size: xx-large;">
                 
 
                 document.getElementById("x_coordinate").innerText =  x_relative;
-                document.getElementById("y_coordinate").innerText = y_relative ;
+                document.getElementById("y_coordinate").innerText = y_relative;
+
+                httpGet("api?x=" + x_relative + "&y=" + y_relative, false)
             }
         }
 
@@ -142,7 +144,24 @@ font-size: xx-large;">
             joystick(width / 2, height / 3);
             document.getElementById("x_coordinate").innerText = 0;
             document.getElementById("y_coordinate").innerText = 0;
+            httpGet("api?x=" + 0 + "&y=" + 0, true);
+            httpGet("api?x=" + 0 + "&y=" + 0, true);
         }
+
+        var oldTime = 0;
+
+        function httpGet(theUrl, ignoreTimeout) {
+            time = new Date();
+            if (oldTime + 200 <= time.getTime() || ignoreTimeout) {
+                console.log(oldTime, time.getTime());
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.open("GET", theUrl, true); // false for synchronous request
+                xmlHttp.send(null);
+                oldTime = time.getTime();
+                return xmlHttp.responseText;
+            }
+        }
+
     </script>
 
 </body>
