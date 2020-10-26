@@ -127,7 +127,7 @@ font-size: xx-large;">
 
                 var speed = Math.round(100 * Math.sqrt(Math.pow(x - x_orig, 2) + Math.pow(y - y_orig, 2)) / radius);
                 var x_relative = Math.round(x - x_orig);
-                var y_relative = Math.round(y - y_orig);
+                var y_relative = Math.round(y - y_orig) * -1;
                 
 
                 document.getElementById("x_coordinate").innerText =  x_relative;
