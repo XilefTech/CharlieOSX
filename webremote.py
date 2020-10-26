@@ -6,8 +6,9 @@ class Webremote():
 
     def __init__(self):
         self.app = picoweb.WebApp("app")
-        self.outDict = {}
+        self.outDict = {'x': 0, 'y': 0}
         self.weblock = _thread.allocate_lock()
+        self.newData = True
 
         @self.app.route("/")
         def index(req, resp):
@@ -30,6 +31,7 @@ class Webremote():
                     self.outDict[temp[0]] = int(temp[1])
                 except:
                     self.outDict[temp[0]] = temp[1]
+            self.newData = True
 
     def startServerThread(self):
         def runWebserver():
@@ -39,5 +41,12 @@ class Webremote():
 
     def getResponseData(self):
         return self.outDict
+
+    def newDataAvailable(self):
+        if self.newData:
+            self.newData = False
+            return True
+        else:
+            return False
 
 
