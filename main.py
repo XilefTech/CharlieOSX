@@ -11,27 +11,13 @@ from charlieosx import CharlieOSX
 
 
 
-import picoweb, _thread
+import webremote
 
-app = picoweb.WebApp("app")
+webremote = webremote.Webremote()
 
-@app.route("/")
-def index(req, resp):
-    yield from picoweb.start_response(resp, content_type = "text/html")
-  
-    htmlFile = open('site.html', 'r')
-  
-    for line in htmlFile:
-        yield from resp.awrite(line)
- 
-
-weblock = _thread.allocate_lock()
-
-def runWebserver():
-    with weblock:
-        app.run(debug=True, host = "192.168.178.52")
-_thread.start_new_thread(runWebserver, ())
-
+webremote.startServerThread()
 
 while True:
-    time.sleep(5)
+    print(webremote.getResponseData())
+    time.sleep(0.1)
+
