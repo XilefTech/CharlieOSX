@@ -152,8 +152,7 @@ font-size: xx-large;">
 
         function httpGet(theUrl, ignoreTimeout) {
             time = new Date();
-            if (oldTime + 200 <= time.getTime() || ignoreTimeout) {
-                console.log(oldTime, time.getTime());
+            if (oldTime + 50 <= time.getTime() || ignoreTimeout) {
                 var xmlHttp = new XMLHttpRequest();
                 xmlHttp.open("GET", theUrl, true); // false for synchronous request
                 xmlHttp.send(null);
