@@ -14,7 +14,7 @@ class Webremote():
         def index(req, resp):
             yield from picoweb.start_response(resp, content_type = "text/html")
         
-            htmlFile = open('site.html', 'r')
+            htmlFile = open('site/site.html', 'r')
         
             for line in htmlFile:
                 yield from resp.awrite(line)
