@@ -33,6 +33,15 @@ class Webremote():
                     self.outDict[temp[0]] = temp[1]
             self.newData = True
 
+        @self.app.route("/style.css")
+        def style(req, resp):
+            yield from picoweb.start_response(resp, content_type = "text/css")
+            
+            htmlFile = open('site/style.css', 'r')
+        
+            for line in htmlFile:
+                yield from resp.awrite(line)
+
     def startServerThread(self):
         def runWebserver():
             with self.weblock:
