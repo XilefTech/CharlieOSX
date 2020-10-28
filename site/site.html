@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="/style.css" type="text/css">
+    <link rel="stylesheet" href="style.css" type="text/css">
     <title>CharlieOSX Webremote</title>
     <meta name="viewport" content="user-scalable=no", charset = 'UTF-8'>
 </head>
@@ -17,10 +17,10 @@ font-size: xx-large;">
         X: <span id="x_coordinate"> </span>
         Y: <span id="y_coordinate"> </span>
     </p>
+    <canvas id="canvas" class = 'canvas'></canvas>
     <div class="slidecontainer">
         <input type="range" min="-100" max="100" value="0" class="slider" id="myRange">
     </div>
-    <canvas id="canvas" ></canvas>
     <script>
         var canvas, ctx;
         
@@ -39,13 +39,13 @@ font-size: xx-large;">
             window.addEventListener('resize', resize);
 
             document.getElementById("x_coordinate").innerText = 0;
-            document.getElementById("x_coordinate").innerText = 0;
+            document.getElementById("y_coordinate").innerText = 0;
         });
 
         var width, height, radius, x_orig, y_orig;
         function background() {
             x_orig = width / 2;
-            y_orig = height / 3;
+            y_orig = height * 1.8;
 
             ctx.beginPath();
             ctx.arc(x_orig, y_orig, radius - 60, 0, Math.PI * 2, true);
@@ -66,11 +66,11 @@ font-size: xx-large;">
         function resize() {
             radius = 180; // specify the radius to 180
             width = window.innerWidth; //Sets the variable width to be equal to the windows width
-            height = radius * 6.5; //Sets the variable height
+            height = radius + 25; //Sets the variable height
             ctx.canvas.width = width; //sets the canvas width to be equal to variable width
-            ctx.canvas.height = height; //sets the canvas height
-            background();//draw the background
-            joystick(width / 2, height / 3); //sends to the joystick function this variables
+            ctx.canvas.height = 800; //sets the canvas height
+            background(); //draw the background
+            joystick(width / 2, height * 1.8); //sends to the joystick function this variables
         }
 
         let coord = {x: 0, y: 0};
@@ -145,7 +145,7 @@ font-size: xx-large;">
             paint = false;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             background();
-            joystick(width / 2, height / 3);
+            joystick(width / 2, height * 1.8);
             document.getElementById("x_coordinate").innerText = 0;
             document.getElementById("y_coordinate").innerText = 0;
             await sleep(60);

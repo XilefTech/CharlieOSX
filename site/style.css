@@ -7,8 +7,17 @@
     user-select: none;
 }
 
+.canvas {
+    margin: 0px;
+    width: 70%;
+    margin-top: 50px;
+}
+
 .slidecontainer {
-    width: 100%; /* Width of the outside container */
+    width: 15%; /* Width of the outside container */
+    margin: 5px;
+    float: right;
+    height: 500px;
 }
   
 /* Mouse-over effects */
@@ -18,7 +27,11 @@
 
 .slider {
     -webkit-appearance: none;
-    width: 100%;
+    transform-origin: 0 0;
+    transform: rotate(90deg) translate(0, 100px);
+    -moz-transform: rotate(90deg) translate(-100px, 0);
+    margin-top: 150px;
+    width: 300px;
     height: 15px;
     border-radius: 5px;  
     background: #aaaaaa;
@@ -26,10 +39,11 @@
     opacity: 0.7;
     -webkit-transition: .2s;
     transition: opacity .2s;
+    float: left;
 }
   
 .slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
+     -webkit-appearance: none;
     appearance: none;
     width: 25px;
     height: 25px;
