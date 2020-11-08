@@ -6,7 +6,7 @@ class Webremote():
 
     def __init__(self):
         self.app = picoweb.WebApp("app")
-        self.outDict = {'x': 0, 'y': 0}
+        self.outDict = {'x': 0, 'y': 0, 'a1': 0}
         self.weblock = _thread.allocate_lock()
         self.newData = True
 
@@ -32,7 +32,7 @@ class Webremote():
                 except:
                     self.outDict[temp[0]] = temp[1]
             self.newData = True
-
+        
         @self.app.route("/style.css")
         def style(req, resp):
             yield from picoweb.start_response(resp, content_type = "text/css")
