@@ -80,8 +80,8 @@ font-size: xx-large;">
             var mouse_x = event.clientX || event.touches[0].clientX;
             var mouse_y = event.clientY || event.touches[0].clientY;
 
-            coord.x = mouse_x - canvas.offsetLeft;
-            coord.y = mouse_y - canvas.offsetTop;
+            coord.x = (mouse_x - canvas.offsetLeft) * 1.43;
+            coord.y = (mouse_y - canvas.offsetTop) * 1.43;
         }
 
         function is_it_in_the_circle() {
