@@ -811,13 +811,11 @@ class Charlie():
         return self.__gyro.angle()
 
     def setRemoteValues(self, data):
-        if data['y'] == 0 and data['x'] == 0 and data['a1'] == 0:
+        if data['y'] == 0 and data['x'] == 0:
             self.breakMotors()
-            self.__aMotor1.dc(0)
         else:
             rSpeed = self._map(data['y'], -200, 200, -100, 100)
             lSpeed = self._map(data['y'], -200, 200, -100, 100)
-            a1Speed = data['a1']
 
             if data['x'] not in range(-20, 21):
                 rSpeed = rSpeed * self._map(data['x'], -200, 200, 1.3, 0.7)
@@ -825,5 +823,10 @@ class Charlie():
 
             self.turnLeftMotor(lSpeed)
             self.turnRightMotor(rSpeed)
+
+        if data['a1'] == 0:
+            self.__aMotor1.hold()
+            a1Speed = data['a1']
+        else:
             self.__aMotor1.dc(a1Speed)
 
