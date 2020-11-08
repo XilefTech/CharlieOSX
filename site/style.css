@@ -34,29 +34,39 @@
     width: 300px;
     height: 15px;
     border-radius: 5px;  
-    background: #aaaaaa;
+    background: #888888;
+    color: #888888;
     outline: none;
-    opacity: 0.7;
+    opacity: 0.8;
     -webkit-transition: .2s;
     transition: opacity .2s;
     float: left;
 }
   
 .slider::-webkit-slider-thumb {
-     -webkit-appearance: none;
+    -webkit-appearance: none;
     appearance: none;
     width: 25px;
     height: 25px;
     border-radius: 50%; 
-    background: #4CAF50;
+    background: #5555ff;
+    opacity: 0.9;
     cursor: pointer;
+    border-width: 10px;
+    border-color: #3333ff;
+    border-style: none;
+    outline: 10px;
+    outline: #3333ff;
 }
   
 .slider::-moz-range-thumb {
     width: 25px;
     height: 25px;
     border-radius: 50%;
-    background: #4CAF50;
+    background: #5555ff;
+    opacity: 0.9;
     cursor: pointer;
+    border-width: 10px;
+    border-color: #3333ff;
 }
   
