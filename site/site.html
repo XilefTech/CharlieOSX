@@ -17,12 +17,14 @@ font-size: xx-large;">
         X: <span id="x_coordinate"> </span>
         Y: <span id="y_coordinate"> </span>
     </p>
-    <canvas id="canvas" class = 'canvas'></canvas>
-    <div class="slidecontainer">
-        <input type="range" min="-100" max="100" value="0" class="slider" id="myRange">
+    <canvas id="canvas" class = 'canvas' onmouseover="mouseOverCanvas = true;" onmouseout="mouseOverCanvas = false;"
+    ontouchstart="mouseOverCanvas = true;" ontouchend="mouseOverCanvas = false;"></canvas>
+    <div class="slidecontainer" onmouseover="mouseOverSlider = true;" onmouseout="mouseOverSlider = false;"
+    ontouchstart="mouseOverSlider = true;" ontouchend="mouseOverSlider = false;">
+        <input type="range" min="-100" max="100" value="0" class="slider" id="slider">
     </div>
     <script>
-        var canvas, ctx;
+        var canvas, ctx, mouseOverCanvas, mouseOverSlider;
         
         window.addEventListener('load', () => {
             canvas = document.getElementById('canvas');
@@ -91,13 +93,15 @@ font-size: xx-large;">
         }
 
         function startDrawing(event) {
-            paint = true;
-            getPosition(event);
-            if (is_it_in_the_circle()) {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                background();
-                joystick(coord.x, coord.y);
-                Draw(event);
+            if (mouseOverCanvas) {
+                paint = true;
+                getPosition(event);
+                if (is_it_in_the_circle()) {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    background();
+                    joystick(coord.x, coord.y);
+                    Draw(event);
+                }
             }
         }
 
@@ -105,7 +109,7 @@ font-size: xx-large;">
             if (paint) {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 background();
-                var angle_in_degrees,x, y, speed;
+                var angle_in_degrees, x, y, speed;
                 var angle = Math.atan2((coord.y - y_orig), (coord.x - x_orig));
 
                 if (Math.sign(angle) == -1) {
@@ -132,12 +136,13 @@ font-size: xx-large;">
                 var speed = Math.round(100 * Math.sqrt(Math.pow(x - x_orig, 2) + Math.pow(y - y_orig, 2)) / radius);
                 var x_relative = Math.round(x - x_orig);
                 var y_relative = Math.round(y - y_orig) * -1;
-                
 
                 document.getElementById("x_coordinate").innerText =  x_relative;
                 document.getElementById("y_coordinate").innerText = y_relative;
-
-                httpGet("api?x=" + x_relative + "&y=" + y_relative, false)
+            
+            
+                a1 = document.getElementById("slider").value;
+                httpGet("api?x=" + x_relative + "&y=" + y_relative + "&a1=" + a1, false);
             }
         }
 
@@ -146,18 +151,20 @@ font-size: xx-large;">
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             background();
             joystick(width / 2, height * 1.8);
+            document.getElementById('slider').value = 0
             document.getElementById("x_coordinate").innerText = 0;
             document.getElementById("y_coordinate").innerText = 0;
             await sleep(60);
-            httpGet("api?x=" + 0 + "&y=" + 0, true);
-            httpGet("api?x=" + 0 + "&y=" + 0, true);
+            httpGet("api?x=" + 0 + "&y=" + 0 + "&a1=" + 0, true);
+            httpGet("api?x=" + 0 + "&y=" + 0 + "&a1=" + 0, true);
         }
 
         var oldTime = 0;
 
         function httpGet(theUrl, ignoreTimeout) {
             time = new Date();
-            if (oldTime + 50 <= time.getTime() || ignoreTimeout) {
+            if (oldTime + 100 <= time.getTime() || ignoreTimeout) {
+                console.log(theUrl)
                 var xmlHttp = new XMLHttpRequest();
                 xmlHttp.open("GET", theUrl, true); // false for synchronous request
                 xmlHttp.send(null);
@@ -168,6 +175,12 @@ font-size: xx-large;">
 
         function sleep(ms) {
             return new Promise(r => setTimeout(r, ms));
+        }
+
+        document.getElementById('slider').oninput = function() {
+            var a1 = document.getElementById('slider').value * -1;
+            console.log(a1);
+            httpGet("api?x=" + 0 + "&y=" + 0 + "&a1=" + a1, true);
         }
 
     </script>
