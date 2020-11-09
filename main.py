@@ -7,18 +7,21 @@ from pybricks.parameters import (Port, Stop, Direction, Button, Color, SoundFile
 from pybricks.tools import print, StopWatch
 from charlieosx import CharlieOSX
      
-### things, I'm sometimes using to test things - can be ignored
-"""
-lineMap = {'height' : 300, 'width' : 1000,
-            'from' : (1, 1), 'to' : (1, 4), 
-            'obstacles' : [((2, 1), (4, 1))]}
-
-tools.doIntersect(lineMap)"""
-
-
-### example code to start CharlieOSX and it's menu-system
 os = CharlieOSX('config.cfg', 'settings.json', '')
-os.ui.mainLoop()
 
-### example for driving straight
-os.robot.straight(100, 20, 0)
+brick = EV3Brick()
+
+import webremote
+
+webremote = webremote.Webremote()
+
+webremote.startServerThread()
+
+
+while not any(brick.buttons.pressed()):
+    if webremote.newDataAvailable():
+        data = webremote.getResponseData()
+        os.robot.setRemoteValues(data)
+        #print(data)
+    time.sleep(0.05)
+

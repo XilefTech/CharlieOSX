@@ -1,4 +1,4 @@
-import math, _thread, time
+import math, _thread, time, math, copy
 from pybricks.ev3devices import (Motor, TouchSensor, ColorSensor, InfraredSensor, UltrasonicSensor, GyroSensor)
 from pybricks.parameters import (Port, Direction, Color, Stop)
 from pybricks.media.ev3dev import Font
@@ -811,3 +811,37 @@ class Charlie():
 
     def getGyroAngle(self):
         return self.__gyro.angle()
+
+    def setRemoteValues(self, data):
+        x = data['x']
+        y = data['y']
+        if x == 0:
+            x = 0.0001
+        if data['y'] == 0 and data['x'] == 0:
+            self.breakMotors()
+        else:
+            radius = int(math.sqrt(x**2 + y**2)) # distance from center
+            ang = math.atan(y / x) # angle in radians
+
+            a = int(self._map(radius, 0, 180, 0, 100))
+            b = int(-1 * math.cos(2 * ang) * self._map(radius, 0, 180, 0, 100))
+
+            if x < 0:
+                temp = a
+                a = b
+                b = temp
+
+            if y < 0:
+                temp = a
+                a = -b
+                b = -temp
+
+            self.turnLeftMotor(int(self._map(a, 0, 100, 0, data['maxSpeed'])))
+            self.turnRightMotor(int(self._map(b, 0, 100, 0, data['maxSpeed'])))
+
+        if data['a1'] == 0:
+            self.__aMotor1.hold()
+        else:
+            a1Speed = data['a1']
+            self.__aMotor1.dc(a1Speed)
+
