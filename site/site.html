@@ -158,15 +158,16 @@ font-size: xx-large;">
             document.getElementById("x_coordinate").innerText = 0;
             document.getElementById("y_coordinate").innerText = 0;
             await sleep(60);
-            httpGet("api?x=" + 0 + "&y=" + 0 + "&a1=" + 0, true);
-            httpGet("api?x=" + 0 + "&y=" + 0 + "&a1=" + 0, true);
+            var a = document.getElementById('slider2').value
+            httpGet("api?x=" + 0 + "&y=" + 0 + "&a1=" + 0 + "&maxSpeed=" + a, true);
+            httpGet("api?x=" + 0 + "&y=" + 0 + "&a1=" + 0 + "&maxSpeed=" + a, true);
         }
 
         var oldTime = 0;
 
         function httpGet(theUrl, ignoreTimeout) {
             time = new Date();
-            if (oldTime + 120 <= time.getTime() || ignoreTimeout) {
+            if (oldTime + 100 <= time.getTime() || ignoreTimeout) {
                 console.log(theUrl)
                 var xmlHttp = new XMLHttpRequest();
                 xmlHttp.open("GET", theUrl, true); // false for synchronous request
@@ -181,13 +182,13 @@ font-size: xx-large;">
         }
 
         document.getElementById('slider1').oninput = function() {
-            var a1 = document.getElementById('slider1').value * -1;
-            httpGet("api?x=" + 0 + "&y=" + 0 + "&a1=" + a1 + "&maxSpeed=" + 0, true);
+            var a = document.getElementById('slider1').value * -1;
+            httpGet("api?a1=" + a, false);
         }
 
         document.getElementById('slider2').oninput = function() {
             var a = document.getElementById('slider2').value;
-            httpGet("api?x=" + 0 + "&y=" + 0 + "&a1=" + 0 + "&maxSpeed=" + a, true);
+            httpGet("api?maxSpeed=" + a, false);
         }
 
     </script>
