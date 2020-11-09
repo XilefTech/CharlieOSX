@@ -18,8 +18,8 @@ Next:
     Logging:
     o cleanup of Logger
 
-    Configparser:
-    -------
+    Webremote:
+    + Add documentation on how to use the webremote
 
     o fixe prefix typo for first 2 log entrys 
 
