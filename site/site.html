@@ -21,7 +21,8 @@ font-size: xx-large;">
     ontouchstart="mouseOverCanvas = true;" ontouchend="mouseOverCanvas = false;"></canvas>
     <div class="slidecontainer" onmouseover="mouseOverSlider = true;" onmouseout="mouseOverSlider = false;"
     ontouchstart="mouseOverSlider = true;" ontouchend="mouseOverSlider = false;">
-        <input type="range" min="-100" max="100" value="0" class="slider" id="slider">
+        <input type="range" min="-100" max="100" value="0" class="slider" id="slider1">
+        <input type="range" min="0" max="100" value="100" class="slider" id="slider2">
     </div>
     <script>
         var canvas, ctx, mouseOverCanvas, mouseOverSlider;
@@ -141,8 +142,10 @@ font-size: xx-large;">
                 document.getElementById("y_coordinate").innerText = y_relative;
             
             
-                a1 = document.getElementById("slider").value;
-                httpGet("api?x=" + x_relative + "&y=" + y_relative + "&a1=" + a1, false);
+                a1 = document.getElementById("slider1").value;
+                a2 = document.getElementById("slider2").value;
+
+                httpGet("api?x=" + x_relative + "&y=" + y_relative + "&a1=" + a1 + "&maxSpeed=" + a2, false);
             }
         }
 
@@ -151,7 +154,7 @@ font-size: xx-large;">
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             background();
             joystick(width / 2, height * 1.8);
-            document.getElementById('slider').value = 0
+            document.getElementById('slider1').value = 0
             document.getElementById("x_coordinate").innerText = 0;
             document.getElementById("y_coordinate").innerText = 0;
             await sleep(60);
@@ -163,7 +166,7 @@ font-size: xx-large;">
 
         function httpGet(theUrl, ignoreTimeout) {
             time = new Date();
-            if (oldTime + 100 <= time.getTime() || ignoreTimeout) {
+            if (oldTime + 120 <= time.getTime() || ignoreTimeout) {
                 console.log(theUrl)
                 var xmlHttp = new XMLHttpRequest();
                 xmlHttp.open("GET", theUrl, true); // false for synchronous request
@@ -177,10 +180,14 @@ font-size: xx-large;">
             return new Promise(r => setTimeout(r, ms));
         }
 
-        document.getElementById('slider').oninput = function() {
-            var a1 = document.getElementById('slider').value * -1;
-            console.log(a1);
-            httpGet("api?x=" + 0 + "&y=" + 0 + "&a1=" + a1, true);
+        document.getElementById('slider1').oninput = function() {
+            var a1 = document.getElementById('slider1').value * -1;
+            httpGet("api?x=" + 0 + "&y=" + 0 + "&a1=" + a1 + "&maxSpeed=" + 0, true);
+        }
+
+        document.getElementById('slider2').oninput = function() {
+            var a = document.getElementById('slider2').value;
+            httpGet("api?x=" + 0 + "&y=" + 0 + "&a1=" + 0 + "&maxSpeed=" + a, true);
         }
 
     </script>

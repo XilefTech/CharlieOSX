@@ -6,7 +6,7 @@ class Webremote():
 
     def __init__(self):
         self.app = picoweb.WebApp("app")
-        self.outDict = {'x': 0, 'y': 0, 'a1': 0}
+        self.outDict = {'x': 0, 'y': 0, 'a1': 0, 'maxSpeed': 100}
         self.weblock = _thread.allocate_lock()
         self.newData = True
 

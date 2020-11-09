@@ -42,6 +42,14 @@
     transition: opacity .2s;
     float: left;
 }
+
+.slider#slider2 {
+    transform: rotate(270deg) translate(-300px, -100px);
+    -moz-transform: rotate(270deg) translate(-300px, -100px);
+    margin-top: -17px;
+    margin-left: 50px;
+    float: left;
+}
   
 .slider::-webkit-slider-thumb {
     -webkit-appearance: none;

@@ -834,10 +834,8 @@ class Charlie():
                 a = -b
                 b = -temp
 
-            print(a, b, radius)
-
-            self.turnLeftMotor(a)
-            self.turnRightMotor(b)
+            self.turnLeftMotor(int(self._map(a, 0, 100, 0, data['maxSpeed'])))
+            self.turnRightMotor(int(self._map(b, 0, 100, 0, data['maxSpeed'])))
 
         if data['a1'] == 0:
             self.__aMotor1.hold()
