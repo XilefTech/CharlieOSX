@@ -1,10 +1,13 @@
-import picoweb, _thread
+import picoweb, _thread, time
 
 
 class Webremote():
     '''docstring'''
 
-    def __init__(self):
+    def __init__(self, config, robot, brick):
+        self.__config = config
+        self.robot = robot
+        self.brick = brick
         self.app = picoweb.WebApp("app")
         self.outDict = {'x': 0, 'y': 0, 'a1': 0, 'maxSpeed': 100}
         self.weblock = _thread.allocate_lock()
@@ -41,10 +44,20 @@ class Webremote():
             for line in htmlFile:
                 yield from resp.awrite(line)
 
+    def run(self):
+        self.startServerThread()
+
+        while not any(self.brick.buttons.pressed()):
+            if self.newDataAvailable():
+                data = self.getResponseData()
+                self.robot.setRemoteValues(data)
+                #print(data)
+            time.sleep(0.05)
+
     def startServerThread(self):
         def runWebserver():
             with self.weblock:
-                self.app.run(debug = -1, host = '192.168.178.52')
+                self.app.run(debug = -1, host = self.__config['localIP'])
         _thread.start_new_thread(runWebserver, ())
 
     def getResponseData(self):
