@@ -24,7 +24,6 @@ class Webremote():
             yield from picoweb.start_response(resp, content_type = "text/html")
             
             proc = req.qs.split("&")
-            self.outDict = {}
             for elm in proc:
                 temp = elm.split("=")
                 try:
