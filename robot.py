@@ -38,12 +38,12 @@ class Charlie():
         self.logger.info(self, 'Driving for Charlie initialized')
     ##TODO
     def __repr__(self):
+        outputString = "(TODO)\n Config: " + self.__config + "\n Brick: " + self.brick + "\n Logger: " + self.logger
+        outputString += "\n--Debug--\n Minimum Speed: "+ str(self.min_speed) + "\n "
         return "TODO"
 
     def __str__(self):
-        outputString = "(TODO)\n Config: " + self.__config + "\n Brick: " + self.brick + "\n Logger: " + self.logger
-        outputString += "\n--Debug--\n Minimum Speed: "+ str(self.min_speed) + "\n "
-        return outputString   
+        return "Charlie"   
 
     def __initSensors(self):
         '''Sub-method for initializing Sensors.'''

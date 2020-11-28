@@ -36,8 +36,8 @@ class UI:
         return "TODO"
 
     def __str__(self):
-        outputString = "-UI-(TODO)\n Config: " + self.__config + "\n Brick: " + self.brick + "\n Logger: " + self.logger
-        return outputString
+        # outputString = "-UI-(TODO)\n Config: " + self.__config + "\n Brick: " + self.brick + "\n Logger: " + self.logger
+        return "UI"
 
     def __sound(self, file):
         '''
