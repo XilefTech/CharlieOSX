@@ -14,8 +14,8 @@ class UIManager:
     """
 
     def __init__(self, config, settings, brick, logger, settingsPath):
-        # needed Stuff
-        #logger.info(self, 'Starting UI initialisation')
+        # general variable setup
+        logger.info(self, 'Starting UI initialisation')
         self.__config = config
         self.__settings = settings
         self.__click = 'assets/media/click.wav'
@@ -25,12 +25,8 @@ class UIManager:
         self.logger = logger
         #self.profileHelper = ProfileHelper(self.logger, self.__config)
         self.__sound_lock = _thread.allocate_lock()
-        #self.logger.info(self, 'UI initialized')
 
-        self.loop = True
-
-        self.currentObject = 0
-
+        # Main Menu
         self.mainMenu = Menu('sidebar')
         mainPages = [
             "assets/graphics/menus/programming.png",
@@ -57,6 +53,25 @@ class UIManager:
 
         # Settings Menu
         self.settingsMenu = Menu('dict')
+
+        # menu Variables
+        self.loop = True        
+        self.currentMenu = self.mainMenu
+        self.position = [0, 0]
+        self.subMenus = [
+            self.programming,
+            self.testing,
+            self.remote,
+            self.competition,
+            self.settingsMenu
+        ]
+        # testSubmenu = Menu('normal')
+        # testSubmenu.addObject(UIObject('testObject1', self.brick, Box(0, 85, 20, 20), 'img', (0, 0), 'assets/graphics/menus/settingsMainMenu.png'))
+        # testSubmenu.addObject(UIObject('testObject2', self.brick, Box(0, 5, 20, 20), 'img', (0, 0), 'assets/graphics/menus/programmingMainMenu.png'))
+        # testSubmenu.addObject(UIObject('testObject3', self.brick, Box(40, 5, 20, 20), 'img', (0, 0), 'assets/graphics/menus/programmingMainMenu.png'))
+        # print(testSubmenu.rasterize())
+
+        #self.logger.info(self, 'UI initialized')
 
     def __sound(self, file):
         '''
