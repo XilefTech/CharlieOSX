@@ -45,7 +45,8 @@ class UIManager:
         # self.programming.draw([0, 0, False])
 
         # Testing Menu
-        self.testing = Menu('list')
+        self.testing = Menu('list', self.brick)
+        self.testing.setList(self.__config['profileNames'])
 
         # Remote-Control Menu
         self.remote = Menu('canvas')
