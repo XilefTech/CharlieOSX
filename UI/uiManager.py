@@ -32,15 +32,16 @@ class UIManager:
         self.currentObject = 0
 
         self.mainMenu = Menu('sidebar')
-        # UI Stuff
-        self.UIObjects = []
-        UIIcons = [
+        mainPages = [
             "assets/graphics/menus/programming.png",
             "assets/graphics/menus/testing.png",
             "assets/graphics/menus/remote.png",
             "assets/graphics/menus/competition.png",
             "assets/graphics/menus/settings.png",
         ]
+        for i in range(len(mainPages)):
+            name = mainPages[i].split('/')[3].split('.')[0]
+            self.mainMenu.addObject(UIObject(name, self.brick, Box(0, i, 30, 25), 'img', (0, 0, True), mainPages[i]))
 
         # for i in range(len(UIIcons)):
         #     name = UIIcons[i].split('/')[3].split('.')[0]
