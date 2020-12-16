@@ -40,7 +40,9 @@ class UIManager:
             self.mainMenu.addObject(UIObject(name, self.brick, Box(0, i, 30, 25), 'img', (0, 0, True), mainPages[i]))
 
         # Programming Menu
-        self.programming = Menu('list')
+        self.programming = Menu('list', self.brick)
+        self.programming.setList(self.__config['profileNames'])
+        # self.programming.draw([0, 0, False])
 
         # Testing Menu
         self.testing = Menu('list')
