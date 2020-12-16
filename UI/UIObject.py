@@ -23,14 +23,20 @@ class UIObject:
         pass
 
     def draw(self):
+        if self.padding[2]:
+            x = self.padding[0]
+            y = self.padding[1]
+        else:
+            x = self.bounds.x + self.padding[0]
+            y = self.bounds.x + self.padding[1]
+            
         if self.contentType == 'img':
             if self.selected:
                 self.radius = 5
             else:
                 self.radius = 0
 
-            self.brick.screen.draw_image(
-                self.bounds.x + self.padding[0], self.bounds.y + self.padding[1], self.content, transparent=Color.RED)
+            self.brick.screen.draw_image(x, y, self.content, transparent=Color.RED)
             # self.brick.screen.draw_box(
             #     self.bounds.x, self.bounds.y, self.bounds.width + self.padding[0], self.bounds.height+self.padding[1], r=self.radius, fill=False, color=Color.BLACK)
             
