@@ -8,6 +8,8 @@ class Menu():
     def __init__(self, type):
         self.type = type
         self.objects = []
+        self.maxX = 0
+        self.maxY = 0
         self.raster = self.rasterize()
 
     def addObject(self, object: UIObject):
@@ -36,6 +38,12 @@ class Menu():
         # sort objects in the subarrays by x value
         for i in array:
             i.sort(key=lambda x: x.bounds.x, reverse=False)
+
+        # get maximum x and y values
+        self.maxY = len(array) - 1
+        for i in array:
+            if len(i) - 1 > self.maxX:
+                self.maxX = len(i) - 1
         return array
 
 class Box():
