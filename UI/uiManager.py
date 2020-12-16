@@ -73,6 +73,9 @@ class UIManager:
 
         #self.logger.info(self, 'UI initialized')
 
+    def __str__(self):
+        return "UI Manager"
+
     def __sound(self, file):
         '''
         This private method is used for playing a sound in a separate thread so that other code can be executed simultaneously.
