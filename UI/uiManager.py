@@ -59,7 +59,7 @@ class UIManager:
         # menu Variables
         self.loop = True        
         self.currentMenu = self.mainMenu
-        self.position = [0, 0]
+        self.position = [0, 0, False]
         self.subMenus = [
             self.programming,
             self.testing,
@@ -108,16 +108,18 @@ class UIManager:
                     self.position[1] = self.position[1] - 1 if self.position[1] > 0 else self.currentMenu.maxY
                 elif Button.DOWN in self.brick.buttons.pressed():
                     self.position[1] = self.position[1] + 1 if self.position[1] < self.currentMenu.maxY else 0
-                elif Button.LEFT in self.brick.buttons.pressed() and len(self.position) > 2:
+                elif Button.LEFT in self.brick.buttons.pressed() and len(self.position) > 3:
                     # self.position[0] = self.position[0] - 1 if self.position[0] > 0 else self.currentMenu.maxX
                     self.position.pop(0)
                     self.position.pop(0)
-                    if len(self.position) == 2:
+                    self.position.pop(0)
+                    if len(self.position) == 3:
                         self.currentMenu = self.mainMenu
                 elif Button.RIGHT in self.brick.buttons.pressed():
                     # self.position[0] = self.position[0] + 1 if self.position[0] < self.currentMenu.maxX else 0
-                    if len(self.position) == 2:
+                    if len(self.position) == 3:
                         self.currentMenu = self.subMenus[self.position[1]]
+                    self.position.insert(0, False)
                     self.position.insert(0, 0)
                     self.position.insert(0, 0)
                 self.currentMenu.draw(self.position)
