@@ -88,35 +88,28 @@ class UIManager:
                 self.brick.speaker.play_file(soundFile)
         _thread.start_new_thread(__playSoundFile, (file, ))
 
-    def addObject(self, UIObject):
-        self.UIObjects.append(UIObject)
-
-    def draw(self):
-        for UIObject in self.UIObjects:
-            UIObject.draw()
-
     def mainLoop(self):
         while self.loop:
-            self.update()
-
-    def update(self):
-        # for UIObject in self.UIObjects:
-        #     UIObject.update()
-
-        if self.brick.buttons.pressed():
-            self.brick.screen.clear()
-            self.checkButtons()
-            self.draw()
-
-    def checkButtons(self):
-        # print("Current Icon: " + str(self.currentObject))
-
-        if Button.DOWN in self.brick.buttons.pressed():
-            if not self.currentObject == len(self.UIObjects) - 1:
-                self.changeCurrentObj(1)
-        elif Button.UP in self.brick.buttons.pressed():
-            if not self.currentObject == 0:
-                self.changeCurrentObj(-1)
+            if any(self.brick.buttons.pressed()):
+                if Button.UP in self.brick.buttons.pressed():
+                    self.position[1] = self.position[1] - 1 if self.position[1] > 0 else self.currentMenu.maxY
+                elif Button.DOWN in self.brick.buttons.pressed():
+                    self.position[1] = self.position[1] + 1 if self.position[1] < self.currentMenu.maxY else 0
+                elif Button.LEFT in self.brick.buttons.pressed() and len(self.position) > 2:
+                    # self.position[0] = self.position[0] - 1 if self.position[0] > 0 else self.currentMenu.maxX
+                    self.position.pop(0)
+                    self.position.pop(0)
+                    if len(self.position) == 2:
+                        self.currentMenu = self.mainMenu
+                elif Button.RIGHT in self.brick.buttons.pressed():
+                    # self.position[0] = self.position[0] + 1 if self.position[0] < self.currentMenu.maxX else 0
+                    if len(self.position) == 2:
+                        self.currentMenu = self.subMenus[self.position[1]]
+                    self.position.insert(0, 0)
+                    self.position.insert(0, 0)
+                self.currentMenu.draw(self.position)
+                print(self.position)
+                time.sleep(0.3)
 
     def changeCurrentObj(self, num):
         self.UIObjects[self.currentObject].selected = False
