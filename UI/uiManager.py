@@ -115,15 +115,45 @@ class UIManager:
                     self.position.pop(0)
                     self.position.pop(0)
                     if len(self.position) == 3:
+                        self.animate(self.position[1], False)
                         self.currentMenu = self.mainMenu
                 elif Button.RIGHT in self.brick.buttons.pressed():
                     # self.position[0] = self.position[0] + 1 if self.position[0] < self.currentMenu.maxX else 0
                     if len(self.position) == 3:
+                        self.animate(self.position[1], True)
                         self.currentMenu = self.subMenus[self.position[1]]
                     self.position.insert(0, False)
                     self.position.insert(0, 0)
                     self.position.insert(0, 0)
-                self.currentMenu.draw(self.position)
+                self.postition = self.currentMenu.draw(self.position)
                 print(self.position)
                 time.sleep(0.3)
 
+    def animate(self, state, direction):
+        '''
+        Animates the transition between the main-menu-pages and the submenu-pages
+        Args:
+            state (int): The menu-transition to animate
+            direction (bool): wether it should play the animation forwards or backwards
+        '''
+        menus = ['mainProgram',
+                 'mainTest',
+                 'mainRemote',
+                 'mainCompetition',
+                 'mainSettings']
+        if direction:
+            try:
+                for i in range(1, 11):
+                    self.brick.screen.draw_image(
+                        0, 0, 'assets/graphics/animations/%s/%s.png' % (menus[state], i), transparent=Color.RED)
+            except Exception as exception:
+                self.logger.error(
+                    self, "Could not animate menu: ", str(exception))
+        else:
+            try:
+                for i in reversed(range(1, 11)):
+                    self.brick.screen.draw_image(
+                        0, 0, 'assets/graphics/animations/%s/%s.png' % (menus[state], i), transparent=Color.RED)
+            except Exception as exception:
+                self.logger.error(
+                    self, "Could not animate menu: ", str(exception))
