@@ -14,12 +14,12 @@ class Menu():
         self.objects.append(object)
         self.raster = self.rasterize()
 
-    def draw(self):
+    def draw(self, selector):
         if self.type != 'sidebar':
             for i in self.objects:
                 i.draw()
         else:
-            self.objects[0].draw()
+            self.objects[selector[1]].draw()
 
     def rasterize(self):
         array = []
