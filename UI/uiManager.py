@@ -43,20 +43,20 @@ class UIManager:
             name = mainPages[i].split('/')[3].split('.')[0]
             self.mainMenu.addObject(UIObject(name, self.brick, Box(0, i, 30, 25), 'img', (0, 0, True), mainPages[i]))
 
-        # for i in range(len(UIIcons)):
-        #     name = UIIcons[i].split('/')[3].split('.')[0]
-        #     self.mainMenu.addObject(UIObject(name, self.brick, Box(0, i, 30, 25), 'img', (2, 1), UIIcons[i]))
+        # Programming Menu
+        self.programming = Menu('list')
 
-        #self.UIObjects[self.currentObject].selected = True
+        # Testing Menu
+        self.testing = Menu('list')
 
-        # self.mainMenu.draw()
+        # Remote-Control Menu
+        self.remote = Menu('canvas')
 
-        testSubmenu = Menu('normal')
-        testSubmenu.addObject(UIObject('testObject1', self.brick, Box(0, 85, 20, 20), 'img', (0, 0), 'assets/graphics/menus/settingsMainMenu.png'))
-        testSubmenu.addObject(UIObject('testObject2', self.brick, Box(0, 5, 20, 20), 'img', (0, 0), 'assets/graphics/menus/programmingMainMenu.png'))
-        testSubmenu.addObject(UIObject('testObject3', self.brick, Box(40, 5, 20, 20), 'img', (0, 0), 'assets/graphics/menus/programmingMainMenu.png'))
-        print(testSubmenu.rasterize())
+        # Competition-Mode Menu
+        self.competition = Menu('canvas')
 
+        # Settings Menu
+        self.settingsMenu = Menu('dict')
 
     def __sound(self, file):
         '''
