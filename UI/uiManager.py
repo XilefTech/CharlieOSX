@@ -89,6 +89,17 @@ class UIManager:
         _thread.start_new_thread(__playSoundFile, (file, ))
 
     def mainLoop(self):
+        # Welcome screen
+        self.brick.screen.draw_image(0, 0, 'assets/graphics/menus/mainMenu.png', transparent=Color.RED)
+        while not any(self.brick.buttons.pressed()): pass
+        if Button.UP in self.brick.buttons.pressed():
+            self.position[1] = self.currentMenu.maxY
+        elif Button.DOWN in self.brick.buttons.pressed():
+            self.position[1] = 0
+        self.currentMenu.draw(self.position)
+        print(self.position)
+        time.sleep(0.3)
+
         while self.loop:
             if any(self.brick.buttons.pressed()):
                 if Button.UP in self.brick.buttons.pressed():
