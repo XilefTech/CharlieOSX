@@ -122,7 +122,3 @@ class UIManager:
                 print(self.position)
                 time.sleep(0.3)
 
-    def changeCurrentObj(self, num):
-        self.UIObjects[self.currentObject].selected = False
-        self.currentObject += num
-        self.UIObjects[self.currentObject].selected = True
