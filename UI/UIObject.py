@@ -6,7 +6,7 @@ from pybricks.media.ev3dev import Image, ImageFile, Font, SoundFile
 
 
 class UIObject:
-    def __init__(self, name: str, brick: EV3Brick, bounds: Box, contentType, padding: tuple, content):
+    def __init__(self, name: str, brick: EV3Brick, bounds: Box, contentType, padding, content):
         # self.logger = logger
         self.name = name
         self.brick = brick
