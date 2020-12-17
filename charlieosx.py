@@ -7,7 +7,6 @@ from configParser import parseConfig
 from collections import OrderedDict
 from webremote import Webremote
 
-from UI.uiManager import UIManager
 
 
 class CharlieOSX:
@@ -29,6 +28,7 @@ class CharlieOSX:
     '''
 
     def __init__(self, configPath, settingsPath, logfilePath):
+        from UI.uiManager import UIManager
         self.__settings = self.loadSettings(settingsPath)
         self.brick = EV3Brick()
         self.logger = Logger(self.__settings, logfilePath, self.brick)
