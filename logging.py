@@ -208,4 +208,7 @@ class Logger:
         Args:
         bool: wether or not the screen should be refreshed
         '''
-        self.__refreshScreenNeeded = value
+        if(isinstance(value, bool)):
+            self.__refreshScreenNeeded = value
+        else:
+            self.warn(self, "Tried calling setScreenRefreshNeeded with a non boolean argument, expected True or False, got: " + str(value))
