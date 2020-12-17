@@ -7,21 +7,21 @@ from pybricks.parameters import (Port, Stop, Direction, Button, Color, SoundFile
 from pybricks.tools import print, StopWatch
 from charlieosx import CharlieOSX
      
-# os = CharlieOSX('config.cfg', 'settings.json', '')
+os = CharlieOSX('config.cfg', 'settings.json', '')
+
+brick = EV3Brick()
+
+import webremote
+
+webremote = webremote.Webremote()
+
+webremote.startServerThread()
 
 
+while not any(brick.buttons.pressed()):
+    if webremote.newDataAvailable():
+        data = webremote.getResponseData()
+        os.robot.setRemoteValues(data)
+        #print(data)
+    time.sleep(0.05)
 
-import picoweb
-
-app = picoweb.WebApp("app")
-
-@app.route("/")
-def index(req, resp):
-    yield from picoweb.start_response(resp, content_type = "text/html")
- 
-    htmlFile = open('site.html', 'r')
- 
-    for line in htmlFile:
-      yield from resp.awrite(line)
- 
-app.run(debug=True, host = "192.168.178.52")
