@@ -6,9 +6,10 @@ from pybricks.media.ev3dev import Image, ImageFile, Font, SoundFile
 
 from UI.UIObject import UIObject
 from UI.tools import Menu, Box
+import charlieosx
 
 
-class UIManager(CharlieOSX):
+class UIManager(charlieosx.CharlieOSX):
     """
         Basicly a Menu
     """
