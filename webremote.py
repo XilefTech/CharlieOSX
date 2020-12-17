@@ -43,6 +43,15 @@ class Webremote():
         
             for line in htmlFile:
                 yield from resp.awrite(line)
+                
+        @self.app.route("/code.js")
+        def style(req, resp):
+            yield from picoweb.start_response(resp, content_type = "text/javascript")
+            
+            htmlFile = open('site/code.js', 'r')
+        
+            for line in htmlFile:
+                yield from resp.awrite(line)
 
     def run(self):
         self.startServerThread()
