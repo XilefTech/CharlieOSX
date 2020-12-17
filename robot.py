@@ -29,10 +29,10 @@ class Charlie():
 
         self.min_speed = 35 # lage motor 20, medium motor 30
         
-        self.__gyro.reset_angle(0)
+        self.__gyro.reset_angle(0) if self.__gyro != 0 else self.logger.error(self, "No gyro attached, robot movement will probably not work and you likely will receive crashs", None)
 
         self.__screenRoutine = False
-        self.showDetails()
+        #self.showDetails()
 
         
         self.logger.info(self, 'Driving for Charlie initialized')
