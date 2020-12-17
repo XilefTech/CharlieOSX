@@ -2,7 +2,7 @@ import picoweb, _thread, time
 
 
 class Webremote():
-    '''docstring'''
+    '''Main class for the Webremote'''
 
     def __init__(self, config, robot, brick):
         self.__config = config
