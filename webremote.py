@@ -35,6 +35,9 @@ class Webremote():
                     self.outDict[temp[0]] = temp[1]
             self.newData = True
         
+        ''' 
+            Serving all resources needed for the Webremote
+        '''
         @self.app.route("/style.css")
         def style(req, resp):
             yield from picoweb.start_response(resp, content_type = "text/css")
@@ -43,7 +46,7 @@ class Webremote():
         
             for line in htmlFile:
                 yield from resp.awrite(line)
-                
+
         @self.app.route("/code.js")
         def style(req, resp):
             yield from picoweb.start_response(resp, content_type = "text/javascript")
