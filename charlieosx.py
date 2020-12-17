@@ -5,6 +5,7 @@ from ui import UI
 from pybricks.hubs import EV3Brick
 from configParser import parseConfig
 from collections import OrderedDict
+from webremote import Webremote
 
 
 class CharlieOSX:
@@ -29,8 +30,11 @@ class CharlieOSX:
         self.brick = EV3Brick()
         self.logger = Logger(self.__settings, logfilePath, self.brick)
         self.__config = parseConfig(configPath, self.logger)
+
         self.robot = Charlie(self.__config, self.brick, self.logger)
         self.ui = UI(self.__config, self.__settings, self.brick, self.logger, settingsPath)
+        self.webremote = Webremote(self.__config, self.robot, self.brick)
+
         self.applySettings(self.__settings)
     #TODO
     def __repr__(self):
