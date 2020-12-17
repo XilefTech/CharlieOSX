@@ -8,7 +8,7 @@ from UI.UIObject import UIObject
 from UI.tools import Menu, Box
 
 
-class UIManager:
+class UIManager(CharlieOSX):
     """
         Basicly a Menu
     """
@@ -125,7 +125,7 @@ class UIManager:
                     self.position.insert(0, False)
                     self.position.insert(0, 0)
                     self.position.insert(0, 0)
-                self.postition = self.currentMenu.draw(self.position)
+                self.currentMenu.draw(self.position)
                 print(self.position)
                 time.sleep(0.3)
 
