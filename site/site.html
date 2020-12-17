@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="style.css" type="text/css" />
+
+    <title>CharlieOSX Webremote</title>
+    <meta name="description" content="The CharlieOSX Webremote" />
+    <meta name="author" content="CharlieOSX Team" />
+    <meta
+      name="viewport"
+      content="user-scalable=no, initial-scale=1.0"
+      ,
+      charset="UTF-8"
+    />
+    <meta name="theme-color" content="#99ffcc" />
+  </head>
+
+  <body scroll="no">
+    <h1 class="unselectable">CharlieOSX Webremote</h1>
+    <p class="unselectable">
+      X: <span id="x_coordinate"> </span> Y: <span id="y_coordinate"> </span>
+    </p>
+    
+    <canvas
+      id="canvas"
+      class="canvas"
+      onmouseover="mouseOverCanvas = true;"
+      onmouseout="mouseOverCanvas = false;"
+      ontouchstart="mouseOverCanvas = true;"
+      ontouchend="mouseOverCanvas = false;"
+    ></canvas>
+    <div
+      class="slidecontainer"
+      onmouseover="mouseOverSlider = true;"
+      onmouseout="mouseOverSlider = false;"
+      ontouchstart="mouseOverSlider = true;"
+      ontouchend="mouseOverSlider = false;"
+    >
+      <input
+        type="range"
+        min="-100"
+        max="100"
+        value="0"
+        class="slider"
+        id="slider1"
+      />
+      <input
+        type="range"
+        min="0"
+        max="100"
+        value="100"
+        class="slider"
+        id="slider2"
+      />
+    </div>
+    <script src="code.js"></script>
+  </body>
+</html>
