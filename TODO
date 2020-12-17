@@ -4,6 +4,7 @@ Next:
     + add content to the main menu and 'unopened' sub-menu pages
 
     Robot:
+    + add config entry for motor type
     + make straightMecanum() abortalble with brick buttons
     + add posibility for only one colorSensor in Front through config and robot.py
     + line following mode
@@ -12,12 +13,15 @@ Next:
     + add more possibilities for colors to toColor()
     o some extensive testing and fixing of errors
     + add on-screen output of sensor-and motor data during driving
+    + Acoustic Feedback while driving
 
     Logging:
     o cleanup of Logger
 
-    Configparser:
-    o Cleanup
+    Webremote:
+    + Add documentation on how to use the webremote
+
+    o fixe prefix typo for first 2 log entrys 
 
 Far-Off:
     Robot:

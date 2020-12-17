@@ -11,14 +11,6 @@ from pybricks.hubs import EV3Brick
 import time
 
 
-# things, I'm sometimes using to test things - can be ignored
-"""
-lineMap = {'height' : 300, 'width' : 1000,
-            'from' : (1, 1), 'to' : (1, 4), 
-            'obstacles' : [((2, 1), (4, 1))]}
-
-tools.doIntersect(lineMap)"""
-
 
 # example code to start CharlieOSX and it's menu-system
 os = CharlieOSX('config.cfg', 'settings.json', '')
@@ -29,4 +21,5 @@ os.ui.mainLoop()
 
 # x = UIManager('', '', EV3Brick(), '')
 # print(x)
-time.sleep(10)
+# time.sleep(10)
+

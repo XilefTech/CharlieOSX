@@ -1,6 +1,7 @@
-import math
+import math, _thread, time, math, copy
 from pybricks.ev3devices import (Motor, TouchSensor, ColorSensor, InfraredSensor, UltrasonicSensor, GyroSensor)
-from pybricks.parameters import (Port, Direction)
+from pybricks.parameters import (Port, Direction, Color, Stop)
+from pybricks.media.ev3dev import Font
 
 
 class Charlie():
@@ -25,10 +26,20 @@ class Charlie():
 
         self.__initSensors()
         self.__initMotors()
+
+        self.min_speed = 35 # lage motor 20, medium motor 30
+        
+        self.__gyro.reset_angle(0)
+
+        self.__screenRoutine = False
+        self.showDetails()
+
         
         self.logger.info(self, 'Driving for Charlie initialized')
-    #TODO
+    ##TODO
     def __repr__(self):
+        outputString = "(TODO)\n Config: " + self.__config + "\n Brick: " + self.brick + "\n Logger: " + self.logger
+        outputString += "\n--Debug--\n Minimum Speed: "+ str(self.min_speed) + "\n "
         return "TODO"
 
     def __str__(self):
@@ -38,7 +49,7 @@ class Charlie():
         '''Sub-method for initializing Sensors.'''
         self.logger.debug(self, "Starting sensor initialisation...")
         try:
-            self.__gyro = GyroSensor(self.__conf2port[self.__config['gyroSensorPort']], positive_direction = Direction.CLOCKWISE if not self.__config['gyroInverted'] else Direction.COUNTERCLOCKWISE) if self.__config['gyroSensorPort'] != 0 else 0
+            self.__gyro = GyroSensor(self.__conf2port[self.__config['gyroSensorPort']], Direction.CLOCKWISE if not self.__config['gyroInverted'] else Direction.COUNTERCLOCKWISE) if self.__config['gyroSensorPort'] != 0 else 0
             self.logger.debug(self, 'Gyrosensor initialized sucessfully on port %s' % self.__config['gyroSensorPort'])
         except Exception as exception:
             self.__gyro = 0
@@ -118,6 +129,36 @@ class Charlie():
         self.logger.debug(self, "Motor initialisation done")
         self.logger.info(self, 'Charlie initialized')
 
+    def showDetails(self):
+        '''
+        Processes sensor data in a separate thread and shows 
+        '''
+        threadLock = _thread.allocate_lock()
+        def __screenPrintRoutine():
+            while True:
+                if self.__gyro.angle() > 360:
+                    ang = self.__gyro.angle() - 360
+                else:
+                    ang = self.__gyro.angle()
+                speedRight = self.__rMotor.speed() if self.__config['robotType'] == 'NORMAL' else self.__fRMotor.speed()
+                speedRight = speedRight / 360   # from deg/s to revs/sec
+                speedRight = speedRight * (self.__config['wheelDiameter'] * math.pi)    # from revs/sec to cm/sec
+                speedLeft = self.__lMotor.speed() if self.__config['robotType'] == 'NORMAL' else self.__fLMotor.speed()
+                speedLeft = speedLeft / 360   # from deg/s to revs/sec
+                speedLeft = speedLeft * (self.__config['wheelDiameter'] * math.pi)    # from revs/sec to cm/sec
+                
+                #self.brick.screen.set_font(Font(family = 'arial', size = 16))
+                if self.__screenRoutine:
+                    print(self.__gyro.angle())
+                    self.brick.screen.draw_text(5, 10, 'Robot-Angle: %s' % ang, text_color=Color.BLACK, background_color=Color.WHITE)
+                    self.brick.screen.draw_text(5, 40, 'Right Motor Speed: %s' % ang, text_color=Color.BLACK, background_color=Color.WHITE)
+                    self.brick.screen.draw_text(5, 70, 'Left Motor Speed: %s' % ang, text_color=Color.BLACK, background_color=Color.WHITE)
+                time.sleep(0.1)
+
+
+        with threadLock:
+            _thread.start_new_thread(__screenPrintRoutine, ())
+
     def execute(self, params):
         '''
         This function interprets the number codes from the given array and executes the driving methods accordingly
@@ -126,29 +167,33 @@ class Charlie():
             params (array): The array of number code arrays to be executed
         '''
 
-        if self.__brick.battery.voltage() <= 7500:
-            self.logger.warn("Please charge the battery. Only %sV left. We recommend least 7.5 Volts for accurate and repeatable results." %
+        if self.brick.battery.voltage() <= 7600:
+            self.logger.warn("Please charge the battery. Only %sV left. We recommend least 7.6 Volts for accurate and repeatable results." %
                              self.brick.battery.voltage() * 0.001)
             return
         if self.__gyro == 0:
             self.logger.error(self, "Cannot drive without gyro", '')
             return
 
+        methods = {
+            3: self.absTurn,
+            4: self.turn,
+            5: self.action,
+            7: self.straight,
+            9: self.intervall,
+            11: self.curve,
+            12: self.toColor,
+            15: self.toWall
+        }
+
         self.__gyro.reset_angle(0)
-        while params != [] and not any(self.brick.buttons()):
+        self.__gyro.reset_angle(0)
+        time.sleep(0.1)
+        self.__screenRoutine = True
+        while params != [] and not any(self.brick.buttons.pressed()):
             pparams = params.pop(0)
             mode, arg1, arg2, arg3 = pparams.pop(0), pparams.pop(
                 0), pparams.pop(0), pparams.pop(0)
-
-            methods = {
-                4: self.turn(),
-                5: self.action(),
-                7: self.straight(),
-                9: self.intervall(),
-                11: self.curve(),
-                12: self.toColor(),
-                15: self.toWall()
-            }
 
             methods[mode](arg1, arg2, arg3)
 
@@ -157,6 +202,7 @@ class Charlie():
             self.__gearingPortMotor.run_target(300, 0, Stop.HOLD, True)  # reset gearing
 
         time.sleep(0.3)
+        self.__screenRoutine = False
 
     def turn(self, speed, deg, port):
         '''
@@ -169,28 +215,29 @@ class Charlie():
         '''
 
         startValue = self.__gyro.angle()
+        speed = self.min_speed if speed < self.min_speed else speed
 
         # turn only with left motor
         if port == 2:
             # right motor off
-            __rMotor.dc(0)
+            self.__rMotor.dc(0)
             # turn the angle
-            if deg > 0:
+            if deg > 0:     
                 while self.__gyro.angle() - startValue < deg:
-                    turnLeftMotor(speed)
+                    self.turnLeftMotor(speed)
                     # slow down to not overshoot
                     if not self.__gyro.angle() - startValue < deg * 0.6:
-                        speed = speed - _map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
+                        speed = speed - self._map(deg, 1, 360, 10, 0.1) if speed > self.min_speed else self.min_speed
 
                     #cancel if button pressed
                     if any(self.brick.buttons.pressed()):
                         return
             else:
                 while self.__gyro.angle() - startValue > deg:
-                    turnLeftMotor(-speed)
+                    self.turnLeftMotor(-speed)
                     # slow down to not overshoot
                     if not self.__gyro.angle() - startValue > deg * 0.6:
-                        speed = speed - _map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
+                        speed = speed - self._map(deg, 1, 360, 10, 0.1) if speed > self.min_speed else self.min_speed
                         
                     #cancel if button pressed
                     if any(self.brick.buttons.pressed()):
@@ -199,24 +246,24 @@ class Charlie():
         # turn only with right motor
         elif port == 3:
             # left motor off
-            __lMotor.dc(0)
+            self.__lMotor.dc(0)
             # turn the angle
             if deg > 0:
                 while self.__gyro.angle() - startValue < deg:
-                    turnRightMotor(-speed)
+                    self.turnRightMotor(-speed)
                     # slow down to not overshoot
                     if not self.__gyro.angle() - startValue < deg * 0.6:
-                        speed = speed - _map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
+                        speed = speed - self._map(deg, 1, 360, 10, 0.1) if speed > self.min_speed else self.min_speed 
 
                     #cancel if button pressed
                     if any(self.brick.buttons.pressed()):
                         return
             else:
                 while self.__gyro.angle() - startValue > deg:
-                    turnRightMotor(speed)
+                    self.turnRightMotor(speed)
                     # slow down to not overshoot
                     if not self.__gyro.angle() - startValue > deg * 0.6:
-                        speed = speed - _map(deg, 1, 360, 10, 0.1) if speed > 20 else speed
+                        speed = speed - self._map(deg, 1, 360, 10, 0.1) if speed > self.min_speed else self.min_speed + 5
                     
                     #cancel if button pressed
                     if any(self.brick.buttons.pressed()):
@@ -224,29 +271,125 @@ class Charlie():
 
         # turn with both motors
         elif port == 23:
+            dualMotorbonus = 19
+            speed = speed * 2
             # turn the angle
             if deg > 0:
                 while self.__gyro.angle() - startValue < deg:
-                    turnLeftMotor(speed / 2)
-                    turnRightMotor(-speed / 2)
+                    self.turnLeftMotor(speed / 2)
+                    self.turnRightMotor(-speed / 2)
                     # slow down to not overshoot
                     if not self.__gyro.angle() - startValue < deg * 0.6:
-                        speed = speed - _map(deg, 1, 360, 10, 0.01) if speed > 40 else speed
+                        speed = speed - self._map(deg, 1, 360, 10, 0.01) if speed - self._map(deg, 1, 360, 10, 0.01) > self.min_speed * 2 - dualMotorbonus else self.min_speed * 2 - dualMotorbonus
 
                     # cancel if button pressed
-                    if any(self.brick.buttons()):
+                    if any(self.brick.buttons.pressed()):
                         return
 
             else:
                 while self.__gyro.angle() - startValue > deg:
-                    turnLeftMotor(-speed / 2)
-                    turnRightMotor(speed / 2)
+                    self.turnLeftMotor(-speed / 2)
+                    self.turnRightMotor(speed / 2)
                     # slow down to not overshoot
                     if not self.__gyro.angle() - startValue > deg * 0.6:
-                        speed = speed - _map(deg, 1, 360, 10, 0.01) if speed > 40 else speed
+                        speed = speed - self._map(deg, 1, 360, 10, 0.01) if speed - self._map(deg, 1, 360, 10, 0.01) > self.min_speed * 2 - dualMotorbonus else self.min_speed * 2 - dualMotorbonus
 
                     # cancel if button pressed
-                    if any(self.brick.buttons()):
+                    if any(self.brick.buttons.pressed()):
+                        return
+
+    def absTurn(self, speed, deg, port):
+        '''
+        Used to turn the motor on the spot using either one or both Motors for turning (2 or 4 in case of ALLWHEEL and MECANUM)
+        This method turns in contrast to the normal turn() method to an absolute ange (compared to starting point)
+
+        Args:
+            speed (int): the speed to drive at
+            deg (int): the angle to turn to
+            port (int): the motor(s) to turn with
+        '''
+
+        speed = self.min_speed if speed < self.min_speed else speed
+
+        # turn only with left motor
+        if port == 2:
+            # right motor off
+            self.__rMotor.dc(0)
+            # turn the angle
+            if deg > 0:     
+                while self.__gyro.angle() < deg:
+                    self.turnLeftMotor(speed)
+                    # slow down to not overshoot
+                    if not self.__gyro.angle() < deg * 0.6:
+                        speed = speed - self._map(deg, 1, 360, 10, 0.1) if speed > self.min_speed else self.min_speed
+
+                    #cancel if button pressed
+                    if any(self.brick.buttons.pressed()):
+                        return
+            else:
+                while self.__gyro.angle() > deg:
+                    self.turnLeftMotor(-speed)
+                    # slow down to not overshoot
+                    if not self.__gyro.angle() > deg * 0.6:
+                        speed = speed - self._map(deg, 1, 360, 10, 0.1) if speed > self.min_speed else self.min_speed
+                        
+                    #cancel if button pressed
+                    if any(self.brick.buttons.pressed()):
+                        return
+
+        # turn only with right motor
+        elif port == 3:
+            # left motor off
+            self.__lMotor.dc(0)
+            # turn the angle
+            if deg > 0:
+                while self.__gyro.angle() < deg:
+                    self.turnRightMotor(-speed)
+                    # slow down to not overshoot
+                    if not self.__gyro.angle() < deg * 0.6:
+                        speed = speed - self._map(deg, 1, 360, 10, 0.1) if speed > self.min_speed else self.min_speed 
+
+                    #cancel if button pressed
+                    if any(self.brick.buttons.pressed()):
+                        return
+            else:
+                while self.__gyro.angle() > deg:
+                    self.turnRightMotor(speed)
+                    # slow down to not overshoot
+                    if not self.__gyro.angle() > deg * 0.6:
+                        speed = speed - self._map(deg, 1, 360, 10, 0.1) if speed > self.min_speed else self.min_speed + 5
+                    
+                    #cancel if button pressed
+                    if any(self.brick.buttons.pressed()):
+                        return
+
+        # turn with both motors
+        elif port == 23:
+            dualMotorbonus = 19
+            speed = speed * 2
+            # turn the angle
+            if deg > 0:
+                while self.__gyro.angle() < deg:
+                    self.turnLeftMotor(speed / 2)
+                    self.turnRightMotor(-speed / 2)
+                    # slow down to not overshoot
+                    if not self.__gyro.angle() < deg * 0.6:
+                        speed = speed - self._map(deg, 1, 360, 10, 0.01) if speed - self._map(deg, 1, 360, 10, 0.01) > self.min_speed * 2 - dualMotorbonus else self.min_speed * 2 - dualMotorbonus
+
+                    # cancel if button pressed
+                    if any(self.brick.buttons.pressed()):
+                        return
+
+            else:
+                while self.__gyro.angle() > deg:
+                    self.turnLeftMotor(-speed / 2)
+                    self.turnRightMotor(speed / 2)
+                    # slow down to not overshoot
+                    if not self.__gyro.angle() > deg * 0.6:
+                        speed = speed - self._map(deg, 1, 360, 10, 0.01) if speed - self._map(deg, 1, 360, 10, 0.01) > self.min_speed * 2 - dualMotorbonus else self.min_speed * 2 - dualMotorbonus
+
+                    # cancel if button pressed
+                    if any(self.brick.buttons.pressed()):
                         return
 
     def straight(self, speed, dist, ang):
@@ -259,18 +402,18 @@ class Charlie():
             dist (int): the distance in cm to drive
         '''
         if self.__config['robotType'] != 'MECANUM':
-            correctionStrength = 2  # how strongly the self will correct. 2 = default, 0 = nothing
+            correctionStrength = 2.5  # how strongly the self will correct. 2 = default, 0 = nothing
             startValue = self.__gyro.angle()
 
             # convert the input (cm) to revs
-            revs = dist / (self.__config['wheelDiameter'] * math.pi) / 2
+            revs = dist / (self.__config['wheelDiameter'] * math.pi)
 
             motor = self.__rMotor if self.__config['robotType'] == 'NORMAL' else self.__fRMotor
 
             # drive
             motor.reset_angle(0)
             if revs > 0:
-                while revs > motor.angle() / 360:
+                while revs > (motor.angle() / 360):
                     # if not driving staright correct it
                     if self.__gyro.angle() - startValue > 0:
                         lSpeed = speed - abs(self.__gyro.angle() - startValue) * correctionStrength
@@ -287,7 +430,7 @@ class Charlie():
                     
                     #cancel if button pressed
                     if any(self.brick.buttons.pressed()):
-                            return
+                        return
             else:
                 while revs < motor.angle() / 360:
                     # if not driving staright correct it
@@ -304,7 +447,7 @@ class Charlie():
                     self.turnLeftMotor(-lSpeed)
                     self.turnRightMotor(-rSpeed)
                     # cancel if button pressed
-                    if any(self.brick.buttons()):
+                    if any(self.brick.buttons.pressed()):
                         return
 
         else:
@@ -416,7 +559,7 @@ class Charlie():
                     if any(self.brick.buttons.pressed()):
                         return
 
-    def curve(self, speed, revs1, deg):
+    def curve(self, speed, dist, deg):
         '''
         Drives forwads and backwards x times.
 
@@ -430,12 +573,15 @@ class Charlie():
         # gyro starting point
         startValue = self.__gyro.angle()
 
+        revs1 = dist / (self.__config['wheelDiameter'] * math.pi)
+
+
         # claculate revs for the second wheel
-        pathOutside = self.__config['wheelDiameter'] * 2 * math.pi * revs1
+        pathOutside = self.__config['wheelDiameter'] * math.pi * revs1
         rad1 = pathOutside / (math.pi * (deg / 180))
         rad2 = rad1 - self.__config['wheelDistance']
         pathInside = rad2 * math.pi * (deg/180)
-        revs2 = pathInside / (self.__config['wheelDiameter'] * 2 * math.pi)
+        revs2 = pathInside / (self.__config['wheelDiameter'] * math.pi)
 
         # claculate the speed for the second wheel
         relation = revs1 / revs2
@@ -453,12 +599,12 @@ class Charlie():
 
         else:
             # asign higher speed to outer wheel
-            rSpeed = speed
-            lSpeed = speedSlow
-            self.__rMotor.run_angle(rSpeed, revs1 * 360 + 5, Stop.COAST, False)
-            self.__lMotor.run_angle(lSpeed, revs2 * 360, Stop.COAST, False)
+            lSpeed = speed
+            rSpeed = speedSlow
+            self.__rMotor.run_angle(rSpeed, revs2 * 360 + 15, Stop.COAST, False)
+            self.__lMotor.run_angle(lSpeed, revs1 * 360, Stop.COAST, False)
             #turn
-            while self.__gyro.angle() + startValue > deg and not any(self.brick.buttons.pressed()):
+            while self.__gyro.angle() - startValue > deg and not any(self.brick.buttons.pressed()):
                 pass
 
     def toColor(self, speed, color, side):
@@ -545,13 +691,11 @@ class Charlie():
             revs (int): how long to turn the motor for
             port (int): which one of the motors should be used
         '''
+        speed = abs(speed) * 1.7 * 6  # speed to deg/s from %
         if self.__config['useGearing']:
-            speed = speed * 1.7 * 6  # speed to deg/s from %
-            self.__gearingPortMotor.run_target(
-                300, port * 90, Stop.HOLD, True)  # select gearing Port
+            self.__gearingPortMotor.run_target(300, port * 90, Stop.HOLD, True)  # select gearing Port
             ang = self.__gearingTurnMotor.angle()
-            self.__gearingTurnMotor.run_angle(
-                speed, revs * 360, Stop.BRAKE, False)  # start turning the port
+            self.__gearingTurnMotor.run_angle(speed, revs * 360, Stop.BRAKE, False)  # start turning the port
             # cancel, if any brick button is pressed
             if revs > 0:
                 while self.__gearingTurnMotor.angle() < revs * 360 - ang:
@@ -566,7 +710,8 @@ class Charlie():
         else:
             # turn motor 1
             if port == 1:
-                self.__aMotor1.run_angle(speed, revs * 360, Stop.BRAKE, False)
+                ang = self.__aMotor1.angle()
+                self.__aMotor1.run_angle(speed, revs * 360, Stop.HOLD, False)
                 if revs > 0:
                     while self.__aMotor1.angle() < revs * 360 - ang:
                         if any(self.brick.buttons.pressed()):
@@ -579,7 +724,8 @@ class Charlie():
                             return
             # turm motor 2
             elif port == 2:
-                self.__aMotor2.run_angle(speed, revs * 360, Stop.BRAKE, False)
+                ang = self.__aMotor2.angle()
+                self.__aMotor2.run_angle(speed, revs * 360, Stop.HOLD, False)
                 if revs > 0:
                     while self.__aMotor2.angle() < revs * 360 - ang:
                         if any(self.brick.buttons.pressed()):
@@ -645,8 +791,9 @@ class Charlie():
             self.__bRMotor.hold()
             self.__fLMotor.hold()
             self.__bLMotor.hold()
+        time.sleep(0.2)
 
-    def _map(x, in_min, in_max, out_min, out_max):
+    def _map(self, x, in_min, in_max, out_min, out_max):
         '''
         Converts a given number in the range of two numbers to a number in the range of two other numbers
 
@@ -661,3 +808,40 @@ class Charlie():
         int: a number between out_min and out_max, de
         '''
         return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
+
+    def getGyroAngle(self):
+        return self.__gyro.angle()
+
+    def setRemoteValues(self, data):
+        x = data['x']
+        y = data['y']
+        if x == 0:
+            x = 0.0001
+        if data['y'] == 0 and data['x'] == 0:
+            self.breakMotors()
+        else:
+            radius = int(math.sqrt(x**2 + y**2)) # distance from center
+            ang = math.atan(y / x) # angle in radians
+
+            a = int(self._map(radius, 0, 180, 0, 100))
+            b = int(-1 * math.cos(2 * ang) * self._map(radius, 0, 180, 0, 100))
+
+            if x < 0:
+                temp = a
+                a = b
+                b = temp
+
+            if y < 0:
+                temp = a
+                a = -b
+                b = -temp
+
+            self.turnLeftMotor(int(self._map(a, 0, 100, 0, data['maxSpeed'])))
+            self.turnRightMotor(int(self._map(b, 0, 100, 0, data['maxSpeed'])))
+
+        if data['a1'] == 0:
+            self.__aMotor1.hold()
+        else:
+            a1Speed = data['a1']
+            self.__aMotor1.dc(a1Speed)
+

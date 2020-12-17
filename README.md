@@ -1,5 +1,5 @@
 *Disclaimer: Everything in this Repository is still experimental and WIP. Nothing is expected to fully work.
-I'm still far away from a final version.*
+I'm still far away from a final version. If you should experience any issues or bugs, please open an issue in this repository.*
 
 # CharlieOSX
 *By XilefTech from the "Lego Spirits"*
@@ -30,7 +30,8 @@ Also it will help you to improve your movements through showing important data i
 | Steering any of the three Robot types with the Help of the [number codes](https://docs.google.com/spreadsheets/d/1DmdYeWCkykAH5O6e8qv4fGR5aR4e66AjW1zxPTqASJo/edit?usp=sharing) | Done |
 | insert/edit the number codes on the brick itself | WIP |
 | create a map with barriers and let the robot navigate on it's own   | NYI |
-| steer the robot with a remote control of some kind (actually not sure what), save the steered path and let it repeat it   | NYI |
+| steer the robot with a remote control in your browser | Done |
+| save the Remote-controlled path and let it repeat it   | NYI |
 | use a FLL mode with separate program slots according to the Tasks on the Field and an extra mode for executing them in a specific order at the competition itself   | NYI |
 
 
@@ -48,6 +49,22 @@ Alternatively, if you want to write your own code inbetween lines and don't need
 CharlieOSX.robot.straight(100, 20, 0) # drives in a straight line 20cm with 100% speed
 CharlieOSX.robot.turn(75, 90, 23)  # turns 90 deg using both motors with 75% speed
 ```
+#### Webremote:
+If you want to use the browser-based Webremote of CharlieOSX, you'll need a USB-WIFI adapter. When your robot is connected to your local WIFI network, make sure the robots local IP-adress and the localIP in the config match.
+
+To then start the webremote call the run() function:
+```Python
+CharlieOSX = CharlieOSX('config.cfg', 'settings.json', '')
+CharlieOSX.webremote.run()
+```
+Now the webserver will start and you can acess the webremote with any webbrowser at < yourBrickIP >:8081 so for example 192.168.178.52:8081
+
+![Webremote-Image](https://user-images.githubusercontent.com/52332196/98609202-0ddb4700-22ed-11eb-9de7-c34cd266c071.png)
+
+The interface is pretty simple:
+1. A joystick for moving the robot
+2. A slider to control the velocity of an action motor
+3. A slider to set the maximum speed for the robot
 
 ### More Information
 You will always be able to find more (detailed) information about the project in the [wiki](https://github.com/XilefTech/CharlieOSX/wiki).
