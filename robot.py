@@ -166,9 +166,12 @@ class Charlie():
         '''
 
         if self.brick.battery.voltage() <= 7600:
-            self.logger.warn("Please charge the battery. Only %sV left. We recommend least 7.6 Volts for accurate and repeatable results." %
+            if(self.__config["ignoreBatteryWarning"] == True):
+                self.logger.warn("Please charge the battery. Only %sV left. We recommend least 7.6 Volts for accurate and repeatable results. ignoreBatteryWarning IS SET TO True, THIS WILL BE IGNORED!!!" % self.brick.battery.voltage() * 0.001)
+            else:
+                self.logger.warn("Please charge the battery. Only %sV left. We recommend least 7.6 Volts for accurate and repeatable results." %
                              self.brick.battery.voltage() * 0.001)
-            return
+                return
         if self.__gyro == 0:
             self.logger.error(self, "Cannot drive without gyro", '')
             return
