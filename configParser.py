@@ -2,10 +2,12 @@
 This file is just to offload some code and make it more organized.
 The only method in this file is parseConfig()
 '''
+
+
 def parseConfig(configPath, logger):
     '''
         Loads the data from a config file based on my somewhat own syntax.
-        
+
         Args:
             configPath (str): the path to the config file
 
@@ -60,6 +62,7 @@ def parseConfig(configPath, logger):
                     else: # array begin
                         keys.append(l[:l.find(':')])
                         arrMode = 1
+
 
     except Exception as exception:
         logger.error(self, 'Error while Parsing config:', exception)
