@@ -1,4 +1,5 @@
 import json
+from versionManager import VersionManagment
 from robot import Charlie
 from logging import Logger
 from ui import UI
@@ -30,6 +31,7 @@ class CharlieOSX:
         self.brick = EV3Brick()
         self.logger = Logger(self.__settings, logfilePath, self.brick)
         self.__config = parseConfig(configPath, self.logger)
+        self.versionMan = VersionManagment(self.__settings, self.brick, self.__config, self.logger)
 
         self.robot = Charlie(self.__config, self.brick, self.logger)
         self.ui = UI(self.__config, self.__settings, self.brick, self.logger, settingsPath)

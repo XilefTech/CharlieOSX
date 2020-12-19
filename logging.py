@@ -37,12 +37,7 @@ class Logger:
         self.__refreshScreenNeeded = 0
         self.__sound_lock = _thread.allocate_lock()
         self.info(self, 'Logger initialized')  
-        try:
-            f = open("VERSION", "r")
-            ver = f.readlines()[0].replace("\n", "").replace("\r", "")
-            self.info(self, 'Using version ' + str(ver))  
-        except:
-            self.warn(self, 'Failed reading version from file')  
+       
     
     def __repr__(self):
         return 'TODO'
