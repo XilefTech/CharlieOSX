@@ -36,8 +36,9 @@ class VersionManagment:
                 self.logger.info(self, 'Checking if a new version is avaiable')
                 try:
                     os.mkdir(self.wkPath + "/download")
-                except FileExistsError:
+                except:
                     pass
+                os.system("rm " + self.wkPath + "/download/VERSION")
                 os.system("wget -P " + self.wkPath + "/download " + repoPath + " ")
                 f = open("download/VERSION", "r")
                 lns = f.readlines()
