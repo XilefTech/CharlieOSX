@@ -52,9 +52,9 @@ class VersionManagment:
                 newAvai = not(self.version.isNewer(remoteVersionObj))
                 self.newAvai = newAvai
                 if(newAvai):
-                    self.logger.info(self, "A new version if ready to be downloaded, current version: %s remote version: %s" % (str(self.version), str(remoteVersionObj)))
+                    self.logger.info(self, "A new version if ready to be downloaded, current version: %s remote version: %s" % (self.version, remoteVersionObj))
                 else:
-                    self.logger.info(self, "CharlieOSX is up to date with version %s" % self.version)
+                    self.logger.info(self, "CharlieOSX is up to date with version %s, remote-version: %s" % (self.version, remoteVersionObj))
             except Exception as ex:
                 self.logger.error(self, "Unable to check for updates: %s" % ex, ex)
 
