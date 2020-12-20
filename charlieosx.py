@@ -1,4 +1,5 @@
 import json
+from versionManager import VersionManagment
 from robot import Charlie
 from logging import Logger
 from ui import UI
@@ -33,6 +34,7 @@ class CharlieOSX:
         self.brick = EV3Brick()
         self.logger = Logger(self.__settings, logfilePath, self.brick)
         self.__config = parseConfig(configPath, self.logger)
+        self.versionMan = VersionManagment(self.__settings, self.brick, self.__config, self.logger)
 
         self.robot = Charlie(self.__config, self.brick, self.logger)
         self.webremote = Webremote(self.__config, self.robot, self.brick)
@@ -99,12 +101,10 @@ class CharlieOSX:
                                                ] = settings['options'][order[i]]
                 sorted_settings['values'] = settings['values']
                 sorted_settings['types'] = settings['types']
-            print('[%s] [Debug]' % '[ChalieOSX}',
-                  'Successfully loaded settings')
+            print('[%s] [Debug]' % self, 'Successfully loaded settings')
             return sorted_settings
         except Exception as exception:
-            print('[%s] [Debug]' % '[ChalieOSX]',
-                  'No settings found, falling back to default values \t caused by:', exception)
+            print('[%s] [Info]' % self, 'No settings found, falling back to default values \t caused by:', exception)
             settings = OrderedDict({'options': OrderedDict({'Debug Driving': 2, 'Audio-Volume': 80, 'EFX-Volume': 25, 'Logging-level': 0, 'Show Warnings': True, 'Show Errors': True}),
                                     'values': {
                                         'min': {'Debug Driving': 0, 'Audio-Volume': 0, 'EFX-Volume': 0, 'Logging-level': 0, 'Show Warnings': False, 'Show Errors': False},

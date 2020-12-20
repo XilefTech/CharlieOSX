@@ -2,7 +2,7 @@ import picoweb, _thread, time
 
 
 class Webremote():
-    '''docstring'''
+    '''Main class for the Webremote'''
 
     def __init__(self, config, robot, brick):
         self.__config = config
@@ -35,11 +35,23 @@ class Webremote():
                     self.outDict[temp[0]] = temp[1]
             self.newData = True
         
+        ''' 
+            Serving all resources needed for the Webremote
+        '''
         @self.app.route("/style.css")
         def style(req, resp):
             yield from picoweb.start_response(resp, content_type = "text/css")
             
             htmlFile = open('site/style.css', 'r')
+        
+            for line in htmlFile:
+                yield from resp.awrite(line)
+
+        @self.app.route("/code.js")
+        def style(req, resp):
+            yield from picoweb.start_response(resp, content_type = "text/javascript")
+            
+            htmlFile = open('site/code.js', 'r')
         
             for line in htmlFile:
                 yield from resp.awrite(line)
