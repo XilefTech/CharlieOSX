@@ -11,6 +11,7 @@ class VersionManagment:
         self.__brick = brick
         self.__config = config
         self.logger = logger
+        self.newAvai = False # As a fallback
         try:
             f = open("VERSION", "r")
             lns = f.readlines()
@@ -30,13 +31,14 @@ class VersionManagment:
 
     def checkForUpdates(self, force=False):
         if(self.__config["checkForUpdates"] or force):
-            repoPath = "https://raw.githubusercontent.com/TheGreyDiamond/CharlieOSX/versioningNew/VERSION" ### !!!!! CHANGE IN MERGE TO MAIN REPO !!!!!
+            repoPath = "http://raw.githubusercontent.com/TheGreyDiamond/CharlieOSX/versioningNew/VERSION" ### !!!!! CHANGE IN MERGE TO MAIN REPO !!!!!
             try:
                 self.logger.info(self, 'Checking if a new version is avaiable')
                 response = urequests.get(repoPath)
                 remoteVersion = response.text
                 remoteVersion = remoteVersion.replace("\n", "").replace("\r", "").replace(" ", "")
-                remoteVersionObj = VersionObject().parseFromString(remoteVersion)
+                remoteVersionObj = VersionObject()
+                remoteVersionObj.parseFromString(remoteVersion)
                 newAvai = not(self.version.isNewer(remoteVersionObj))
                 self.newAvai = newAvai
                 if(newAvai):
