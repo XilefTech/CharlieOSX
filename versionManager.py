@@ -31,7 +31,7 @@ class VersionManagment:
 
     def checkForUpdates(self, force=False):
         if(self.__config["checkForUpdates"] or force):
-            repoPath = "https://raw.githubusercontent.com/TheGreyDiamond/CharlieOSX/versioningNew/VERSION" ### !!!!! CHANGE IN MERGE TO MAIN REPO !!!!!
+            repoPath = "https://raw.githubusercontent.com/XilefTech/CharlieOSX/master/VERSION"
             try:
                 self.logger.info(self, 'Checking if a new version is avaiable')
                 try:
