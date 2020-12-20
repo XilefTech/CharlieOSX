@@ -8,6 +8,7 @@ class VersionManagment:
     def __init__ (self, settings, brick, config, logger):
         logger.info(self, 'Initialisating VersionManagment')
         logger.info(self, "LOOOKKKK %s" % os.getcwd())
+        self.wkPath = os.getcwd()
         self.__settings = settings
         self.__brick = brick
         self.__config = config
@@ -30,11 +31,19 @@ class VersionManagment:
 
     def checkForUpdates(self, force=False):
         if(self.__config["checkForUpdates"] or force):
-            repoPath = "http://rawcdn.githack.com/TheGreyDiamond/CharlieOSX/33d4ec3073e69cfdd5f7d39bbb78656a2e8ebf4c/VERSION" ### !!!!! CHANGE IN MERGE TO MAIN REPO !!!!!
+            repoPath = "https://raw.githubusercontent.com/TheGreyDiamond/CharlieOSX/versioningNew/VERSION" ### !!!!! CHANGE IN MERGE TO MAIN REPO !!!!!
             try:
                 self.logger.info(self, 'Checking if a new version is avaiable')
-                response = urequests.request("GET", repoPath)
-                remoteVersion = response.text
+                try:
+                    os.mkdir(self.wkPath + "/download")
+                except FileExistsError:
+                    pass
+                os.system("wget -P " + self.wkPath + "/download " + repoPath + " ")
+                f = open("download/VERSION", "r")
+                lns = f.readlines()
+                ln = lns[0]
+                f.close()
+                remoteVersion = ln
                 remoteVersion = remoteVersion.replace("\n", "").replace("\r", "").replace(" ", "")
                 remoteVersionObj = VersionObject()
                 remoteVersionObj.parseFromString(remoteVersion)
