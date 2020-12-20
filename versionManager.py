@@ -33,7 +33,6 @@ class VersionManagment:
             try:
                 self.logger.info(self, 'Checking if a new version is avaiable')
                 response = urequests.request("GET", repoPath)
-                self.logger.debug(self, "Done with requests, repsonse text is: " + str(response.text))
                 remoteVersion = response.text
                 remoteVersion = remoteVersion.replace("\n", "").replace("\r", "").replace(" ", "")
                 remoteVersionObj = VersionObject()
