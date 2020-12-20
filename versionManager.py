@@ -26,8 +26,6 @@ class VersionManagment:
         
         ## Check if there is a new version
         self.checkForUpdates()
-        
-        
 
     def checkForUpdates(self, force=False):
         if(self.__config["checkForUpdates"] or force):
@@ -35,14 +33,16 @@ class VersionManagment:
             try:
                 self.logger.info(self, 'Checking if a new version is avaiable')
                 response = urequests.get(repoPath)
+                self.logger.debug(self, "Done with requests, repsonse text is: " + str(response.text))
                 remoteVersion = response.text
                 remoteVersion = remoteVersion.replace("\n", "").replace("\r", "").replace(" ", "")
                 remoteVersionObj = VersionObject()
                 remoteVersionObj.parseFromString(remoteVersion)
+                self.logger.debug(self, "Done with remote version creation")
                 newAvai = not(self.version.isNewer(remoteVersionObj))
                 self.newAvai = newAvai
                 if(newAvai):
-                    self.logger.info("A new version if ready to be downloaded, current version: " + str(self.version) + " remote version: " + str(remoteVersionObj))
+                    self.logger.info(self, "A new version if ready to be downloaded, current version: " + str(self.version) + " remote version: " + str(remoteVersionObj))
             except:
                 self.logger.warn(self, "Unable to check for updates")
         else:
