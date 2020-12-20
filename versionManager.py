@@ -1,5 +1,7 @@
 import time, _thread, os
 import customUrequest as urequests
+from inspect import getsourcefile
+from os.path import abspath
 
 class VersionManagment:
     '''
@@ -7,6 +9,7 @@ class VersionManagment:
     '''
     def __init__ (self, settings, brick, config, logger):
         logger.info(self, 'Initialisating VersionManagment')
+        logger.info(self, "LOOOKKKK %s", abspath(getsourcefile(lambda:0)))
         self.__settings = settings
         self.__brick = brick
         self.__config = config
