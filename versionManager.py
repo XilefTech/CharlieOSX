@@ -109,10 +109,10 @@ class VersionObject():
             isNewerB = True
         
         # Then Minor
-        if(self.minor >= remoteVersion.getMinor()):
+        if(self.minor >= remoteVersion.getMinor() and self.major >= remoteVersion.getMajor()):
             isNewerB = True
         
-        if(self.fix >= remoteVersion.getFix()):
+        if(self.fix >= remoteVersion.getFix() and self.minor >= remoteVersion.getMinor() and self.major >= remoteVersion.getMajor()):
             isNewerB = True
         
         return(isNewerB)
