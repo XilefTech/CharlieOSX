@@ -1,5 +1,5 @@
 import time, _thread, os
-import urequests
+import customUrequest as urequests
 
 class VersionManagment:
     '''
@@ -32,7 +32,7 @@ class VersionManagment:
             repoPath = "http://raw.githubusercontent.com/TheGreyDiamond/CharlieOSX/versioningNew/VERSION" ### !!!!! CHANGE IN MERGE TO MAIN REPO !!!!!
             try:
                 self.logger.info(self, 'Checking if a new version is avaiable')
-                response = urequests.get(repoPath)
+                response = urequests.request("GET", repoPath)
                 self.logger.debug(self, "Done with requests, repsonse text is: " + str(response.text))
                 remoteVersion = response.text
                 remoteVersion = remoteVersion.replace("\n", "").replace("\r", "").replace(" ", "")
@@ -44,7 +44,13 @@ class VersionManagment:
                 if(newAvai):
                     self.logger.info(self, "A new version if ready to be downloaded, current version: " + str(self.version) + " remote version: " + str(remoteVersionObj))
             except Exception as ex:
+<<<<<<< Updated upstream
                 self.logger.error(self, "Unable to check for updates: %s" % ex, ex)
+=======
+                self.logger.warn(self, "Unable to check for updates")
+                print(ex.with_traceback)
+                print(ex)
+>>>>>>> Stashed changes
         else:
             self.logger.info(self, 'Skipping update check')
         return self.newAvai
