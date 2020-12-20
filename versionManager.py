@@ -63,9 +63,14 @@ class VersionManagment:
 
 class VersionObject():
     def __init__(self, major=0, minor=0, fix=0):
-        self.major = major
-        self.minor = minor
-        self.fix = fix
+        try:
+            self.major = int(major)
+            self.minor = int(minor)
+            self.fix = int(fix)
+        except ValueError:
+            self.major = 0
+            self.minor = 0
+            self.fix = 0
     
     def __str__(self):
         return(str(self.major) + "." + str(self.minor) + "." + str(self.fix))
