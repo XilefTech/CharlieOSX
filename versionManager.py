@@ -68,7 +68,10 @@ class VersionObject():
         self.fix = fix
     
     def __str__(self):
-        return(self.major + "." + self.minor + "." + self.fix)
+        return(str(self.major) + "." + str(self.minor) + "." + str(self.fix))
+
+    def __repr__(self):
+        return(str(self.major) + "." + str(self.minor) + "." + str(self.fix))
     
     def parseFromString(self, string):
         parts = string.split(".")
