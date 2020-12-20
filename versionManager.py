@@ -6,8 +6,8 @@ class VersionManagment:
     
     '''
     def __init__ (self, settings, brick, config, logger):
+        logger.info(self, 'Initialisating VersionManagment')
         self.__settings = settings
-        self.info(self, 'Initialisating VersionManagment')
         self.__brick = brick
         self.__config = config
         self.logger = logger
@@ -19,9 +19,9 @@ class VersionManagment:
             ln = ln.replace("\n", "").replace("\r", "").replace(" ", "")
             self.version = VersionObject()
             self.version.parseFromString(ln)
-            logger.info(self, 'Using version ' + str(self.version))
+            self.logger.info(self, 'Using version ' + str(self.version))
         except:
-            logger.warn(self, "Error reading version!")
+            self.logger.warn(self, "Error reading version!")
         
         ## Check if there is a new version
         self.checkForUpdates()
@@ -29,7 +29,7 @@ class VersionManagment:
         
 
     def checkForUpdates(self, force=False):
-        if(self.config["checkForUpdates"] or force):
+        if(self.__config["checkForUpdates"] or force):
             repoPath = "https://raw.githubusercontent.com/TheGreyDiamond/CharlieOSX/versioningNew/VERSION" ### !!!!! CHANGE IN MERGE TO MAIN REPO !!!!!
             try:
                 self.logger.info(self, 'Checking if a new version is avaiable')
@@ -45,13 +45,13 @@ class VersionManagment:
                 self.logger.warn(self, "Unable to check for updates")
         else:
             self.logger.info(self, 'Skipping update check')
-        return(self.newAvai)
+        return self.newAvai
     
     def getUpdateStatus(self):
         ''' 
         Returns True if there is a newer version ready
         '''
-        return(self.newAvai)
+        return self.newAvai
     
     def __repr__(self):
         return 'TODO'
