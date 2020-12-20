@@ -49,7 +49,7 @@ class VersionManagment:
                 remoteVersionObj = VersionObject()
                 remoteVersionObj.parseFromString(remoteVersion)
                 self.logger.debug(self, "Done with remote version creation")
-                newAvai = not(self.version.isNewer(remoteVersionObj))
+                newAvai = self.version.isRemoteNewer(remoteVersionObj)
                 self.newAvai = newAvai
                 if(newAvai):
                     self.logger.info(self, "A new version if ready to be downloaded, current version: %s remote version: %s" % (self.version, remoteVersionObj))
@@ -112,20 +112,20 @@ class VersionObject():
     def getFix(self):
         return(self.fix)
 
-    def isNewer(self, remoteVersion):
+    def isRemoteNewer(self, remoteVersion):
         '''
-        Returns True if the the local version is newer then `remoteVersion`
+        Returns True if the the remote version is newer then local version
         '''
         isNewerB = False
         # Starting with Major
-        if(self.major >= remoteVersion.getMajor()):
+        if(self.major <= remoteVersion.getMajor()):
             isNewerB = True
         
         # Then Minor
-        if(self.minor >= remoteVersion.getMinor() and self.major >= remoteVersion.getMajor()):
+        if(self.minor <= remoteVersion.getMinor() and self.major <= remoteVersion.getMajor()):
             isNewerB = True
         
-        if(self.fix >= remoteVersion.getFix() and self.minor >= remoteVersion.getMinor() and self.major >= remoteVersion.getMajor()):
+        if(self.fix <= remoteVersion.getFix() and self.minor <= remoteVersion.getMinor() and self.major <= remoteVersion.getMajor()):
             isNewerB = True
         
         return(isNewerB)
