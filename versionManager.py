@@ -44,13 +44,8 @@ class VersionManagment:
                 if(newAvai):
                     self.logger.info(self, "A new version if ready to be downloaded, current version: " + str(self.version) + " remote version: " + str(remoteVersionObj))
             except Exception as ex:
-<<<<<<< Updated upstream
                 self.logger.error(self, "Unable to check for updates: %s" % ex, ex)
-=======
-                self.logger.warn(self, "Unable to check for updates")
-                print(ex.with_traceback)
-                print(ex)
->>>>>>> Stashed changes
+
         else:
             self.logger.info(self, 'Skipping update check')
         return self.newAvai
