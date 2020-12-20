@@ -29,7 +29,7 @@ class VersionManagment:
 
     def checkForUpdates(self, force=False):
         if(self.__config["checkForUpdates"] or force):
-            repoPath = "https://raw.githubusercontent.com/TheGreyDiamond/CharlieOSX/versioningNew/VERSION" ### !!!!! CHANGE IN MERGE TO MAIN REPO !!!!!
+            repoPath = "http://rawcdn.githack.com/TheGreyDiamond/CharlieOSX/33d4ec3073e69cfdd5f7d39bbb78656a2e8ebf4c/VERSION" ### !!!!! CHANGE IN MERGE TO MAIN REPO !!!!!
             try:
                 self.logger.info(self, 'Checking if a new version is avaiable')
                 response = urequests.request("GET", repoPath)
