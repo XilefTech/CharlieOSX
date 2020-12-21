@@ -43,12 +43,5 @@ class UIObject:
             self.brick.screen.draw_text(self.bounds.x + 1, self.bounds.y + 1, self.content)
             self.brick.screen.draw_box(x, y, x + self.bounds.width, y + self.bounds.height, r=2, fill=False, color=Color.BLACK)
 
-
-    def drawInfoBox(self):
-        self.brick.screen.draw_box(
-            self.bounds.width + self.padding[0] + 3, 0, self.brick.screen.width-1, self.brick.screen.height-1, r=5, fill=False, color=Color.BLACK)
-
-        self.brick.screen.set_font(Font(size=14))
-
-        self.brick.screen.draw_text(
-            self.bounds.width + 5, 0, self.name, text_color=Color.BLACK, background_color=None)
+    def setClickAction(self, action: Function):
+        self.clickAction = action
