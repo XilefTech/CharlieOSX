@@ -51,6 +51,7 @@ class UIManager(charlieosx.CharlieOSX):
 
         # Remote-Control Menu
         self.remote = Menu('canvas')
+        self.remote.addObject(UIObject('startButton', self.brick, Box(58, 80, 81, 14), 'textBox', 'Start Webremote', padding=(-1, -1, False)))
 
         # Competition-Mode Menu
         self.competition = Menu('canvas')
