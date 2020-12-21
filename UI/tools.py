@@ -17,6 +17,9 @@ class Menu():
         self.font = Font(family='arial', size=13)
         self.raster = self.rasterize()
 
+    def getType(self):
+        return self.type
+
     def addObject(self, object: UIObject):
         self.objects.append(object)
         self.raster = self.rasterize()
