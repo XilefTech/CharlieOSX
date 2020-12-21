@@ -107,9 +107,9 @@ class UIManager(charlieosx.CharlieOSX):
 
         while self.loop:
             if any(self.brick.buttons.pressed()):
-                if Button.UP in self.brick.buttons.pressed():
+                if Button.UP in self.brick.buttons.pressed() and not self.position[2]:
                     self.position[1] = self.position[1] - 1 if self.position[1] > 0 else self.currentMenu.maxY
-                elif Button.DOWN in self.brick.buttons.pressed():
+                elif Button.DOWN in self.brick.buttons.pressed() and not self.position[2]:
                     self.position[1] = self.position[1] + 1 if self.position[1] < self.currentMenu.maxY else 0
                 elif Button.LEFT in self.brick.buttons.pressed() and len(self.position) > 3:
                     # self.position[0] = self.position[0] - 1 if self.position[0] > 0 else self.currentMenu.maxX
