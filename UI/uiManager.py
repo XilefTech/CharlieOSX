@@ -79,7 +79,7 @@ class UIManager(charlieosx.CharlieOSX):
         #self.logger.info(self, 'UI initialized')
 
     def __str__(self):
-        return "UI Manager"
+        return "UIManager"
 
     def __sound(self, file):
         '''
