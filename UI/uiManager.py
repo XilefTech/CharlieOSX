@@ -111,22 +111,27 @@ class UIManager(charlieosx.CharlieOSX):
                     self.position[1] = self.position[1] - 1 if self.position[1] > 0 else self.currentMenu.maxY
                 elif Button.DOWN in self.brick.buttons.pressed() and not self.position[2]:
                     self.position[1] = self.position[1] + 1 if self.position[1] < self.currentMenu.maxY else 0
-                elif Button.LEFT in self.brick.buttons.pressed() and len(self.position) > 3:
-                    # self.position[0] = self.position[0] - 1 if self.position[0] > 0 else self.currentMenu.maxX
-                    self.position.pop(0)
-                    self.position.pop(0)
-                    self.position.pop(0)
-                    if len(self.position) == 3:
-                        self.animate(self.position[1], False)
-                        self.currentMenu = self.mainMenu
-                elif Button.RIGHT in self.brick.buttons.pressed():
+                elif Button.LEFT in self.brick.buttons.pressed() and len(self.position) > 3 and not self.position[2]:
+                    if self.currentMenu.getType() == 'canvas' and self.position[0] > 0:
+                        self.position[0] = self.position[0] - 1 if self.position[0] > 0 else self.currentMenu.maxX
+                    else:
+                        self.position.pop(0)
+                        self.position.pop(0)
+                        self.position.pop(0)
+                        if len(self.position) == 3:
+                            self.animate(self.position[1], False)
+                            self.currentMenu = self.mainMenu
+                elif Button.RIGHT in self.brick.buttons.pressed() and not self.position[2]:
                     # self.position[0] = self.position[0] + 1 if self.position[0] < self.currentMenu.maxX else 0
-                    if len(self.position) == 3:
-                        self.animate(self.position[1], True)
-                        self.currentMenu = self.subMenus[self.position[1]]
-                    self.position.insert(0, False)
-                    self.position.insert(0, 0)
-                    self.position.insert(0, 0)
+                    if self.currentMenu.getType() == 'canvas':
+                        self.position[0] = self.position[0] + 1 if self.position[0] < self.currentMenu.maxX else 0
+                    else:
+                        if len(self.position) == 3:
+                            self.animate(self.position[1], True)
+                            self.currentMenu = self.subMenus[self.position[1]]
+                        self.position.insert(0, False)
+                        self.position.insert(0, 0)
+                        self.position.insert(0, 0)
                 elif Button.CENTER in self.brick.buttons.pressed():
                     self.position[2] = not self.position[2]
                 self.currentMenu.draw(self.position)
