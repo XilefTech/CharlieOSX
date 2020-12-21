@@ -52,6 +52,7 @@ class UIManager(charlieosx.CharlieOSX):
         # Remote-Control Menu
         self.remote = Menu('canvas')
         self.remote.addObject(UIObject('startButton', self.brick, Box(58, 80, 81, 14), 'textBox', 'Start Webremote', padding=(-1, -1, False)))
+        self.remote.getObjectByName('startButton').setClickAction(self.startWebremote())
 
         # Competition-Mode Menu
         self.competition = Menu('canvas')
@@ -166,3 +167,6 @@ class UIManager(charlieosx.CharlieOSX):
             except Exception as exception:
                 self.logger.error(
                     self, "Could not animate menu: ", str(exception))
+
+    def startWebremote(self):
+        super().webremote.run()
