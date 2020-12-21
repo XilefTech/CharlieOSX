@@ -18,7 +18,8 @@ class UIObject:
         self.radius = 0
         self.selected = False
 
-        self.bounds.y *= self.bounds.height + self.padding[1]
+    def getName(self):
+        return self.name
 
     def update(self):
         pass
