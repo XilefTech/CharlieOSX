@@ -30,8 +30,8 @@ class UIObject:
             y = self.padding[1]
         else:
             x = self.bounds.x + self.padding[0]
-            y = self.bounds.x + self.padding[1]
-            
+            y = self.bounds.y + self.padding[1]
+
         if self.contentType == 'img':
             if self.selected:
                 self.radius = 5
