@@ -99,6 +99,11 @@ class Menu():
                 self.maxX = len(i) - 1
         return array
 
+    def getObjectByName(self, name):
+        for i in self.objects:
+            if i.getName == name:
+                return i
+
 class Box():
     def __init__(self, x, y, width, height):
         self.x = x
