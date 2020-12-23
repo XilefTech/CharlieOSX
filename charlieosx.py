@@ -35,8 +35,7 @@ class CharlieOSX:
         self.__config = parseConfig(configPath, self.logger)
 
         self.robot = Charlie(self.__config, self.brick, self.logger)
-        self.webremote = Webremote(self.__config, self.robot, self.brick)
-        self.ui = UIManager(self.__config, self.__settings, self.brick, self.logger, settingsPath)
+        self.webremote = Webremote(self.__config, self.robot, self.brick, self.logger)
 
         self.applySettings(self.__settings)
     # TODO
