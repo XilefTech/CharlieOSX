@@ -50,3 +50,6 @@ class UIObject:
 
     def setClickAction(self, action: Function):
         self.clickAction = action
+
+    def click(self):
+        self.clickAction()
