@@ -6,15 +6,14 @@ from pybricks.media.ev3dev import Image, ImageFile, Font, SoundFile
 
 from UI.UIObject import UIObject
 from UI.tools import Menu, Box
-import charlieosx
 
 
-class UIManager(charlieosx.CharlieOSX):
+class UIManager:
     """
         Basicly a Menu
     """
 
-    def __init__(self, config, settings, brick, logger, settingsPath):
+    def __init__(self, config, settings, brick, logger, settingsPath, charlieOSX):
         # general variable setup
         logger.info(self, 'Starting UI initialisation')
         self.__config = config
@@ -24,6 +23,7 @@ class UIManager(charlieosx.CharlieOSX):
         self.__settingsPath = settingsPath
         self.brick = brick
         self.logger = logger
+        self.os = charlieOSX
         #self.profileHelper = ProfileHelper(self.logger, self.__config)
         self.__sound_lock = _thread.allocate_lock()
 
@@ -169,4 +169,4 @@ class UIManager(charlieosx.CharlieOSX):
                     self, "Could not animate menu: ", str(exception))
 
     def startWebremote(self):
-        super().webremote.run()
+        self.os.webremote.run()

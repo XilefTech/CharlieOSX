@@ -6,6 +6,7 @@ from pybricks.hubs import EV3Brick
 from configParser import parseConfig
 from collections import OrderedDict
 from webremote import Webremote
+from UI.uiManager import UIManager
 
 
 
@@ -28,7 +29,6 @@ class CharlieOSX:
     '''
 
     def __init__(self, configPath, settingsPath, logfilePath):
-        from UI.uiManager import UIManager
         self.__settings = self.loadSettings(settingsPath)
         self.brick = EV3Brick()
         self.logger = Logger(self.__settings, logfilePath, self.brick)
@@ -36,13 +36,13 @@ class CharlieOSX:
 
         self.robot = Charlie(self.__config, self.brick, self.logger)
         self.webremote = Webremote(self.__config, self.robot, self.brick, self.logger)
+        self.ui = UIManager(self.__config, self.__settings, self.brick, self.logger, settingsPath, self)
 
         self.applySettings(self.__settings)
+    
     # TODO
-
     def __repr__(self):
         return "TODO"
-    # TODO
 
     def __str__(self):
         return "CharlieOSX"
@@ -112,3 +112,4 @@ class CharlieOSX:
             with open(settingsPath, 'w') as f:
                 f.write(json.dumps(settings, sort_keys=False))
             return settings
+
