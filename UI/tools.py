@@ -101,7 +101,7 @@ class Menu():
 
     def getObjectByName(self, name):
         for i in self.objects:
-            if i.getName == name:
+            if i.getName() == name:
                 return i
 
 class Box():
