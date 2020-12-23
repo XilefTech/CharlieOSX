@@ -104,6 +104,10 @@ class Menu():
             if i.getName() == name:
                 return i
 
+    def getObjectByPostion(self, position):
+        return self.raster[position[0]][position[1]]
+
+
 class Box():
     def __init__(self, x, y, width, height):
         self.x = x
