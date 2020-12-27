@@ -53,6 +53,7 @@ class UIManager:
         self.remote = Menu('canvas')
         self.remote.addObject(UIObject('startButton', self.brick, Box(58, 80, 82, 14), 'textBox', 'Start Webremote', padding=(-1, -1, False)))
         self.remote.addObject(UIObject('endButton', self.brick, Box(59, 80, 81, 14), 'textBox', 'Stop Webremote', padding=(-1, -1, False), visible=False))
+        self.remote.getObjectByName('startButton').setClickAction(self.runWebremote)
 
         # Competition-Mode Menu
         self.competition = Menu('canvas')
