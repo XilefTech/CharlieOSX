@@ -63,7 +63,11 @@ class Menu():
         # something else
         else:
             for i in self.objects:
-                i.draw()
+                if not i.getVisibility():
+                    i.draw() if i != self.raster[selector[0]][selector[1]] else i.draw(selected=True)
+            for i in self.objects:
+                if i.getVisibility():
+                    i.draw() if i != self.raster[selector[0]][selector[1]] else i.draw(selected=True)
 
     def drawScrollBar(self, totalLength, pos):
         '''
