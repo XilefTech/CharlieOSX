@@ -174,5 +174,5 @@ class UIManager:
                 self.logger.error(
                     self, "Could not animate menu: ", str(exception))
 
-    def startWebremote(self):
+    def runWebremote(self):
         self.os.webremote.run()
