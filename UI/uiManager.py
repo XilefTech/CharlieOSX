@@ -175,4 +175,15 @@ class UIManager:
                     self, "Could not animate menu: ", str(exception))
 
     def runWebremote(self):
+        self.currentMenu.getObjectByName('startButton').setVisibility(False)
+        self.currentMenu.getObjectByName('endButton').setVisibility(True)
+        self.position[1] += 1
+        self.currentMenu.draw(self.position)
+        time.sleep(0.3)
         self.os.webremote.run()
+        self.currentMenu.getObjectByName('startButton').setVisibility(True)
+        self.currentMenu.getObjectByName('endButton').setVisibility(False)
+        self.position[2] = False
+        self.position[1] -= 1
+        self.currentMenu.draw(self.position)
+        time.sleep(0.3)
