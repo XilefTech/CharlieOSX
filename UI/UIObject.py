@@ -31,15 +31,14 @@ class UIObject:
     def update(self):
         pass
 
-    def draw(self):
+    def draw(self, selected=False):
+        if self.padding[2]:
+            x = self.padding[0]
+            y = self.padding[1]
+        else:
+            x = self.bounds.x + self.padding[0]
+            y = self.bounds.y + self.padding[1]
         if self.visibility:
-            if self.padding[2]:
-                x = self.padding[0]
-                y = self.padding[1]
-            else:
-                x = self.bounds.x + self.padding[0]
-                y = self.bounds.y + self.padding[1]
-
             if self.contentType == 'img':
                 if self.selected:
                     self.radius = 5
@@ -48,8 +47,12 @@ class UIObject:
                 self.brick.screen.draw_image(x, y, self.content, transparent=Color.RED)
             elif self.contentType == 'textBox':
                 self.brick.screen.set_font(self.font)
-                self.brick.screen.draw_text(self.bounds.x + 1, self.bounds.y + 1, self.content)
-                self.brick.screen.draw_box(x, y, x + self.bounds.width, y + self.bounds.height, r=2, fill=False, color=Color.BLACK)
+                self.brick.screen.draw_box(x, y, x + self.bounds.width, y + self.bounds.height, r=2, fill=True, color=Color.WHITE)
+                self.brick.screen.draw_box(x, y, x + self.bounds.width, y + self.bounds.height, r=2, fill=False if not selected else True, color=Color.BLACK)
+                self.brick.screen.draw_text(self.bounds.x + 1, self.bounds.y + 1, self.content, text_color=Color.BLACK if not selected else Color.WHITE)
+        else:
+            if self.contentType == 'textBox':
+                self.brick.screen.draw_box(x, y, x + self.bounds.width, y + self.bounds.height, r=2, fill=True, color=Color.WHITE)
 
     def setClickAction(self, action: Function):
         self.clickAction = action
