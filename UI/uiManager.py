@@ -26,6 +26,7 @@ class UIManager:
         self.os = charlieOSX
         #self.profileHelper = ProfileHelper(self.logger, self.__config)
         self.__sound_lock = _thread.allocate_lock()
+        self.position = [0, 0, False]
 
         # Main Menu
         self.mainMenu = Menu('sidebar')
@@ -64,7 +65,6 @@ class UIManager:
         # menu Variables
         self.loop = True        
         self.currentMenu = self.mainMenu
-        self.position = [0, 0, False]
         self.subMenus = [
             self.programming,
             self.testing,
