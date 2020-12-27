@@ -25,6 +25,9 @@ class UIObject:
     def setVisibility(self, visibility: bool):
         self.visibility = visibility
 
+    def getVisibility(self):
+        return self.visibility
+
     def update(self):
         pass
 
