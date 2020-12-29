@@ -1,6 +1,6 @@
 import time, _thread, os
 import customUrequest as urequests
-import os
+
 class VersionManagment:
     '''
     
