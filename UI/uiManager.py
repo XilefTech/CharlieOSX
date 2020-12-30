@@ -165,6 +165,7 @@ class UIManager:
                 for i in range(1, 11):
                     self.brick.screen.draw_image(
                         0, 0, 'assets/graphics/animations/%s/%s.png' % (menus[state], i), transparent=Color.RED)
+                    time.sleep(0.05)
             except Exception as exception:
                 self.logger.error(
                     self, "Could not animate menu: ", str(exception))
@@ -173,6 +174,7 @@ class UIManager:
                 for i in reversed(range(1, 11)):
                     self.brick.screen.draw_image(
                         0, 0, 'assets/graphics/animations/%s/%s.png' % (menus[state], i), transparent=Color.RED)
+                    time.sleep(0.05)
             except Exception as exception:
                 self.logger.error(
                     self, "Could not animate menu: ", str(exception))
