@@ -111,6 +111,14 @@ class Menu():
     def getObjectByPostion(self, position):
         return self.raster[position[0]][position[1]]
 
+    def setClickAction(self, clickAction):
+        if self.type == 'list':
+            self.clickAction = clickAction
+        else:
+            raise AttributeError
+
+    def click(self, position):
+        self.clickAction(position)
 
 class Box():
     def __init__(self, x, y, width, height):
