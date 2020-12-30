@@ -179,6 +179,11 @@ class UIManager:
                 self.logger.error(
                     self, "Could not animate menu: ", str(exception))
 
+    def runTesting(self, position):
+        index = position[1]
+        profileData = self.profileHelper.getProfileData(self.__config['profileNames'][index])
+        self.os.robot.execute(profileData)
+
     def runWebremote(self):
         self.currentMenu.getObjectByName('startButton').setVisibility(False)
         self.currentMenu.getObjectByName('endButton').setVisibility(True)
