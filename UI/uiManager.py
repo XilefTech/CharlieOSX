@@ -197,7 +197,7 @@ class UIManager:
         # enable station interface and connect to WiFi access point
         x = os.popen('connmanctl services').read()
         print(x)
-        #self.wireless(False)
+        #self.wireless(False)   # uncommented to not loose connectivity for console-logging and effective development through wifi
         time.sleep(1)
         self.wireless(True)
         time.sleep(2)
