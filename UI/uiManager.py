@@ -24,7 +24,7 @@ class UIManager:
         self.brick = brick
         self.logger = logger
         self.os = charlieOSX
-        #self.profileHelper = ProfileHelper(self.logger, self.__config)
+        self.profileHelper = ProfileHelper(self.logger, self.__config)
         self.__sound_lock = _thread.allocate_lock()
         self.position = [0, 0, False]
 
