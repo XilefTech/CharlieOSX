@@ -138,12 +138,15 @@ class UIManager:
                         self.position.insert(0, 0)
                         self.position.insert(0, 0)
                 elif Button.CENTER in self.brick.buttons.pressed():
-                    self.position[2] = not self.position[2]
-                    self.currentMenu.getObjectByPostion(self.position).click()
-                    if self.currentMenu.getType() not in ['dict', 'canvas']:
-                        self.position.insert(0, False)
-                        self.position.insert(0, 0)
-                        self.position.insert(0, 0)
+                    if self.currentMenu.getType() != 'list':
+                        self.position[2] = not self.position[2]
+                        self.currentMenu.getObjectByPostion(self.position).click()
+                        if self.currentMenu.getType() not in ['dict', 'canvas']:
+                            self.position.insert(0, False)
+                            self.position.insert(0, 0)
+                            self.position.insert(0, 0)
+                    else:
+                        self.currentMenu.click(self.position)
                 self.currentMenu.draw(self.position)
                 print(self.position)
                 time.sleep(0.3)
