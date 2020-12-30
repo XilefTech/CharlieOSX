@@ -59,6 +59,8 @@ class UIManager:
 
         # Competition-Mode Menu
         self.competition = Menu('canvas')
+        self.competition.addObject(UIObject('startButton', self.brick, Box(55, 80, 88, 14), 'textBox', 'Start Competition', padding=(-1, -1, False)))
+        self.competition.getObjectByName('startButton').setClickAction(self.runCompetition)
 
         # Settings Menu
         self.settingsMenu = Menu('dict')
