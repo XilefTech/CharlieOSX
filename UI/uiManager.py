@@ -192,3 +192,19 @@ class UIManager:
         self.position[1] -= 1
         self.currentMenu.draw(self.position)
         time.sleep(0.3)
+
+    def runCompetition(self):
+        # enable station interface and connect to WiFi access point
+        x = os.popen('connmanctl services').read()
+        print(x)
+        #self.wireless(False)
+        time.sleep(1)
+        self.wireless(True)
+        time.sleep(2)
+        print(x)
+        self.position[2] = False
+    
+    def wireless(self, enable):
+        cmd = 'enable' if not enable else 'disable'
+        os.system('connmanctl {} offline'.format(cmd))
+
