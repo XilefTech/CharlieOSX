@@ -1,4 +1,4 @@
-import _thread, time
+import _thread, time, os
 
 from profileHelper import ProfileHelper
 from pybricks.parameters import Button, Color
