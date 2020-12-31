@@ -1,4 +1,5 @@
 import os
+from copy import deepcopy
 
 class ProfileHelper():
     '''
@@ -82,7 +83,8 @@ class ProfileHelper():
         array: The array of number code arrays frome the given profile
         '''
         try:
-            return self._data[profile]
+            x = deepcopy(self._data[profile])
+            return x
         except KeyError as excpetion:
             self.logger.warn(self, 'Couldn\'t get profile data for %s: No such profile in data' % str(exception))
     
