@@ -2,6 +2,7 @@ Next:
     UI:
     + add side buttons for value input for higher steps
     + add content to the main menu and 'unopened' sub-menu pages
+    + add functionality to the side buttons during competition mode for action motor turning
 
     Robot:
     + add config entry for motor type
