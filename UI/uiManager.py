@@ -207,15 +207,39 @@ class UIManager:
         time.sleep(0.3)
 
     def runCompetition(self):
-        # enable station interface and connect to WiFi access point
-        x = os.popen('connmanctl services').read()
-        print(x)
-        #self.wireless(False)   # uncommented to not loose connectivity for console-logging and effective development through wifi
-        time.sleep(1)
+        dataArray = []
+        self.wireless(False)   # uncomment to not loose connectivity for console-logging and effective development through wifi
+        self.currentMenu.getObjectByName('startButton').setVisibility(False)
+        self.currentMenu.getObjectByName('runButton').setVisibility(True)
+        self.position[0], self.position[1] = 1, 1
+        self.currentMenu.draw(self.position)
+        for i in self.__config['profileNames']:
+            dataArray.append(self.profileHelper.getProfileData(i))
+        self.currentMenu.getObjectByName('runButton').setVisibility(False)
+        self.currentMenu.getObjectByName('nextButton').setVisibility(True)
+        time.sleep(0.3)
+        for index in range(0, len(dataArray)):
+            self.brick.screen.draw_box(30, 30, 200, 80, fill=True, color=Color.WHITE)
+            self.brick.screen.set_font(self.__almostBigFont)
+            self.brick.screen.draw_text(74, 36, "Run %s/%s:" % (index, len(dataArray) - 1), background_color=Color.WHITE)
+            self.brick.screen.set_font(self.__bigFont)
+            self.brick.screen.draw_text(98 - self.__bigFont.text_width(self.__config['profileNames'][index]) / 2, 60, self.__config['profileNames'][index], background_color=Color.WHITE)
+            while Button.CENTER not in self.brick.buttons.pressed(): pass
+            self.position[0], self.position[1] = 1, 1
+            self.currentMenu.draw(self.position)
+            time.sleep(0.3)
+            self.os.robot.execute(dataArray[index])
+            time.sleep(0.3)
+            self.position[0], self.position[1] = 1, 0
+            self.currentMenu.draw(self.position)
+
         self.wireless(True)
-        time.sleep(2)
-        print(x)
-        self.position[2] = False
+        self.brick.screen.draw_box(30, 30, 200, 80, fill=True, color=Color.WHITE)
+        self.position[0], self.position[1], self.position[2] = 0, 0, False
+        self.currentMenu.getObjectByName('startButton').setVisibility(True)
+        self.currentMenu.getObjectByName('runButton').setVisibility(False)
+        self.currentMenu.getObjectByName('nextButton').setVisibility(False)
+        self.currentMenu.draw(self.position)
     
     def wireless(self, enable):
         cmd = 'enable' if not enable else 'disable'
