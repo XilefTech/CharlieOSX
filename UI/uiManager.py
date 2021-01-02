@@ -26,6 +26,8 @@ class UIManager:
         self.os = charlieOSX
         self.profileHelper = ProfileHelper(self.logger, self.__config)
         self.__sound_lock = _thread.allocate_lock()
+        self.__almostBigFont = Font(family='Arial', size=12, bold=False)
+        self.__bigFont = Font(family='Arial', size=15, bold=True)
         self.position = [0, 0, False]
 
         # Main Menu
