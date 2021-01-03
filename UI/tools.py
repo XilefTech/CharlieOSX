@@ -29,6 +29,23 @@ class Menu():
         self.maxX = 0
         self.maxY = len(self.llist) - 1
 
+    def setDict(self, ddict: dict):
+        self.dict = ddict
+
+    def setClickAction(self, clickAction):
+        if self.type == 'list':
+            self.clickAction = clickAction
+        else:
+            raise AttributeError
+
+    def getObjectByName(self, name):
+        for i in self.objects:
+            if i.getName() == name:
+                return i
+
+    def getObjectByPostion(self, position):
+        return self.raster[position[0]][position[1]]
+
     def updateSettins(self, settings):
         self.settings = settings
 
@@ -102,21 +119,7 @@ class Menu():
             if len(i) - 1 > self.maxX:
                 self.maxX = len(i) - 1
         return array
-
-    def getObjectByName(self, name):
-        for i in self.objects:
-            if i.getName() == name:
-                return i
-
-    def getObjectByPostion(self, position):
-        return self.raster[position[0]][position[1]]
-
-    def setClickAction(self, clickAction):
-        if self.type == 'list':
-            self.clickAction = clickAction
-        else:
-            raise AttributeError
-
+   
     def click(self, position):
         self.clickAction(position)
 
