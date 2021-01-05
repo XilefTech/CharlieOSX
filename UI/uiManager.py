@@ -157,6 +157,8 @@ class UIManager:
                             self.position.pop(0)
                             self.position.pop(0)
                             self.position[2] = not self.position[2]
+                            self.os.storeSettings(self.__settings, 'default')
+                            self.applySettings(self.__settings)
                         else:
                             self.position[2] = not self.position[2]
                             self.position.insert(0, True)
