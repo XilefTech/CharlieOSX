@@ -79,6 +79,41 @@ class Menu():
                 else:
                     self.brick.screen.draw_box(26, 29 + i * 20, 170, 46 + i * 20, fill=True, color=Color.WHITE)
                     self.brick.screen.draw_text(29, 30 + i * 20, self.llist[i + offset])
+        # dict-Menu
+        elif self.type == 'dict':
+            self.brick.screen.set_font(self.font)
+
+            if selector[1] in range(0, 3):
+                offset = 0
+            elif selector[1] in range(len(self.dict['options']) - 2, len(self.dict['options'])):
+                offset = len(self.dict['options']) - 5
+            else:
+                offset = selector[1] - 2
+
+            self.drawScrollBar(len(self.dict['options']), selector[1])
+            for i in range(5):
+                if offset + i == selector[1]:
+                    if selector[2]:
+                        self.brick.screen.draw_box(26, 29 + i * 20, 168, 46 + i * 20, r=3, fill=True, color=Color.BLACK)
+                        self.brick.screen.draw_text(29, 30 + i * 20, "%s: %s" % list(self.dict['options'].items())[i + offset], text_color=Color.WHITE)
+                    else:
+                        self.brick.screen.draw_box(26, 29 + i * 20, 168, 46 + i * 20, r=3, fill=True, color=Color.WHITE)
+                        self.brick.screen.draw_box(26, 29 + i * 20, 168, 46 + i * 20, r=3, fill=False, color=Color.BLACK)
+                        self.brick.screen.draw_text(29, 30 + i * 20, "%s: %s" % list(self.dict['options'].items())[i + offset])
+                else:
+                    self.brick.screen.draw_box(26, 29 + i * 20, 170, 46 + i * 20, fill=True, color=Color.WHITE)
+                    self.brick.screen.draw_text(29, 30 + i * 20, "%s: %s" % list(self.dict['options'].items())[i + offset])
+
+            if selector[2]:
+                keys = list(self.dict['options'].keys())
+                index = selector[1]
+                print(keys[index])
+                if self.dict['types'][keys[index]] == 'bool':
+                    self.maxX = 1
+                elif self.dict['types'][keys[index]] == 'int':
+                    self.maxX = abs(self.dict['values']['min'][keys[index]]) + abs(self.dict['values']['max'][keys[index]])
+            else:
+                self.maxX = 0
         # something else
         else:
             for i in self.objects:
