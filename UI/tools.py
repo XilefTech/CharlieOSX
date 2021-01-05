@@ -48,7 +48,7 @@ class Menu():
     def getObjectByPostion(self, position):
         return self.raster[position[0]][position[1]]
 
-    def updateSettins(self, settings):
+    def updateSettings(self, settings):
         self.settings = settings
 
     def draw(self, selector):
