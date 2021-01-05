@@ -31,6 +31,8 @@ class Menu():
 
     def setDict(self, ddict: dict):
         self.dict = ddict
+        self.maxX = 0
+        self.maxY = len(self.dict['options']) - 1
 
     def setClickAction(self, clickAction):
         if self.type == 'list':
