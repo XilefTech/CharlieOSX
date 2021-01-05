@@ -142,16 +142,33 @@ class UIManager:
                         self.position.insert(0, False)
                         self.position.insert(0, 0)
                         self.position.insert(0, 0)
+                elif Button.RIGHT in self.brick.buttons.pressed() and self.position[2]:
+                    self.position[0] = self.position[0] + 1 if self.position[0] < self.currentMenu.maxX else 0
+                    self.__settings['options'][list(self.__settings['options'].keys())[self.position[1]]] = self.position[0]
+                elif Button.LEFT in self.brick.buttons.pressed() and self.position[2]:
+                    self.position[0] = self.position[0] - 1 if self.position[0] > 0 else self.currentMenu.maxX
+                    self.__settings['options'][list(self.__settings['options'].keys())[self.position[1]]] = self.position[0]
                 elif Button.CENTER in self.brick.buttons.pressed():
-                    if self.currentMenu.getType() != 'list':
+                    if self.currentMenu.getType() == 'list':
+                        self.currentMenu.click(self.position)
+                    elif self.currentMenu.getType() == 'dict':
+                        if self.position[2]:
+                            self.position.pop(0)
+                            self.position.pop(0)
+                            self.position.pop(0)
+                            self.position[2] = not self.position[2]
+                        else:
+                            self.position[2] = not self.position[2]
+                            self.position.insert(0, True)
+                            self.position.insert(0, self.position[2])
+                            self.position.insert(0, self.__settings['options'][list(self.__settings['options'].keys())[self.position[0]]])
+                    else:
                         self.position[2] = not self.position[2]
                         self.currentMenu.getObjectByPostion(self.position).click()
-                        if self.currentMenu.getType() not in ['dict', 'canvas']:
+                        if self.currentMenu.getType() not in ['canvas']:
                             self.position.insert(0, False)
                             self.position.insert(0, 0)
                             self.position.insert(0, 0)
-                    else:
-                        self.currentMenu.click(self.position)
                 self.currentMenu.draw(self.position)
                 print(self.position)
                 time.sleep(0.3)
