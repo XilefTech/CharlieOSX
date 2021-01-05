@@ -29,6 +29,7 @@ class CharlieOSX:
     '''
 
     def __init__(self, configPath, settingsPath, logfilePath):
+        self.__settingsPath = settingsPath
         self.__settings = self.loadSettings(settingsPath)
         self.brick = EV3Brick()
         self.logger = Logger(self.__settings, logfilePath, self.brick)
@@ -55,6 +56,8 @@ class CharlieOSX:
             data (dict): The Settings dict that sould be stored
             path (str): The path to the settings file
         '''
+        if path == 'default':
+            path = self.__settingsPath
         try:
             with open(path, 'w') as f:
                 f.write(json.dumps(data, sort_keys=False))
