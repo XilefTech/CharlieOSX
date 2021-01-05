@@ -67,7 +67,8 @@ class UIManager:
         self.competition.getObjectByName('startButton').setClickAction(self.runCompetition)
 
         # Settings Menu
-        self.settingsMenu = Menu('dict')
+        self.settingsMenu = Menu('dict', self.brick)
+        self.settingsMenu.setDict(self.__settings)
 
         # menu Variables
         self.loop = True        
