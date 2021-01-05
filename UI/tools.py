@@ -158,7 +158,10 @@ class Menu():
         return array
    
     def click(self, position):
-        self.clickAction(position)
+        if self.type == 'list':
+            self.clickAction(position)
+        else:
+            pass
 
 class Box():
     def __init__(self, x, y, width, height):
