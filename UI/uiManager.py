@@ -158,7 +158,7 @@ class UIManager:
                             self.position.pop(0)
                             self.position[2] = not self.position[2]
                             self.os.storeSettings(self.__settings, 'default')
-                            self.applySettings(self.__settings)
+                            self.os.applySettings(self.__settings)
                         else:
                             self.position[2] = not self.position[2]
                             self.position.insert(0, True)
@@ -265,17 +265,4 @@ class UIManager:
         cmd = 'enable' if not enable else 'disable'
         os.system('connmanctl {} offline'.format(cmd))
 
-    def applySettings(self, settings):
-        '''
-        Applies the settings from the given dict to (currently only) the volume of sounds.
-        In other places, the data is often directly taken from the dict.
-
-        Args:
-            settings (dict): The Settings dict that sould be used for applying the settings
-        '''
-        self.brick.speaker.set_volume(
-            settings['options']['Audio-Volume'] * 0.9, 'Beep')
-        self.brick.speaker.set_volume(
-            settings['options']['EFX-Volume'] * 0.9, 'PCM')
-        self.logger.debug(self, 'Applied settings')
 

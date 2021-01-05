@@ -102,3 +102,16 @@ class CharlieOSX:
                 f.write(json.dumps(settings, sort_keys=False))
             return settings
 
+    def applySettings(self, settings):
+        '''
+        Applies the settings from the given dict to (currently only) the volume of sounds.
+        In other places, the data is often directly taken from the dict.
+
+        Args:
+            settings (dict): The Settings dict that sould be used for applying the settings
+        '''
+        self.brick.speaker.set_volume(
+            settings['options']['Audio-Volume'] * 0.9, 'Beep')
+        self.brick.speaker.set_volume(
+            settings['options']['EFX-Volume'] * 0.9, 'PCM')
+        self.logger.debug(self, 'Applied settings')
