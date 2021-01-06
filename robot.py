@@ -2,6 +2,7 @@ import math, _thread, time, math, copy
 from pybricks.ev3devices import (Motor, TouchSensor, ColorSensor, InfraredSensor, UltrasonicSensor, GyroSensor)
 from pybricks.parameters import (Port, Direction, Color, Stop)
 from pybricks.media.ev3dev import Font
+from lib.simple_pid import PID
 
 
 class Charlie():
@@ -28,6 +29,8 @@ class Charlie():
         self.__initMotors()
 
         self.min_speed = 35 # lage motor 20, medium motor 30
+        self.pid = PID(1, 0.1, 0.05, setpoint=1)
+        self.pid.sample_time = 0.01
         
         self.__gyro.reset_angle(0)
 
@@ -406,6 +409,7 @@ class Charlie():
         '''
         if self.__config['robotType'] != 'MECANUM':
             correctionStrength = 2.5  # how strongly the self will correct. 2 = default, 0 = nothing
+            self.pid.setpoint = self.__gyro.angle()
             startValue = self.__gyro.angle()
 
             # convert the input (cm) to revs
@@ -417,16 +421,17 @@ class Charlie():
             motor.reset_angle(0)
             if revs > 0:
                 while revs > (motor.angle() / 360):
+                    print(self.pid(self.__gyro.angle()), self.__gyro.angle())
                     # if not driving staright correct it
-                    if self.__gyro.angle() - startValue > 0:
-                        lSpeed = speed - abs(self.__gyro.angle() - startValue) * correctionStrength
-                        rSpeed = speed
-                    elif self.__gyro.angle() - startValue < 0:
-                        rSpeed = speed - abs(self.__gyro.angle() - startValue) * correctionStrength
-                        lSpeed = speed
-                    else:
-                        lSpeed = speed
-                        rSpeed = speed
+                    # if self.__gyro.angle() - startValue > 0:
+                    #     lSpeed = speed - abs(self.__gyro.angle() - startValue) * correctionStrength
+                    #     rSpeed = speed
+                    # elif self.__gyro.angle() - startValue < 0:
+                    #     rSpeed = speed - abs(self.__gyro.angle() - startValue) * correctionStrength
+                    #     lSpeed = speed
+                    # else:
+                    #     lSpeed = speed
+                    #     rSpeed = speed
 
                     self.turnLeftMotor(lSpeed)
                     self.turnRightMotor(rSpeed)
