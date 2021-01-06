@@ -1,5 +1,5 @@
 import time, _thread, os
-import customUrequest as urequests
+import lib.customUrequest as urequests
 
 class VersionManagment:
     '''

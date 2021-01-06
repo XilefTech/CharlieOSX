@@ -1,4 +1,5 @@
-import picoweb, _thread, time
+import lib.picoweb as picoweb
+import _thread, time
 
 
 class Webremote():

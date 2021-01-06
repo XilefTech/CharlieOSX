@@ -1,14 +1,14 @@
 import json
-from versionManager import VersionManagment
+from lib.versionManager import VersionManagment
 from robot import Charlie
-from logging import Logger
+from lib.logging import Logger
 from ui import UI
 from pybricks.hubs import EV3Brick
-from configParser import parseConfig
+from lib.configParser import parseConfig
 from collections import OrderedDict
 from webremote import Webremote
 
-from UI.uiManager import UIManager
+#from UI.uiManager import UIManager
 
 
 class CharlieOSX:
@@ -38,7 +38,7 @@ class CharlieOSX:
 
         self.robot = Charlie(self.__config, self.brick, self.logger)
         self.webremote = Webremote(self.__config, self.robot, self.brick)
-        self.ui = UIManager(self.__config, self.__settings, self.brick, self.logger, settingsPath)
+        self.ui = UI(self.__config, self.__settings, self.brick, self.logger, settingsPath)
 
         self.applySettings(self.__settings)
     # TODO
