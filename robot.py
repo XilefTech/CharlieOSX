@@ -29,7 +29,7 @@ class Charlie():
         self.__initMotors()
 
         self.min_speed = 35 # lage motor 20, medium motor 30
-        self.pid = PID(Kp=0.37, Ki=0, Kd=0.45, setpoint=1)
+        self.pid = PID(Kp=0.8, Ki=0.1, Kd=0.65, setpoint=0)
         self.pid.sample_time = 0.01
         
         self.__gyro.reset_angle(0)
