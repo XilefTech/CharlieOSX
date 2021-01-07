@@ -454,8 +454,8 @@ class Charlie():
                         lSpeed = speed
                         rSpeed = speed
 
-                    self.turnLeftMotor(-lSpeed)
-                    self.turnRightMotor(-rSpeed)
+                    self.turnLeftMotor(-abs(lSpeed))
+                    self.turnRightMotor(-abs(rSpeed))
                     # cancel if button pressed
                     if any(self.brick.buttons.pressed()):
                         return
