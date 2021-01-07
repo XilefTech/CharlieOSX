@@ -35,7 +35,7 @@ class Charlie():
         self.__gyro.reset_angle(0)
 
         self.__screenRoutine = False
-        self.showDetails()
+        #self.showDetails()
 
         
         self.logger.info(self, 'Driving for Charlie initialized')
