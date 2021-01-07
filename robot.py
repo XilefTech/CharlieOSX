@@ -417,28 +417,30 @@ class Charlie():
 
             motor = self.__rMotor if self.__config['robotType'] == 'NORMAL' else self.__fRMotor
 
+            rSpeed = speed
+            lSpeed = speed
+
             # drive
             motor.reset_angle(0)
             if revs > 0:
                 while revs > (motor.angle() / 360):
-                    print(self.pid(self.__gyro.angle()), self.__gyro.angle())
-                    # if not driving staright correct it
-                    # if self.__gyro.angle() - startValue > 0:
-                    #     lSpeed = speed - abs(self.__gyro.angle() - startValue) * correctionStrength
-                    #     rSpeed = speed
-                    # elif self.__gyro.angle() - startValue < 0:
-                    #     rSpeed = speed - abs(self.__gyro.angle() - startValue) * correctionStrength
-                    #     lSpeed = speed
-                    # else:
-                    #     lSpeed = speed
-                    #     rSpeed = speed
+                    pidValue = int(self.pid(self.__gyro.angle())) * 0.5
+                    print("\t".join(map(str, [pidValue, self.__gyro.angle(), lSpeed, rSpeed])))
+                    #if not driving staright correct it
+                    if pidValue < 0:
+                        lSpeed = lSpeed - abs(pidValue)
+                        rSpeed = rSpeed + abs(pidValue) *  2 if rSpeed < speed else speed
+                    elif pidValue > 0:
+                        rSpeed = rSpeed - abs(pidValue) 
+                        lSpeed = lSpeed + abs(pidValue) * 2 if lSpeed < speed else speed
 
-                    self.turnLeftMotor(lSpeed)
-                    self.turnRightMotor(rSpeed)
+                    self.turnLeftMotor(abs(lSpeed))
+                    self.turnRightMotor(abs(rSpeed))
                     
                     #cancel if button pressed
                     if any(self.brick.buttons.pressed()):
                         return
+                    time.sleep(0.05)
             else:
                 while revs < motor.angle() / 360:
                     # if not driving staright correct it
