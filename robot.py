@@ -407,6 +407,7 @@ class Charlie():
             speed (int): the speed to drive at
             dist (int): the distance in cm to drive
         '''
+        speed = 100 if speed > 100 else speed   # just in case someone gives faster than max speed
         if self.__config['robotType'] != 'MECANUM':
             correctionStrength = 2.5  # how strongly the self will correct. 2 = default, 0 = nothing
             self.pid.setpoint = self.__gyro.angle()
@@ -419,23 +420,27 @@ class Charlie():
 
             rSpeed = speed
             lSpeed = speed
+            steer = 0
 
             # drive
             motor.reset_angle(0)
             if revs > 0:
                 while revs > (motor.angle() / 360):
-                    pidValue = int(self.pid(self.__gyro.angle())) * 0.5
-                    print("\t".join(map(str, [pidValue, self.__gyro.angle(), lSpeed, rSpeed])))
+                    pidValue = int(self.pid(self.__gyro.angle()) * 0.125)
+                    print("\t \t".join(map(str, [pidValue, self.__gyro.angle(), steer, lSpeed, rSpeed])))
                     #if not driving staright correct it
-                    if pidValue < 0:
-                        lSpeed = lSpeed - abs(pidValue)
-                        rSpeed = rSpeed + abs(pidValue) *  2 if rSpeed < speed else speed
-                    elif pidValue > 0:
-                        rSpeed = rSpeed - abs(pidValue) 
-                        lSpeed = lSpeed + abs(pidValue) * 2 if lSpeed < speed else speed
+                    # if pidValue < 0:
+                    #     lSpeed = lSpeed - abs(pidValue) if lSpeed > 0 else 0
+                    #     rSpeed = rSpeed + abs(pidValue) * 2 if rSpeed < speed else speed
+                    # elif pidValue > 0:
+                    #     rSpeed = rSpeed - abs(pidValue) if rSpeed > 0 else 0
+                    #     lSpeed = lSpeed + abs(pidValue) * 2 if lSpeed < speed else speed
+                    steer += pidValue
+                    rSpeed = speed - steer if steer > 0 else speed
+                    lSpeed = speed + steer if steer < 0 else speed
 
-                    self.turnLeftMotor(abs(lSpeed))
-                    self.turnRightMotor(abs(rSpeed))
+                    self.turnLeftMotor(lSpeed if lSpeed > 0 else 0)
+                    self.turnRightMotor(rSpeed if rSpeed > 0 else 0)
                     
                     #cancel if button pressed
                     if any(self.brick.buttons.pressed()):
