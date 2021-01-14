@@ -178,3 +178,12 @@ class Box():
 
     def contains(self, other):
         return ((self.x > other.x and self.x < (other.x+other.width)) and (self.y > other.y and self.y < (other.y+other.height)))
+
+class Popup():
+    "a popup"
+
+    def __init__(self, brick, title, contentType):
+        self.brick = brick
+        self.title = title
+        self.titleFont = Font(family='arial', size=15, bold=True)
+        self.contentType = contentType
