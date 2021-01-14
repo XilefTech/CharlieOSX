@@ -46,7 +46,7 @@ class UIManager:
         # Programming Menu
         self.programming = Menu('list', self.brick)
         self.programming.setList(self.__config['profileNames'])
-        # self.programming.draw([0, 0, False])
+        self.programming.setClickAction(self.runProgramming)
 
         # Testing Menu
         self.testing = Menu('list', self.brick)
