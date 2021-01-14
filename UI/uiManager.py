@@ -5,7 +5,7 @@ from pybricks.parameters import Button, Color
 from pybricks.media.ev3dev import Image, ImageFile, Font, SoundFile
 
 from UI.UIObject import UIObject
-from UI.tools import Menu, Box
+from UI.tools import Menu, Box, ProgrammingWindow
 
 
 class UIManager:
