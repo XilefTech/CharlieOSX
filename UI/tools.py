@@ -187,3 +187,10 @@ class Popup():
         self.title = title
         self.titleFont = Font(family='arial', size=15, bold=True)
         self.contentType = contentType
+
+    def draw(self):
+        self.brick.screen.draw_image(9, 11, 'assets/graphics/misc/popup.png', transparent = Color.RED)
+        self.brick.screen.set_font(self.titleFont)
+        self.brick.screen.draw_text(self.brick.screen.width/2 - self.titleFont.text_width(self.title) / 2, 15, self.title)
+        self.brick.screen.draw_line(self.brick.screen.width/2 - self.titleFont.text_width(self.title) / 2 - 1, 31, self.brick.screen.width/2 + self.titleFont.text_width(self.title) / 2 + 1, 31, width=2)
+
