@@ -194,3 +194,9 @@ class Popup():
         self.brick.screen.draw_text(self.brick.screen.width/2 - self.titleFont.text_width(self.title) / 2, 15, self.title)
         self.brick.screen.draw_line(self.brick.screen.width/2 - self.titleFont.text_width(self.title) / 2 - 1, 31, self.brick.screen.width/2 + self.titleFont.text_width(self.title) / 2 + 1, 31, width=2)
 
+class ProgrammingWindow(Popup):
+    "a programming Window"
+
+    def __init__(self, brick, title, contentType, data=[]):
+        super().__init__(brick, title, contentType)
+        self.data = data
