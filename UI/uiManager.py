@@ -206,6 +206,13 @@ class UIManager:
                 self.logger.error(
                     self, "Could not animate menu: ", str(exception))
 
+    def runProgramming(self, position):
+        index = position[1]
+        content = self.profileHelper.getProfileData(self.__config['profileNames'][index])
+        menu = ProgrammingWindow(self.brick, self.__config['profileNames'][index], 'progArr', content)
+        menu.draw()
+        time.sleep(5)
+
     def runTesting(self, position):
         index = position[1]
         profileData = self.profileHelper.getProfileData(self.__config['profileNames'][index])
