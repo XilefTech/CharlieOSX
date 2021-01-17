@@ -188,6 +188,12 @@ class Popup():
         self.titleFont = Font(family='arial', size=15, bold=True)
         self.contentType = contentType
 
+    def open(self):
+        self.draw()
+
+    def close(self, position):
+        position.insert(0, -1)
+
     def draw(self):
         self.brick.screen.draw_image(9, 11, 'assets/graphics/misc/popup.png', transparent = Color.RED)
         self.brick.screen.set_font(self.titleFont)

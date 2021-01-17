@@ -114,6 +114,13 @@ class UIManager:
         self.currentMenu.draw(self.position)
         print(self.position)
         time.sleep(0.3)
+        menuLocations = [
+            "assets/graphics/animations/mainProgram/10.png",
+            "assets/graphics/animations/mainTest/10.png",
+            "assets/graphics/animations/mainRemote/10.png",
+            "assets/graphics/animations/mainCompetition/10.png",
+            "assets/graphics/animations/mainSettings/10.png",
+        ]
 
         while self.loop:
             if any(self.brick.buttons.pressed()):
@@ -171,9 +178,13 @@ class UIManager:
                             self.position.insert(0, False)
                             self.position.insert(0, 0)
                             self.position.insert(0, 0)
+                if self.position[0] == -1:
+                    self.position.pop(0)
+                    self.brick.screen.draw_image(0, 0, menuLocations[self.position[len(self.position) - 4]], transparent=Color.RED)
                 self.currentMenu.draw(self.position)
                 print(self.position)
                 time.sleep(0.3)
+            
 
     def animate(self, state, direction):
         '''
@@ -209,9 +220,11 @@ class UIManager:
     def runProgramming(self, position):
         index = position[1]
         content = self.profileHelper.getProfileData(self.__config['profileNames'][index])
-        menu = ProgrammingWindow(self.brick, self.__config['profileNames'][index], 'progArr', content)
-        menu.draw()
+        menu = ProgrammingWindow(self.brick, self.__config['profileNames'][index], 'list', content)
+        menu.open()
+        #do stuff
         time.sleep(5)
+        menu.close(position)
 
     def runTesting(self, position):
         index = position[1]
