@@ -26,6 +26,8 @@ class Menu():
 
     def setList(self, arrList: Array):
         self.llist = arrList
+        if self.type == 'progList':
+            self.llist.append([])
         self.maxX = 0
         self.maxY = len(self.llist) - 1
 
@@ -35,7 +37,7 @@ class Menu():
         self.maxY = len(self.dict['options']) - 1
 
     def setClickAction(self, clickAction):
-        if self.type == 'list':
+        if self.type in ['list', 'progList']:
             self.clickAction = clickAction
         else:
             raise AttributeError("current Menu type doesn't support a clickaction")
@@ -114,6 +116,37 @@ class Menu():
                     self.maxX = abs(self.dict['values']['min'][keys[index]]) + abs(self.dict['values']['max'][keys[index]])
             else:
                 self.maxX = 0
+        # progList Menu
+        elif self.type == 'progList':
+            self.brick.screen.set_font(self.font)
+            if len(self.llist) >= 5:
+                if selector[1] in range(0, 3):
+                    offset = 0
+                elif selector[1] in range(len(self.llist) - 2, len(self.llist)):
+                    offset = len(self.llist) - 5
+                else:
+                    offset = selector[1] - 2
+            else:
+                offset = 0
+
+            self.drawScrollBar(len(self.llist), selector[1])
+            self.brick.screen.draw_box(26, 29, 170, self.brick.screen.height, fill=True, color=Color.WHITE)
+            for i in range(5) if len(self.llist) >= 5 else range(len(self.llist)):
+                content = self.llist[i + offset]
+                if content == []:
+                    self.brick.screen.draw_box(26, 29 + i * 20, 170, 46 + i * 20, fill=True, color=Color.WHITE)
+                    self.brick.screen.draw_image(81, 30 + i * 20, 'assets/graphics/misc/+.png' if offset + i != selector[1] else 'assets/graphics/misc/+_sel.png', transparent=Color.RED)
+                elif offset + i == selector[1]:
+                    if selector[2]:
+                        self.brick.screen.draw_box(26, 29 + i * 20, 168, 46 + i * 20, r=3, fill=True, color=Color.BLACK)
+                        self.brick.screen.draw_text(29, 30 + i * 20, content)
+                    else:
+                        self.brick.screen.draw_box(26, 29 + i * 20, 168, 46 + i * 20, r=3, fill=True, color=Color.WHITE)
+                        self.brick.screen.draw_box(26, 29 + i * 20, 168, 46 + i * 20, r=3, fill=False, color=Color.BLACK)
+                        self.brick.screen.draw_text(29, 30 + i * 20, content)
+                else:
+                    self.brick.screen.draw_box(26, 29 + i * 20, 170, 46 + i * 20, fill=True, color=Color.WHITE)
+                    self.brick.screen.draw_text(29, 30 + i * 20, content)
         # something else
         else:
             for i in self.objects:
@@ -158,7 +191,7 @@ class Menu():
         return array
    
     def click(self, position):
-        if self.type == 'list':
+        if self.type in ['list', 'progList']:
             self.clickAction(position)
         else:
             pass
