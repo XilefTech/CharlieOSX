@@ -114,7 +114,7 @@ class UIManager:
         self.currentMenu.draw(self.position)
         print(self.position)
         time.sleep(0.3)
-        menuLocations = [
+        self.menuLocations = [
             "assets/graphics/animations/mainProgram/10.png",
             "assets/graphics/animations/mainTest/10.png",
             "assets/graphics/animations/mainRemote/10.png",
@@ -180,7 +180,7 @@ class UIManager:
                             self.position.insert(0, 0)
                 if self.position[0] == -1:
                     self.position.pop(0)
-                    self.brick.screen.draw_image(0, 0, menuLocations[self.position[len(self.position) - 4]], transparent=Color.RED)
+                    self.brick.screen.draw_image(0, 0, self.menuLocations[self.position[len(self.position) - 4]], transparent=Color.RED)
                 self.currentMenu.draw(self.position)
                 print(self.position)
                 time.sleep(0.3)
