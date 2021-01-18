@@ -220,9 +220,36 @@ class UIManager:
     def runProgramming(self, position):
         index = position[1]
         content = self.profileHelper.getProfileData(self.__config['profileNames'][index])
+
+        self.runList = Menu('progList', self.brick)
+        self.runList.setList(content)
+        self.runList.setClickAction(self.runEditing)
+        self.runList.draw(self.position)
+
+        # sideloop for interactive sub submenu
+        while not Button.LEFT in self.brick.buttons.pressed():
+            if any(self.brick.buttons.pressed()):
+                if Button.UP in self.brick.buttons.pressed() and not self.position[2]:
+                    self.position[1] = self.position[1] - 1 if self.position[1] > 0 else self.runList.maxY
+                elif Button.DOWN in self.brick.buttons.pressed() and not self.position[2]:
+                    self.position[1] = self.position[1] + 1 if self.position[1] < self.runList.maxY else 0
+                elif Button.CENTER in self.brick.buttons.pressed():
+                    self.runList.click(self.position)
+                if self.position[0] == -1:
+                    self.position.pop(0)
+                    self.brick.screen.draw_image(0, 0, self.menuLocations[self.position[len(self.position) - 4]], transparent=Color.RED)
+                self.runList.draw(self.position)
+                print(self.position)
+                time.sleep(0.3)
+        
+    def runEditing(self, position):
+        index = position[1]
+        content = self.profileHelper.getProfileData(self.__config['profileNames'][index])
+
         menu = ProgrammingWindow(self.brick, self.__config['profileNames'][index], 'list', content)
+
         menu.open()
-        #do stuff
+        # editing for one 
         time.sleep(5)
         menu.close(position)
 
