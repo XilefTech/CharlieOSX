@@ -38,7 +38,7 @@ class Menu():
         if self.type == 'list':
             self.clickAction = clickAction
         else:
-            raise AttributeError
+            raise AttributeError("current Menu type doesn't support a clickaction")
 
     def getObjectByName(self, name):
         for i in self.objects:
