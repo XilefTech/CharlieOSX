@@ -279,11 +279,11 @@ class UIManager:
         screenContent[2] = '%s: %s' % (self.secondParam[content[index][0]], content[index][2]) if self.secondParam[content[index][0]] != 'none' else ''
         screenContent[3] = '%s: %s' % (self.thirdParam[content[index][0]], content[index][3]) if self.thirdParam[content[index][0]] != 'none' else ''
 
-        menu = ProgrammingWindow(self.brick, self.__config['profileNames'][index], 'list', content)
+        menu = ProgrammingWindow(self.brick, 'Edit Step', 'list', screenContent)
 
-        menu.open()
+        menu.open(position)
         # editing for one 
-        time.sleep(5)
+        time.sleep(4)
         menu.close(position)
 
     def runTesting(self, position):
