@@ -222,8 +222,8 @@ class Popup():
         self.normalFont = Font(family='arial', size=13)
         self.contentType = contentType
 
-    def open(self):
-        self.draw()
+    def open(self, position=[]):
+        self.draw(position=position)
 
     def close(self, position):
         position.insert(0, -1)
