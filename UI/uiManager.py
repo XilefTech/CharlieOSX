@@ -271,7 +271,13 @@ class UIManager:
         
     def runEditing(self, position):
         index = position[1]
-        content = self.profileHelper.getProfileData(self.__config['profileNames'][index])
+        screenContent = ['', '', '', '']
+        content = self.profileHelper.getProfileData(self.__config['profileNames'][position[4]])
+
+        screenContent[0] = 'Type: %s' % self.types[content[index][0]]
+        screenContent[1] = 'Speed: %s' % content[index][1]
+        screenContent[2] = '%s: %s' % (self.secondParam[content[index][0]], content[index][2]) if self.secondParam[content[index][0]] != 'none' else ''
+        screenContent[3] = '%s: %s' % (self.thirdParam[content[index][0]], content[index][3]) if self.thirdParam[content[index][0]] != 'none' else ''
 
         menu = ProgrammingWindow(self.brick, self.__config['profileNames'][index], 'list', content)
 
