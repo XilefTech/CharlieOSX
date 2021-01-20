@@ -240,3 +240,20 @@ class ProgrammingWindow(Popup):
     def __init__(self, brick, title, contentType, data=['', '', '', '']):
         super().__init__(brick, title, contentType)
         self.data = data
+
+    def draw(self, position=[]):
+        super().draw()
+        self.brick.screen.set_font(self.normalFont)
+        for i in range(4):
+            content = self.data[i]
+            if i == position[1]:
+                if position[2]:
+                    self.brick.screen.draw_box(20, 38 + i * 20, 158, 55 + i * 20, r=3, fill=True, color=Color.BLACK)
+                    self.brick.screen.draw_text(23, 39 + i * 20, content)
+                else:
+                    self.brick.screen.draw_box(20, 38 + i * 20, 158, 55 + i * 20, r=3, fill=True, color=Color.WHITE)
+                    self.brick.screen.draw_box(20, 38 + i * 20, 158, 55 + i * 20, r=3, fill=False, color=Color.BLACK)
+                    self.brick.screen.draw_text(23, 39 + i * 20, content)
+            else:
+                self.brick.screen.draw_box(20, 38 + i * 20, 160, 55 + i * 20, fill=True, color=Color.WHITE)
+                self.brick.screen.draw_text(23, 39 + i * 20, content)
