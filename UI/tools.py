@@ -237,6 +237,6 @@ class Popup():
 class ProgrammingWindow(Popup):
     "a programming Window"
 
-    def __init__(self, brick, title, contentType, data=[]):
+    def __init__(self, brick, title, contentType, data=['', '', '', '']):
         super().__init__(brick, title, contentType)
         self.data = data
