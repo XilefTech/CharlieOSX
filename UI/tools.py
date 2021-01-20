@@ -219,6 +219,7 @@ class Popup():
         self.brick = brick
         self.title = title
         self.titleFont = Font(family='arial', size=15, bold=True)
+        self.normalFont = Font(family='arial', size=13)
         self.contentType = contentType
 
     def open(self):
