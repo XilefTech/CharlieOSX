@@ -80,6 +80,33 @@ class UIManager:
             self.competition,
             self.settingsMenu
         ]
+        self.types = {
+            4: 'Turn',
+            5: 'Action',
+            7: 'Straight',
+            9: 'Intervall',
+            11: 'Curve',
+            12: 'to Color',
+            15: 'to Wall'
+        }
+        self.secondParam = {
+            4: 'Angle',
+            5: 'Revs',
+            7: 'Distance',
+            9: 'Distance',
+            11: 'Distance',
+            12: 'Color',
+            15: 'none'
+        }
+        self.thirdParam = {
+            4: 'Port',
+            5: 'Port',
+            7: 'none' if self.__config['robotType'] != 'MECANUM' else 'Angle',
+            9: 'Amount',
+            11: 'Angle',
+            12: 'Side',
+            15: 'none'
+        }
         # testSubmenu = Menu('normal')
         # testSubmenu.addObject(UIObject('testObject1', self.brick, Box(0, 85, 20, 20), 'img', (0, 0), 'assets/graphics/menus/settingsMainMenu.png'))
         # testSubmenu.addObject(UIObject('testObject2', self.brick, Box(0, 5, 20, 20), 'img', (0, 0), 'assets/graphics/menus/programmingMainMenu.png'))
