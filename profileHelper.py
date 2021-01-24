@@ -96,4 +96,6 @@ class ProfileHelper():
             profile (str): The name of the profile
             data (array): The array with the data
         '''
+        self.logger.debug(self, 'Setting Profile data for profile "%s"' % profile)
+        self._data[profile] = deepcopy(data)
         self._saveProfiles()
