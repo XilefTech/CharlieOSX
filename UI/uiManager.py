@@ -261,7 +261,13 @@ class UIManager:
                 elif Button.DOWN in self.brick.buttons.pressed() and not self.position[2]:
                     self.position[1] = self.position[1] + 1 if self.position[1] < self.runList.maxY else 0
                 elif Button.CENTER in self.brick.buttons.pressed():
-                    self.runList.click(self.position)
+                    if self.position[1] != len(content) - 1:
+                        self.runList.click(self.position)
+                    else:
+                        content.pop()
+                        content.append([7, 100, 10, 0])
+                        self.runList.setList(content)
+                        self.profileHelper.setProfileData(self.__config['profileNames'][index], content)
                 if self.position[0] == -1:
                     self.position.pop(0)
                     self.brick.screen.draw_image(0, 0, self.menuLocations[self.position[len(self.position) - 4]], transparent=Color.RED)
