@@ -292,20 +292,24 @@ class UIManager:
         mmax = 4
         menu.open(position)
         while not (Button.LEFT in self.brick.buttons.pressed() and not position[2]):
-            if Button.UP in self.brick.buttons.pressed() and not self.position[2]:
-                self.position[1] = self.position[1] - 1 if self.position[1] > 0 else mmax
-            elif Button.DOWN in self.brick.buttons.pressed() and not self.position[2]:
-                self.position[1] = self.position[1] + 1 if self.position[1] < mmax else 0
-            elif any(self.brick.buttons.pressed()):
-                if Button.CENTER in self.brick.buttons.pressed():
+            if any(self.brick.buttons.pressed()):
+                if Button.UP in self.brick.buttons.pressed() and not self.position[2]:
+                    self.position[1] = self.position[1] - 1 if self.position[1] > 0 else mmax
+                elif Button.DOWN in self.brick.buttons.pressed() and not self.position[2]:
+                    self.position[1] = self.position[1] + 1 if self.position[1] < mmax else 0
+                elif Button.CENTER in self.brick.buttons.pressed():
                     position[2] = not position[2]
                 menu.draw(position=position)
-                time.sleep(0.3)
-        menu.close(position)
+                if not (Button.LEFT in self.brick.buttons.pressed() and not position[2]):
+                    time.sleep(0.3)
 
         self.position.pop(0)
         self.position.pop(0)
         self.position.pop(0)
+        menu.close(position)
+        time.sleep(0.3)
+
+        
 
     def runTesting(self, position):
         index = position[1]
