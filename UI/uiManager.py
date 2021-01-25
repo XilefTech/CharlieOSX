@@ -286,11 +286,26 @@ class UIManager:
         screenContent[3] = '%s: %s' % (self.thirdParam[content[index][0]], content[index][3]) if self.thirdParam[content[index][0]] != 'none' else ''
 
         menu = ProgrammingWindow(self.brick, 'Edit Step', 'list', screenContent)
-
+        self.position.insert(0, False)
+        self.position.insert(0, 0)
+        self.position.insert(0, 0)
+        mmax = 4
         menu.open(position)
-        # editing for one 
-        time.sleep(4)
+        while not (Button.LEFT in self.brick.buttons.pressed() and not position[2]):
+            if Button.UP in self.brick.buttons.pressed() and not self.position[2]:
+                self.position[1] = self.position[1] - 1 if self.position[1] > 0 else mmax
+            elif Button.DOWN in self.brick.buttons.pressed() and not self.position[2]:
+                self.position[1] = self.position[1] + 1 if self.position[1] < mmax else 0
+            elif any(self.brick.buttons.pressed()):
+                if Button.CENTER in self.brick.buttons.pressed():
+                    position[2] = not position[2]
+                menu.draw(position=position)
+                time.sleep(0.3)
         menu.close(position)
+
+        self.position.pop(0)
+        self.position.pop(0)
+        self.position.pop(0)
 
     def runTesting(self, position):
         index = position[1]
