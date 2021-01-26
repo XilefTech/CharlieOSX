@@ -107,11 +107,33 @@ class UIManager:
             12: 'Side',
             15: 'none'
         }
-        # testSubmenu = Menu('normal')
-        # testSubmenu.addObject(UIObject('testObject1', self.brick, Box(0, 85, 20, 20), 'img', (0, 0), 'assets/graphics/menus/settingsMainMenu.png'))
-        # testSubmenu.addObject(UIObject('testObject2', self.brick, Box(0, 5, 20, 20), 'img', (0, 0), 'assets/graphics/menus/programmingMainMenu.png'))
-        # testSubmenu.addObject(UIObject('testObject3', self.brick, Box(40, 5, 20, 20), 'img', (0, 0), 'assets/graphics/menus/programmingMainMenu.png'))
-        # print(testSubmenu.rasterize())
+        self.valueTypes = {
+            2: {
+                4: 'largeInt',
+                5: 'largeInt',
+                7: 'largeInt',
+                9: 'largeInt',
+                11: 'largeInt',
+                12: 'bool',
+                15: 'none'
+            }
+            3: {
+                4: 'side',
+                5: 'port',
+                7: 'none',
+                9: 'largeInt',
+                11: 'largeInt',
+                12: 'side',
+                15: 'none'
+            }
+        }
+        self.valueRanges = {
+            'largeInt': range(0, 10000),
+            'side': [2, 3, 23],
+            'bool': [0, 1],
+            'port': range(0, 4),
+            'none': [0]
+        }
 
         #self.logger.info(self, 'UI initialized')
 
@@ -212,7 +234,6 @@ class UIManager:
                 print(self.position)
                 time.sleep(0.3)
             
-
     def animate(self, state, direction):
         '''
         Animates the transition between the main-menu-pages and the submenu-pages
@@ -294,9 +315,21 @@ class UIManager:
         while not (Button.LEFT in self.brick.buttons.pressed() and not position[2]):
             if any(self.brick.buttons.pressed()):
                 if Button.UP in self.brick.buttons.pressed() and not self.position[2]:
-                    self.position[1] = self.position[1] - 1 if self.position[1] > 0 else mmax
-                elif Button.DOWN in self.brick.buttons.pressed() and not self.position[2]:
-                    self.position[1] = self.position[1] + 1 if self.position[1] < mmax else 0
+                    if self.position[2]:
+                        content[index][position[1]] = content[index][position[1]] + 1 if content[index][position[1]] + 1 in self.valueRanges[self.valueTypes[position[1]]] else self.valueRanges[self.valueTypes[position[1]]][0]
+                    else:
+                        self.position[1] = self.position[1] - 1 if self.position[1] > 0 else mmax
+                elif Button.DOWN in self.brick.buttons.pressed():
+                    if self.position[2]:
+                        content[index][position[1]] = content[index][position[1]] - 1 if content[index][position[1]] - 1 in self.valueRanges[self.valueTypes[position[1]]] else self.valueRanges[self.valueTypes[position[1]]][0]
+                    else:
+                        self.position[1] = self.position[1] + 1 if self.position[1] < mmax else 0
+                elif Button.RIGHT in self.brick.buttons.pressed():
+                    if self.position[2]:
+                        pass
+                elif Button.LEFT in self.brick.buttons.pressed():
+                    if self.position[2]:
+                        pass
                 elif Button.CENTER in self.brick.buttons.pressed():
                     position[2] = not position[2]
                 menu.draw(position=position)
