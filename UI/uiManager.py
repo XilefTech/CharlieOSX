@@ -82,7 +82,7 @@ class UIManager:
         ]
         self.types = {
             4: 'Turn',
-            5: 'Action',
+            5: 'Action' if not self.__config['useGearing'] else 'Gearing',
             7: 'Straight',
             9: 'Intervall',
             11: 'Curve',
