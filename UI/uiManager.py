@@ -330,25 +330,29 @@ class UIManager:
         menu.open(position)
         while not (Button.LEFT in self.brick.buttons.pressed() and not position[2]):
             if any(self.brick.buttons.pressed()):
-                if Button.UP in self.brick.buttons.pressed() and not self.position[2]:
+                valueType = self.valueTypes[position[1]][content[index][0]] if position[1] != 0 else 'type'
+                valueRange = self.valueRanges[valueType]
+                print(valueRange, valueType, position[1], content[index][0])
+                if Button.UP in self.brick.buttons.pressed():
                     if self.position[2]:
-                        content[index][position[1]] = content[index][position[1]] + 1 if content[index][position[1]] + 1 in self.valueRanges[self.valueTypes[position[1]]] else self.valueRanges[self.valueTypes[position[1]]][0]
+                        content[index][position[1]] = content[index][position[1]] + smallStep if content[index][position[1]] + smallStep in valueRange else valueRange[0]
                     else:
                         self.position[1] = self.position[1] - 1 if self.position[1] > 0 else mmax
                 elif Button.DOWN in self.brick.buttons.pressed():
                     if self.position[2]:
-                        content[index][position[1]] = content[index][position[1]] - 1 if content[index][position[1]] - 1 in self.valueRanges[self.valueTypes[position[1]]] else self.valueRanges[self.valueTypes[position[1]]][0]
+                        content[index][position[1]] = content[index][position[1]] - smallStep if content[index][position[1]] - smallStep in valueRange else valueRange[len(valueRange) - 1]
                     else:
                         self.position[1] = self.position[1] + 1 if self.position[1] < mmax else 0
                 elif Button.RIGHT in self.brick.buttons.pressed():
                     if self.position[2]:
-                        pass
+                        content[index][position[1]] = content[index][position[1]] + bigStep if content[index][position[1]] + bigStep in valueRange else valueRange[0]
                 elif Button.LEFT in self.brick.buttons.pressed():
                     if self.position[2]:
-                        pass
+                        content[index][position[1]] = content[index][position[1]] - bigStep if content[index][position[1]] - bigStep in valueRange else valueRange[len(valueRange) - 1]
                 elif Button.CENTER in self.brick.buttons.pressed():
                     position[2] = not position[2]
                 formatScreenContent()
+                menu.updateContent(screenContent)
                 menu.draw(position=position)
                 if not (Button.LEFT in self.brick.buttons.pressed() and not position[2]):
                     time.sleep(0.3)
