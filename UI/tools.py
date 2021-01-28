@@ -249,7 +249,7 @@ class ProgrammingWindow(Popup):
             if i == position[1]:
                 if position[2]:
                     self.brick.screen.draw_box(20, 38 + i * 20, 158, 55 + i * 20, r=3, fill=True, color=Color.BLACK)
-                    self.brick.screen.draw_text(23, 39 + i * 20, content)
+                    self.brick.screen.draw_text(23, 39 + i * 20, content, text_color=Color.WHITE)
                 else:
                     self.brick.screen.draw_box(20, 38 + i * 20, 158, 55 + i * 20, r=3, fill=True, color=Color.WHITE)
                     self.brick.screen.draw_box(20, 38 + i * 20, 158, 55 + i * 20, r=3, fill=False, color=Color.BLACK)
