@@ -308,14 +308,19 @@ class UIManager:
                 time.sleep(0.3)
         
     def runEditing(self, position):
+        def formatScreenContent():
+            screenContent[0] = 'Type: %s' % self.types[content[index][0]]
+            screenContent[1] = 'Speed: %s' % content[index][1]
+            screenContent[2] = '%s: %s' % (self.secondParam[content[index][0]], content[index][2]) if self.secondParam[content[index][0]] != 'none' else ''
+            screenContent[3] = '%s: %s' % (self.thirdParam[content[index][0]], content[index][3]) if self.thirdParam[content[index][0]] != 'none' else ''
+
+        smallStep = 1
+        bigStep = 5
         index = position[1]
         screenContent = ['', '', '', '']
         content = self.profileHelper.getProfileData(self.__config['profileNames'][position[4]])
 
-        screenContent[0] = 'Type: %s' % self.types[content[index][0]]
-        screenContent[1] = 'Speed: %s' % content[index][1]
-        screenContent[2] = '%s: %s' % (self.secondParam[content[index][0]], content[index][2]) if self.secondParam[content[index][0]] != 'none' else ''
-        screenContent[3] = '%s: %s' % (self.thirdParam[content[index][0]], content[index][3]) if self.thirdParam[content[index][0]] != 'none' else ''
+        formatScreenContent()
 
         menu = ProgrammingWindow(self.brick, 'Edit Step', 'list', screenContent)
         self.position.insert(0, False)
@@ -343,6 +348,7 @@ class UIManager:
                         pass
                 elif Button.CENTER in self.brick.buttons.pressed():
                     position[2] = not position[2]
+                formatScreenContent()
                 menu.draw(position=position)
                 if not (Button.LEFT in self.brick.buttons.pressed() and not position[2]):
                     time.sleep(0.3)
