@@ -326,13 +326,12 @@ class UIManager:
         self.position.insert(0, False)
         self.position.insert(0, 0)
         self.position.insert(0, 0)
-        mmax = 4
+        mmax = 3
         menu.open(position)
         while not (Button.LEFT in self.brick.buttons.pressed() and not position[2]):
             if any(self.brick.buttons.pressed()):
                 valueType = self.valueTypes[position[1]][content[index][0]] if position[1] != 0 else 'type'
                 valueRange = self.valueRanges[valueType]
-                print(valueRange, valueType, position[1], content[index][0])
                 if Button.UP in self.brick.buttons.pressed():
                     if self.position[2]:
                         content[index][position[1]] = content[index][position[1]] + smallStep if content[index][position[1]] + smallStep in valueRange else valueRange[0]
@@ -360,6 +359,7 @@ class UIManager:
         self.position.pop(0)
         self.position.pop(0)
         self.position.pop(0)
+        self.profileHelper.setProfileData(self.__config['profileNames'][position[4]], content)
         menu.close(position)
         time.sleep(0.3)
 
