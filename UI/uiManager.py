@@ -108,6 +108,15 @@ class UIManager:
             15: 'none'
         }
         self.valueTypes = {
+            1: {
+                4: 'percentage',
+                5: 'percentage',
+                7: 'percentage',
+                9: 'percentage',
+                11: 'percentage',
+                12: 'percentage',
+                15: 'percentage'
+            },
             2: {
                 4: 'largeInt',
                 5: 'largeInt',
