@@ -125,7 +125,7 @@ class UIManager:
                 11: 'largeInt',
                 12: 'bool',
                 15: 'none'
-            }
+            },
             3: {
                 4: 'side',
                 5: 'port',
@@ -137,6 +137,8 @@ class UIManager:
             }
         }
         self.valueRanges = {
+            'percentage': range(0, 101),
+            'type': [4, 5, 7, 9, 11, 12, 15],
             'largeInt': range(0, 10000),
             'side': [2, 3, 23],
             'bool': [0, 1],
