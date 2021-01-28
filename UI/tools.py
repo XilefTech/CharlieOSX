@@ -241,6 +241,9 @@ class ProgrammingWindow(Popup):
         super().__init__(brick, title, contentType)
         self.data = data
 
+    def updateContent(self, content):
+        self.data = content
+
     def draw(self, position=[]):
         super().draw()
         self.brick.screen.set_font(self.normalFont)
