@@ -138,7 +138,7 @@ class UIManager:
         }
         self.valueRanges = {
             'percentage': range(0, 101),
-            'type': [4, 5, 7, 9, 11, 12, 15],
+            'type': [7, 4, 5, 11, 9, 12, 15],
             'largeInt': range(0, 10000),
             'side': [2, 3, 23],
             'bool': [0, 1],
