@@ -334,20 +334,28 @@ class UIManager:
                 valueRange = self.valueRanges[valueType]
                 if Button.UP in self.brick.buttons.pressed():
                     if self.position[2]:
-                        content[index][position[1]] = content[index][position[1]] + smallStep if content[index][position[1]] + smallStep in valueRange else valueRange[0]
+                        if valueType != 'type':
+                            content[index][position[1]] = content[index][position[1]] + smallStep if content[index][position[1]] + smallStep in valueRange else valueRange[0]
+                        else:
+                            content[index][position[1]] = valueRange[valueRange.index(content[index][position[1]]) - 1 if valueRange.index(content[index][position[1]]) - 1 >= 0 else len(valueRange) - 1]
                     else:
                         self.position[1] = self.position[1] - 1 if self.position[1] > 0 else mmax
                 elif Button.DOWN in self.brick.buttons.pressed():
                     if self.position[2]:
-                        content[index][position[1]] = content[index][position[1]] - smallStep if content[index][position[1]] - smallStep in valueRange else valueRange[len(valueRange) - 1]
+                        if valueType != 'type':
+                            content[index][position[1]] = content[index][position[1]] - smallStep if content[index][position[1]] - smallStep in valueRange else valueRange[len(valueRange) - 1]
+                        else:
+                            content[index][position[1]] = valueRange[valueRange.index(content[index][position[1]]) + 1 if valueRange.index(content[index][position[1]]) + 1 < len(valueRange) else 0]
                     else:
                         self.position[1] = self.position[1] + 1 if self.position[1] < mmax else 0
                 elif Button.RIGHT in self.brick.buttons.pressed():
                     if self.position[2]:
-                        content[index][position[1]] = content[index][position[1]] + bigStep if content[index][position[1]] + bigStep in valueRange else valueRange[0]
+                        if valueType != 'type':
+                            content[index][position[1]] = content[index][position[1]] + bigStep if content[index][position[1]] + bigStep in valueRange else valueRange[0]
                 elif Button.LEFT in self.brick.buttons.pressed():
                     if self.position[2]:
-                        content[index][position[1]] = content[index][position[1]] - bigStep if content[index][position[1]] - bigStep in valueRange else valueRange[len(valueRange) - 1]
+                        if valueType != 'type':
+                            content[index][position[1]] = content[index][position[1]] - bigStep if content[index][position[1]] - bigStep in valueRange else valueRange[len(valueRange) - 1]
                 elif Button.CENTER in self.brick.buttons.pressed():
                     position[2] = not position[2]
                 formatScreenContent()
