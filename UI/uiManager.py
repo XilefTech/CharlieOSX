@@ -96,7 +96,16 @@ class UIManager:
             9: 'Distance',
             11: 'Distance',
             12: 'Color',
-            15: 'none'
+            15: 'none',
+            'units': {
+                4: '°',
+                5: 'Revs',
+                7: 'cm',
+                9: 'cm',
+                11: 'cm',
+                12: '',
+                15: ''
+            }
         }
         self.thirdParam = {
             4: 'Port',
@@ -105,7 +114,16 @@ class UIManager:
             9: 'Amount',
             11: 'Angle',
             12: 'Side',
-            15: 'none'
+            15: 'none',
+            'units': {
+                4: '',
+                5: '',
+                7: '°',
+                9: '',
+                11: '°',
+                12: '',
+                15: ''
+            }
         }
         self.valueTypes = {
             1: {
@@ -322,11 +340,12 @@ class UIManager:
                 time.sleep(0.3)
         
     def runEditing(self, position):
-        def formatScreenContent():
+        def formatScreenContent(thirdType):
             screenContent[0] = 'Type: %s' % self.types[content[index][0]]
-            screenContent[1] = 'Speed: %s' % content[index][1]
-            screenContent[2] = '%s: %s' % (self.secondParam[content[index][0]], content[index][2]) if self.secondParam[content[index][0]] != 'none' else ''
-            screenContent[3] = '%s: %s' % (self.thirdParam[content[index][0]], content[index][3]) if self.thirdParam[content[index][0]] != 'none' else ''
+            screenContent[1] = 'Speed: %s%%' % content[index][1]
+            screenContent[2] = '%s: %s%s' % (self.secondParam[content[index][0]], content[index][2], self.secondParam['units'][content[index][0]]) if self.secondParam[content[index][0]] != 'none' else ''
+            value = str(content[index][3]).replace('23', 'Left/Right').replace('2', 'Left').replace('3', 'Right') if thirdType == 'side' else content[index][3]
+            screenContent[3] = '%s: %s%s' % (self.thirdParam[content[index][0]], value, self.thirdParam['units'][content[index][0]]) if self.thirdParam[content[index][0]] != 'none' else ''
 
         smallStep = 1
         bigStep = 5
@@ -334,7 +353,7 @@ class UIManager:
         screenContent = ['', '', '', '']
         content = self.profileHelper.getProfileData(self.__config['profileNames'][position[4]])
 
-        formatScreenContent()
+        formatScreenContent(self.valueTypes[3][content[index][0]])
 
         menu = ProgrammingWindow(self.brick, 'Edit Step', 'list', screenContent)
         self.position.insert(0, False)
@@ -348,31 +367,37 @@ class UIManager:
                 valueRange = self.valueRanges[valueType]
                 if Button.UP in self.brick.buttons.pressed():
                     if self.position[2]:
-                        if valueType != 'type':
+                        if valueType not in ['type', 'side']:
                             content[index][position[1]] = content[index][position[1]] + smallStep if content[index][position[1]] + smallStep in valueRange else valueRange[0]
                         else:
-                            content[index][position[1]] = valueRange[valueRange.index(content[index][position[1]]) - 1 if valueRange.index(content[index][position[1]]) - 1 >= 0 else len(valueRange) - 1]
+                            try:
+                                content[index][position[1]] = valueRange[valueRange.index(content[index][position[1]]) - 1 if valueRange.index(content[index][position[1]]) - 1 >= 0 else len(valueRange) - 1]
+                            except ValueError:
+                                content[index][position[1]] = valueRange[0]
                     else:
                         self.position[1] = self.position[1] - 1 if self.position[1] > 0 else mmax
                 elif Button.DOWN in self.brick.buttons.pressed():
                     if self.position[2]:
-                        if valueType != 'type':
+                        if valueType not in ['type', 'side']:
                             content[index][position[1]] = content[index][position[1]] - smallStep if content[index][position[1]] - smallStep in valueRange else valueRange[len(valueRange) - 1]
                         else:
-                            content[index][position[1]] = valueRange[valueRange.index(content[index][position[1]]) + 1 if valueRange.index(content[index][position[1]]) + 1 < len(valueRange) else 0]
+                            try:
+                                content[index][position[1]] = valueRange[valueRange.index(content[index][position[1]]) + 1 if valueRange.index(content[index][position[1]]) + 1 < len(valueRange) else 0]
+                            except ValueError:
+                                content[index][position[1]] = valueRange[0]
                     else:
                         self.position[1] = self.position[1] + 1 if self.position[1] < mmax else 0
                 elif Button.RIGHT in self.brick.buttons.pressed():
                     if self.position[2]:
-                        if valueType != 'type':
+                        if valueType not in ['type', 'side']:
                             content[index][position[1]] = content[index][position[1]] + bigStep if content[index][position[1]] + bigStep in valueRange else valueRange[0]
                 elif Button.LEFT in self.brick.buttons.pressed():
                     if self.position[2]:
-                        if valueType != 'type':
+                        if valueType not in ['type', 'side']:
                             content[index][position[1]] = content[index][position[1]] - bigStep if content[index][position[1]] - bigStep in valueRange else valueRange[len(valueRange) - 1]
                 elif Button.CENTER in self.brick.buttons.pressed():
                     position[2] = not position[2]
-                formatScreenContent()
+                formatScreenContent(self.valueTypes[3][content[index][0]])
                 menu.updateContent(screenContent)
                 menu.draw(position=position)
                 if not (Button.LEFT in self.brick.buttons.pressed() and not position[2]):
