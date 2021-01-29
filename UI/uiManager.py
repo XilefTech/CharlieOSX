@@ -249,7 +249,7 @@ class UIManager:
                             self.position.insert(0, True)
                             self.position.insert(0, self.position[2])
                             self.position.insert(0, self.__settings['options'][list(self.__settings['options'].keys())[self.position[0]]])
-                    elif len(self.position[1]) != 3:
+                    elif len(self.position) != 3:
                         self.position[2] = not self.position[2]
                         self.currentMenu.getObjectByPostion(self.position).click()
                         if self.currentMenu.getType() not in ['canvas']:
