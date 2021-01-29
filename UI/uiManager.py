@@ -293,18 +293,32 @@ class UIManager:
                 elif Button.DOWN in self.brick.buttons.pressed() and not self.position[2]:
                     self.position[1] = self.position[1] + 1 if self.position[1] < self.runList.maxY else 0
                 elif Button.CENTER in self.brick.buttons.pressed():
-                    if self.position[1] != len(content) - 1:
-                        self.runList.click(self.position)
-                    else:
-                        content.pop()
-                        content.append([7, 100, 10, 0])
-                        self.runList.setList(content)
-                        self.profileHelper.setProfileData(self.__config['profileNames'][index], content)
+                    startTime = time.time()
+                    deleted = False
+                    while Button.CENTER in self.brick.buttons.pressed():
+                        if time.time() - startTime > 2 and not deleted:
+                            deleted = True
+                            content.pop()
+                            content.pop(self.position[1])
+                            self.runList.setList(content)
+                            self.runList.draw(self.position)
+                            self.brick.speaker.beep()
+                            
+                    buttonTime = time.time() - startTime
+                    if buttonTime < 2:    # edit step
+                        if self.position[1] != len(content) - 1:
+                            self.runList.click(self.position)
+                        else:
+                            content.pop()
+                            content.append([7, 100, 10, 0])
+                            self.runList.setList(content)
+                            self.profileHelper.setProfileData(self.__config['profileNames'][index], content)
+                    
                 if self.position[0] == -1:
                     self.position.pop(0)
                     self.brick.screen.draw_image(0, 0, self.menuLocations[self.position[len(self.position) - 4]], transparent=Color.RED)
+                print(self.position, content)
                 self.runList.draw(self.position)
-                print(self.position)
                 time.sleep(0.3)
         
     def runEditing(self, position):
@@ -369,9 +383,7 @@ class UIManager:
         self.position.pop(0)
         self.profileHelper.setProfileData(self.__config['profileNames'][position[4]], content)
         menu.close(position)
-        time.sleep(0.3)
-
-        
+        time.sleep(0.3)    
 
     def runTesting(self, position):
         index = position[1]
