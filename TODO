@@ -16,6 +16,7 @@ Next:
     o some extensive testing and fixing of errors
     + add on-screen output of sensor-and motor data during driving
     + Acoustic Feedback while driving
+    + add custom PID input
     + errorhandling for webremote without motors attached
 
     Logging:

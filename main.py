@@ -1,6 +1,6 @@
 #!/usr/bin/env pybricks-micropython
 
-from UI.uiManager import UIManager
+#from UI.uiManager import UIManager
 from charlieosx import CharlieOSX
 from pybricks.tools import print, StopWatch
 from pybricks.parameters import (
