@@ -32,7 +32,7 @@ class Charlie():
         self.pid = PID(Kp=0.88, Ki=0.1, Kd=0.68, setpoint=0)
         self.pid.sample_time = 0.01
         
-        self.__gyro.reset_angle(0)
+        self.__gyro.reset_angle(0) if self.__gyro != 0 else self.logger.error(self, "No gyro attached, robot movement will probably not work and you likely will receive crashs", None)
 
         self.__screenRoutine = False
         #self.showDetails()

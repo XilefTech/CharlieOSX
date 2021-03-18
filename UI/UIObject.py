@@ -6,7 +6,7 @@ from pybricks.media.ev3dev import Image, ImageFile, Font, SoundFile
 
 
 class UIObject:
-    def __init__(self, name: str, brick: EV3Brick, bounds: Box, contentType, padding, content):
+    def __init__(self, name: str, brick: EV3Brick, bounds: Box, contentType, content, padding=(0, 0, False), font=Font(family='arial', size=11), visible=True):
         # self.logger = logger
         self.name = name
         self.brick = brick
@@ -14,39 +14,48 @@ class UIObject:
         self.padding = padding
         self.contentType = contentType
         self.content = content
+        self.font = font
+        self.visibility = visible
         self.radius = 0
         self.selected = False
 
-        self.bounds.y *= self.bounds.height + self.padding[1]
+    def getName(self):
+        return self.name
+
+    def setVisibility(self, visibility: bool):
+        self.visibility = visibility
+
+    def getVisibility(self):
+        return self.visibility
 
     def update(self):
         pass
 
-    def draw(self):
+    def draw(self, selected=False):
         if self.padding[2]:
             x = self.padding[0]
             y = self.padding[1]
         else:
             x = self.bounds.x + self.padding[0]
-            y = self.bounds.x + self.padding[1]
-            
-        if self.contentType == 'img':
-            if self.selected:
-                self.radius = 5
-            else:
-                self.radius = 0
+            y = self.bounds.y + self.padding[1]
+        if self.visibility:
+            if self.contentType == 'img':
+                if self.selected:
+                    self.radius = 5
+                else:
+                    self.radius = 0
+                self.brick.screen.draw_image(x, y, self.content, transparent=Color.RED)
+            elif self.contentType == 'textBox':
+                self.brick.screen.set_font(self.font)
+                self.brick.screen.draw_box(x, y, x + self.bounds.width, y + self.bounds.height, r=2, fill=True, color=Color.WHITE)
+                self.brick.screen.draw_box(x, y, x + self.bounds.width, y + self.bounds.height, r=2, fill=False if not selected else True, color=Color.BLACK)
+                self.brick.screen.draw_text(self.bounds.x + 1, self.bounds.y + 1, self.content, text_color=Color.BLACK if not selected else Color.WHITE)
+        else:
+            if self.contentType == 'textBox':
+                self.brick.screen.draw_box(x, y, x + self.bounds.width, y + self.bounds.height, r=2, fill=True, color=Color.WHITE)
 
-            self.brick.screen.draw_image(x, y, self.content, transparent=Color.RED)
-            # self.brick.screen.draw_box(
-            #     self.bounds.x, self.bounds.y, self.bounds.width + self.padding[0], self.bounds.height+self.padding[1], r=self.radius, fill=False, color=Color.BLACK)
-            
+    def setClickAction(self, action: Function):
+        self.clickAction = action
 
-
-    def drawInfoBox(self):
-        self.brick.screen.draw_box(
-            self.bounds.width + self.padding[0] + 3, 0, self.brick.screen.width-1, self.brick.screen.height-1, r=5, fill=False, color=Color.BLACK)
-
-        self.brick.screen.set_font(Font(size=14))
-
-        self.brick.screen.draw_text(
-            self.bounds.width + 5, 0, self.name, text_color=Color.BLACK, background_color=None)
+    def click(self):
+        self.clickAction()

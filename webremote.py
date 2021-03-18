@@ -5,10 +5,11 @@ import _thread, time
 class Webremote():
     '''Main class for the Webremote'''
 
-    def __init__(self, config, robot, brick):
+    def __init__(self, config, robot, brick, logger):
         self.__config = config
         self.robot = robot
         self.brick = brick
+        self.logger = logger
         self.app = picoweb.WebApp("app")
         self.outDict = {'x': 0, 'y': 0, 'a1': 0, 'maxSpeed': 100}
         self.weblock = _thread.allocate_lock()
@@ -58,13 +59,13 @@ class Webremote():
                 yield from resp.awrite(line)
 
     def run(self):
+        self.logger.info(self, 'Starting Webremote...')
         self.startServerThread()
-
+        self.logger.info(self, 'Webremote Started!')
         while not any(self.brick.buttons.pressed()):
             if self.newDataAvailable():
                 data = self.getResponseData()
                 self.robot.setRemoteValues(data)
-                #print(data)
             time.sleep(0.05)
 
     def startServerThread(self):

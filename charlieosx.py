@@ -7,8 +7,8 @@ from pybricks.hubs import EV3Brick
 from lib.configParser import parseConfig
 from collections import OrderedDict
 from webremote import Webremote
+from UI.uiManager import UIManager
 
-#from UI.uiManager import UIManager
 
 
 class CharlieOSX:
@@ -30,6 +30,7 @@ class CharlieOSX:
     '''
 
     def __init__(self, configPath, settingsPath, logfilePath):
+        self.__settingsPath = settingsPath
         self.__settings = self.loadSettings(settingsPath)
         self.brick = EV3Brick()
         self.logger = Logger(self.__settings, logfilePath, self.brick)
@@ -37,15 +38,14 @@ class CharlieOSX:
         self.versionMan = VersionManagment(self.__settings, self.brick, self.__config, self.logger)
 
         self.robot = Charlie(self.__config, self.brick, self.logger)
-        self.webremote = Webremote(self.__config, self.robot, self.brick)
-        self.ui = UI(self.__config, self.__settings, self.brick, self.logger, settingsPath)
+        self.webremote = Webremote(self.__config, self.robot, self.brick, self.logger)
+        self.ui = UIManager(self.__config, self.__settings, self.brick, self.logger, settingsPath, self)
 
         self.applySettings(self.__settings)
+    
     # TODO
-
     def __repr__(self):
         return "TODO"
-    # TODO
 
     def __str__(self):
         return "CharlieOSX"
@@ -58,6 +58,8 @@ class CharlieOSX:
             data (dict): The Settings dict that sould be stored
             path (str): The path to the settings file
         '''
+        if path == 'default':
+            path = self.__settingsPath
         try:
             with open(path, 'w') as f:
                 f.write(json.dumps(data, sort_keys=False))
@@ -65,20 +67,6 @@ class CharlieOSX:
         except Exception as exception:
             self.logger.error(
                 self, 'Failed to store settings to %s' % path, exception)
-
-    def applySettings(self, settings):
-        '''
-        Applies the settings from the given dict to (currently only) the volume of sounds.
-        In other places, the data is often directly taken from the dict.
-
-        Args:
-            settings (dict): The Settings dict that sould be used for applying the settings
-        '''
-        self.brick.speaker.set_volume(
-            settings['options']['Audio-Volume'] * 0.9, 'Beep')
-        self.brick.speaker.set_volume(
-            settings['options']['EFX-Volume'] * 0.9, 'PCM')
-        self.logger.debug(self, 'Applied settings')
 
     def loadSettings(self, settingsPath):
         '''
@@ -113,3 +101,17 @@ class CharlieOSX:
             with open(settingsPath, 'w') as f:
                 f.write(json.dumps(settings, sort_keys=False))
             return settings
+
+    def applySettings(self, settings):
+        '''
+        Applies the settings from the given dict to (currently only) the volume of sounds.
+        In other places, the data is often directly taken from the dict.
+
+        Args:
+            settings (dict): The Settings dict that sould be used for applying the settings
+        '''
+        self.brick.speaker.set_volume(
+            settings['options']['Audio-Volume'] * 0.9, 'Beep')
+        self.brick.speaker.set_volume(
+            settings['options']['EFX-Volume'] * 0.9, 'PCM')
+        self.logger.debug(self, 'Applied settings')
