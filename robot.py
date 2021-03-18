@@ -28,8 +28,8 @@ class Charlie():
         self.__initSensors()
         self.__initMotors()
 
-        self.min_speed = 35 # lage motor 20, medium motor 30
-        self.pid = PID(Kp=0.8, Ki=0.1, Kd=0.65, setpoint=0)
+        self.min_speed = 54 # lage motor 20, medium motor 40
+        self.pid = PID(Kp=0.88, Ki=0.1, Kd=0.68, setpoint=0)
         self.pid.sample_time = 0.01
         
         self.__gyro.reset_angle(0)
@@ -233,7 +233,7 @@ class Charlie():
                     self.turnLeftMotor(speed)
                     # slow down to not overshoot
                     if not self.__gyro.angle() - startValue < deg * 0.6:
-                        speed = speed - self._map(deg, 1, 360, 10, 0.1) if speed > self.min_speed else self.min_speed
+                        speed = speed - self._map(deg, 1, 360, 10, 0.1) if speed > self.min_speed else self.min_speed 
 
                     #cancel if button pressed
                     if any(self.brick.buttons.pressed()):
@@ -277,7 +277,7 @@ class Charlie():
 
         # turn with both motors
         elif port == 23:
-            dualMotorbonus = 19
+            dualMotorbonus = 10
             speed = speed * 2
             # turn the angle
             if deg > 0:
@@ -371,7 +371,7 @@ class Charlie():
 
         # turn with both motors
         elif port == 23:
-            dualMotorbonus = 19
+            dualMotorbonus = 7
             speed = speed * 2
             # turn the angle
             if deg > 0:
@@ -448,22 +448,26 @@ class Charlie():
                     time.sleep(0.05)
             else:
                 while revs < motor.angle() / 360:
-                    # if not driving staright correct it
-                    if self.__gyro.angle() - startValue < 0:
-                        rSpeed = speed + abs(self.__gyro.angle() - startValue) * correctionStrength
-                        lSpeed = speed
-                    elif self.__gyro.angle() - startValue > 0:
-                        lSpeed = speed + abs(self.__gyro.angle() - startValue) * correctionStrength
-                        rSpeed = speed
-                    else:
-                        lSpeed = speed
-                        rSpeed = speed
+                    pidValue = int(self.pid(self.__gyro.angle()) * 0.125)
+                    print("\t \t".join(map(str, [pidValue, self.__gyro.angle(), steer, lSpeed, rSpeed])))
+                    #if not driving staright correct it
+                    # if pidValue < 0:
+                    #     lSpeed = lSpeed - abs(pidValue) if lSpeed > 0 else 0
+                    #     rSpeed = rSpeed + abs(pidValue) * 2 if rSpeed < speed else speed
+                    # elif pidValue > 0:
+                    #     rSpeed = rSpeed - abs(pidValue) if rSpeed > 0 else 0
+                    #     lSpeed = lSpeed + abs(pidValue) * 2 if lSpeed < speed else speed
+                    steer += pidValue
+                    lSpeed = speed - steer if steer > 0 else speed
+                    rSpeed = speed + steer if steer < 0 else speed
 
-                    self.turnLeftMotor(-abs(lSpeed))
-                    self.turnRightMotor(-abs(rSpeed))
-                    # cancel if button pressed
+                    self.turnLeftMotor(-lSpeed if lSpeed > 0 else 0)
+                    self.turnRightMotor(-rSpeed if rSpeed > 0 else 0)
+                    
+                    #cancel if button pressed
                     if any(self.brick.buttons.pressed()):
                         return
+                    time.sleep(0.05)
 
         else:
             self.__fRMotor.reset_angle(0)
@@ -725,21 +729,23 @@ class Charlie():
         else:
             # turn motor 1
             if port == 1:
-                ang = self.__aMotor1.angle()
+                ang = self.__aMotor1.angle() + 5
                 self.__aMotor1.run_angle(speed, revs * 360, Stop.HOLD, False)
                 if revs > 0:
                     while self.__aMotor1.angle() < revs * 360 - ang:
                         if any(self.brick.buttons.pressed()):
                             self.__aMotor1.dc(0)
                             return
+                    self.__aMotor1.brake()
                 else:
                     while self.__aMotor1.angle() > revs * 360 + ang:
                         if any(self.brick.buttons.pressed()):
                             self.__aMotor1.dc(0)
                             return
+                    self.__aMotor1.brake()
             # turm motor 2
             elif port == 2:
-                ang = self.__aMotor2.angle()
+                ang = self.__aMotor2.angle() + 5
                 self.__aMotor2.run_angle(speed, revs * 360, Stop.HOLD, False)
                 if revs > 0:
                     while self.__aMotor2.angle() < revs * 360 - ang:
@@ -860,3 +866,6 @@ class Charlie():
             a1Speed = data['a1']
             self.__aMotor1.dc(a1Speed)
 
+
+    def getActionMotor(self):
+        return self.__aMotor1
