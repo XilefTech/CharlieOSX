@@ -69,7 +69,7 @@ class Menu():
                 offset = selector[1] - 2
 
             self.drawScrollBar(len(self.llist), selector[1])
-            for i in range(5):
+            for i in range(5) if len(self.llist) >= 5 else range(len(self.llist)):
                 if offset + i == selector[1]:
                     if selector[2]:
                         self.brick.screen.draw_box(26, 29 + i * 20, 168, 46 + i * 20, r=3, fill=True, color=Color.BLACK)
