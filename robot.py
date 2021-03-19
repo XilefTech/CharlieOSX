@@ -187,6 +187,7 @@ class Charlie():
             3: self.absTurn,
             4: self.turn,
             5: self.action,
+            6: self.asyncActionTime,
             7: self.straight,
             9: self.intervall,
             11: self.curve,
@@ -759,6 +760,23 @@ class Charlie():
                         if any(self.brick.buttons.pressed()):
                             self.__aMotor2.dc(0)
                             return
+
+    def asyncActionTime(self, speed, time, port):
+        '''
+        Doesn't drive the robot, but drives one of the action motors. In difference to action(), this method just starts the motors for the given time and then returns to run other code simountaneously
+
+        Args:
+            speed (int): the speed to turn the motor at
+            revs (int): how long to turn the motor for
+            port (int): which one of the motors should be used
+        '''
+        speed = abs(speed) * 1.7 * 6  # speed to deg/s from %
+        # turn motor 1
+        if port == 1:
+            self.__aMotor1.run_time(speed, time * 1000, Stop.HOLD, True)
+        # turm motor 2
+        elif port == 2:
+            self.__aMotor2.run_time(speed, time * 1000, Stop.HOLD, True)
 
     def turnLeftMotor(self, speed):
         '''
