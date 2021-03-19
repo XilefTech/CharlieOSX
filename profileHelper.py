@@ -40,7 +40,7 @@ class ProfileHelper():
                 with open('%s.dat' % k, 'r') as dat:
                     for line in dat:
                         l = line.split(', ')
-                        intList = [int(s) for s in l]
+                        intList = [float(s) for s in l]
                         self._data[k].append(intList)
             self.logger.info(self, 'Loaded profiles sucessfully')
         except Exception as exception:
