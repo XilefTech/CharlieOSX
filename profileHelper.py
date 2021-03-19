@@ -85,7 +85,7 @@ class ProfileHelper():
         try:
             x = deepcopy(self._data[profile])
             return x
-        except KeyError as excpetion:
+        except KeyError as exception:
             self.logger.warn(self, 'Couldn\'t get profile data for %s: No such profile in data' % str(exception))
     
     def setProfileData(self, profile, data):
