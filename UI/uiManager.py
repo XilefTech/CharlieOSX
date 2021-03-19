@@ -81,6 +81,7 @@ class UIManager:
             self.settingsMenu
         ]
         self.types = {
+            3: 'AbsTurn',
             4: 'Turn',
             5: 'Action' if not self.__config['useGearing'] else 'Gearing',
             7: 'Straight',
@@ -90,6 +91,7 @@ class UIManager:
             15: 'to Wall'
         }
         self.secondParam = {
+            3: 'Angle',
             4: 'Angle',
             5: 'Revs',
             7: 'Distance',
@@ -98,6 +100,7 @@ class UIManager:
             12: 'Color',
             15: 'none',
             'units': {
+                3: '°',
                 4: '°',
                 5: 'Revs',
                 7: 'cm',
@@ -108,6 +111,7 @@ class UIManager:
             }
         }
         self.thirdParam = {
+            3: 'Port',
             4: 'Port',
             5: 'Port',
             7: 'none' if self.__config['robotType'] != 'MECANUM' else 'Angle',
@@ -116,6 +120,7 @@ class UIManager:
             12: 'Side',
             15: 'none',
             'units': {
+                3: '',
                 4: '',
                 5: '',
                 7: '°',
@@ -127,6 +132,7 @@ class UIManager:
         }
         self.valueTypes = {
             1: {
+                3: 'percentage',
                 4: 'percentage',
                 5: 'percentage',
                 7: 'percentage',
@@ -136,6 +142,7 @@ class UIManager:
                 15: 'percentage'
             },
             2: {
+                3: 'largeInt',
                 4: 'largeInt',
                 5: 'largeInt',
                 7: 'largeInt',
@@ -145,6 +152,7 @@ class UIManager:
                 15: 'none'
             },
             3: {
+                3: 'side',
                 4: 'side',
                 5: 'port',
                 7: 'none',
