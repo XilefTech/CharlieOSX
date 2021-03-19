@@ -81,6 +81,7 @@ class UIManager:
             self.settingsMenu
         ]
         self.types = {
+            0: 'Brake Motors',
             3: 'AbsTurn',
             4: 'Turn',
             5: 'Action' if not self.__config['useGearing'] else 'Gearing',
@@ -91,6 +92,7 @@ class UIManager:
             15: 'to Wall'
         }
         self.secondParam = {
+            0: 'none',
             3: 'Angle',
             4: 'Angle',
             5: 'Revs',
@@ -100,6 +102,7 @@ class UIManager:
             12: 'Color',
             15: 'none',
             'units': {
+                0: '',
                 3: '°',
                 4: '°',
                 5: 'Revs',
@@ -111,6 +114,7 @@ class UIManager:
             }
         }
         self.thirdParam = {
+            0: 'none',
             3: 'Port',
             4: 'Port',
             5: 'Port',
@@ -120,6 +124,7 @@ class UIManager:
             12: 'Side',
             15: 'none',
             'units': {
+                0: '',
                 3: '',
                 4: '',
                 5: '',
@@ -132,6 +137,7 @@ class UIManager:
         }
         self.valueTypes = {
             1: {
+                0: 'none',
                 3: 'percentage',
                 4: 'percentage',
                 5: 'percentage',
@@ -142,6 +148,7 @@ class UIManager:
                 15: 'percentage'
             },
             2: {
+                0: 'none',
                 3: 'largeInt',
                 4: 'largeInt',
                 5: 'largeInt',
@@ -152,6 +159,7 @@ class UIManager:
                 15: 'none'
             },
             3: {
+                0: 'none',
                 3: 'side',
                 4: 'side',
                 5: 'port',
@@ -164,7 +172,7 @@ class UIManager:
         }
         self.valueRanges = {
             'percentage': range(0, 101),
-            'type': [7, 4, 5, 11, 9, 12, 15],
+            'type': [7, 3, 0, 4, 5, 11, 9, 12, 15],
             'largeInt': range(-10000, 10000),
             'side': [2, 3, 23],
             'bool': [0, 1],

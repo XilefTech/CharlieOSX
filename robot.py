@@ -182,6 +182,7 @@ class Charlie():
             return
 
         methods = {
+            0: self.stopMotors,
             3: self.absTurn,
             4: self.turn,
             5: self.action,
@@ -813,6 +814,9 @@ class Charlie():
             self.__fLMotor.hold()
             self.__bLMotor.hold()
         time.sleep(0.2)
+
+    def stopMotors(self, null1, null2, null3):
+        self.breakMotors()
 
     def _map(self, x, in_min, in_max, out_min, out_max):
         '''
