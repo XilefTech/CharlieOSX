@@ -183,6 +183,7 @@ class Charlie():
 
         methods = {
             0: self.stopMotors,
+            1: self.wait,
             3: self.absTurn,
             4: self.turn,
             5: self.action,
@@ -818,6 +819,9 @@ class Charlie():
     def stopMotors(self, null1, null2, null3):
         self.breakMotors()
 
+    def wait(self, null1, sleepTime, null2):
+        time.sleep(sleepTime)
+
     def _map(self, x, in_min, in_max, out_min, out_max):
         '''
         Converts a given number in the range of two numbers to a number in the range of two other numbers
@@ -869,7 +873,6 @@ class Charlie():
         else:
             a1Speed = data['a1']
             self.__aMotor1.dc(a1Speed)
-
 
     def getActionMotor(self):
         return self.__aMotor1

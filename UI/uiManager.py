@@ -82,6 +82,7 @@ class UIManager:
         ]
         self.types = {
             0: 'Brake Motors',
+            1: 'Wait',
             3: 'AbsTurn',
             4: 'Turn',
             5: 'Action' if not self.__config['useGearing'] else 'Gearing',
@@ -93,6 +94,7 @@ class UIManager:
         }
         self.secondParam = {
             0: 'none',
+            1: 'Time',
             3: 'Angle',
             4: 'Angle',
             5: 'Revs',
@@ -103,6 +105,7 @@ class UIManager:
             15: 'none',
             'units': {
                 0: '',
+                1: 's',
                 3: '°',
                 4: '°',
                 5: 'Revs',
@@ -115,6 +118,7 @@ class UIManager:
         }
         self.thirdParam = {
             0: 'none',
+            1: 'none',
             3: 'Port',
             4: 'Port',
             5: 'Port',
@@ -125,6 +129,7 @@ class UIManager:
             15: 'none',
             'units': {
                 0: '',
+                1: '',
                 3: '',
                 4: '',
                 5: '',
@@ -138,6 +143,7 @@ class UIManager:
         self.valueTypes = {
             1: {
                 0: 'none',
+                0: 'none',
                 3: 'percentage',
                 4: 'percentage',
                 5: 'percentage',
@@ -149,6 +155,7 @@ class UIManager:
             },
             2: {
                 0: 'none',
+                0: 'percentage',
                 3: 'largeInt',
                 4: 'largeInt',
                 5: 'largeInt',
@@ -159,6 +166,7 @@ class UIManager:
                 15: 'none'
             },
             3: {
+                0: 'none',
                 0: 'none',
                 3: 'side',
                 4: 'side',
