@@ -3,7 +3,7 @@ I'm still far away from a final version. If you should experience any issues or 
 
 # CharlieOSX
 *By XilefTech from the "Lego Spirits"*
-- *Already won a first place in Robotdesign @ FLL*
+- *Already won a first place in Robotdesign @ FLL 2020/2021 RePLAY*
 
 ![Image of the Main Menu](https://i.pinimg.com/474x/38/bf/b9/38bfb9bd54bc9f610f0fcf08225d95ac.jpg)
 
