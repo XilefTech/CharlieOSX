@@ -228,8 +228,7 @@ class Charlie():
         self.__screenRoutine = True
         while params != [] and not any(self.brick.buttons.pressed()):
             pparams = params.pop(0)
-            mode, arg1, arg2, arg3 = pparams.pop(0), pparams.pop(
-                0), pparams.pop(0), pparams.pop(0)
+            # print(pparams)
 
             methods[mode](arg1, arg2, arg3)
 
@@ -458,7 +457,7 @@ class Charlie():
             if revs > 0:
                 while revs > (motor.angle() / 360):
                     pidValue = int(self.pid(self.__gyro.angle()) * 0.125)
-                    print("\t \t".join(map(str, [pidValue, self.__gyro.angle(), steer, lSpeed, rSpeed])))
+                    #print("\t \t".join(map(str, [pidValue, self.__gyro.angle(), steer, lSpeed, rSpeed])))
                     #if not driving staright correct it
                     # if pidValue < 0:
                     #     lSpeed = lSpeed - abs(pidValue) if lSpeed > 0 else 0
@@ -480,7 +479,7 @@ class Charlie():
             else:
                 while revs < motor.angle() / 360:
                     pidValue = int(self.pid(self.__gyro.angle()) * 0.125)
-                    print("\t \t".join(map(str, [pidValue, self.__gyro.angle(), steer, lSpeed, rSpeed])))
+                    # print("\t \t".join(map(str, [pidValue, self.__gyro.angle(), steer, lSpeed, rSpeed])))
                     #if not driving staright correct it
                     # if pidValue < 0:
                     #     lSpeed = lSpeed - abs(pidValue) if lSpeed > 0 else 0
