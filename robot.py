@@ -771,15 +771,22 @@ class Charlie():
         else:
             # turn motor 1
             if port == 1:
-                ang = self.__aMotor1.angle() + 5
+                ang = self.__aMotor1.angle()
+                # print(ang, revs * 360)
                 self.__aMotor1.run_angle(speed, revs * 360, Stop.HOLD, False)
                 if revs > 0:
-                    while self.__aMotor1.angle() < revs * 360 - ang:
+                    ang -= 6
+                    while self.__aMotor1.angle() < revs * 360 + ang:
+                        print(self.__aMotor1.angle(), revs * 360 + ang, ang, revs)
                         if any(self.brick.buttons.pressed()):
+                            #print('button pressed?')
                             self.__aMotor1.dc(0)
                             return
+                    
+                    print(self.__aMotor1.angle(), revs * 360 + ang, 'here')
                     self.__aMotor1.brake()
                 else:
+                    ang += 6
                     while self.__aMotor1.angle() > revs * 360 + ang:
                         if any(self.brick.buttons.pressed()):
                             self.__aMotor1.dc(0)
