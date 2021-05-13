@@ -193,7 +193,8 @@ class Charlie():
 
         if self.brick.battery.voltage() <= 7600:
             if(self.__config["ignoreBatteryWarning"] == True):
-                self.logger.warn("Please charge the battery. Only %sV left. We recommend least 7.6 Volts for accurate and repeatable results. ignoreBatteryWarning IS SET TO True, THIS WILL BE IGNORED!!!" % self.brick.battery.voltage() * 0.001)
+                # self.logger.warn("Please charge the battery. Only %sV left. We recommend least 7.6 Volts for accurate and repeatable results. ignoreBatteryWarning IS SET TO True, THIS WILL BE IGNORED!!!" % self.brick.battery.voltage() * 0.001)
+                pass
             else:
                 # self.logger.warn("Please charge the battery. Only %sV left. We recommend least 7.6 Volts for accurate and repeatable results." %
                 #              (float(self.brick.battery.voltage()) * 0.001))
