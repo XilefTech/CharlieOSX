@@ -861,8 +861,9 @@ class Charlie():
             self.__fLMotor.dc(speed)
             self.__bLMotor.dc(speed)
 
-    def breakMotors(self):
+    def breakMotors(self, coast=False):
         '''Sub-method for breaking all the motors'''
+        if not coast:
         if self.__config['robotType'] == 'NORMAL':
             self.__lMotor.hold()
             self.__rMotor.hold()
@@ -872,6 +873,20 @@ class Charlie():
             self.__fLMotor.hold()
             self.__bLMotor.hold()
         time.sleep(0.2)
+        else:
+            if self.__config['robotType'] == 'NORMAL':
+                self.__lMotor.stop()
+                self.__rMotor.stop()
+            else:
+                self.__fRMotor.stop()
+                self.__bRMotor.stop()
+                self.__fLMotor.stop()
+                self.__bLMotor.stop()
+
+            if self.__aMotor1:
+                self.__aMotor1.stop()
+            if self.__aMotor2:
+                self.__aMotor2.stop()
 
     def stopMotors(self, null1, null2, null3):
         self.breakMotors()
