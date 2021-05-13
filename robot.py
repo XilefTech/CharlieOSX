@@ -48,6 +48,27 @@ class Charlie():
     def __str__(self):
         return "Charlie"   
 
+    def setPidDefaults(self, **args):
+        self.pid.Kp = 0.88
+        self.pid.Kd = 0.68
+        self.pid.Ki = 0.1
+
+    def setPids(self, Kp, Kd, Ki):
+        self.pid.Kp = Kp
+        self.pid.Kd = Kd
+        self.pid.Ki = Ki
+
+    def setMinDefaults(self, **args):
+        self.min_speed = 50
+
+    def setMins(self, speed, null1, null2):
+        self.min_speed = speed
+
+    def setPids(self, Kp, Kd, Ki):
+        self.pid.Kp = Kp
+        self.pid.Kd = Kd
+        self.pid.Ki = Ki
+
     def __initSensors(self):
         '''Sub-method for initializing Sensors.'''
         self.logger.debug(self, "Starting sensor initialisation...")
@@ -192,7 +213,11 @@ class Charlie():
             9: self.intervall,
             11: self.curve,
             12: self.toColor,
-            15: self.toWall
+            15: self.toWall,
+            96: self.setMins,
+            97: self.setMinDefaults,
+            98: self.setPids,
+            99: self.setPidDefaults
         }
 
         self.__gyro.reset_angle(0)
@@ -211,6 +236,7 @@ class Charlie():
             self.__gearingPortMotor.run_target(300, 0, Stop.HOLD, True)  # reset gearing
 
         time.sleep(0.3)
+        self.setPidDefaults()
         self.__screenRoutine = False
 
     def turn(self, speed, deg, port):
