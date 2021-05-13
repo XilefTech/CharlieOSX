@@ -211,6 +211,7 @@ class Charlie():
             5: self.action,
             6: self.asyncActionTime,
             7: self.straight,
+            8: self.straightPureAsyncTime,
             9: self.intervall,
             11: self.curve,
             12: self.toColor,
@@ -554,6 +555,18 @@ class Charlie():
                 self.__bRMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
                 self.__fLMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
                 self.__bLMotor.run_angle(speed, revs * -360, Stop.COAST, True)
+
+    def straightPureAsyncTime(self, speed, ttime, sync):
+        speed = speed * 1.7 * 6  # speed to deg/s from %
+
+        if self.__config['robotType'] == 'NORMAL':
+            self.__lMotor.run_time(speed, ttime * 1000, then=Stop.COAST, wait=False)
+            self.__rMotor.run_time(speed, ttime * 1000, then=Stop.COAST, wait=sync)
+        else:
+            self.__fLMotor.run_time(speed, ttime * 1000, then=Stop.COAST, wait=False)
+            self.__bLMotor.run_time(speed, ttime * 1000, then=Stop.COAST, wait=False)
+            self.__fRMotor.run_time(speed, ttime * 1000, then=Stop.COAST, wait=False)
+            self.__bRMotor.run_time(speed, ttime * 1000, then=Stop.COAST, wait=sync)
 
     def intervall(self, speed, dist, count):
         '''
