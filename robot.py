@@ -891,6 +891,14 @@ class Charlie():
     def stopMotors(self, null1, null2, null3):
         self.breakMotors()
 
+        if self.__config['useGearing']:
+            pass
+        else:
+            if self.__aMotor1:
+                self.__aMotor1.hold()
+            if self.__aMotor2:
+                self.__aMotor2.hold()
+
     def wait(self, null1, sleepTime, null2):
         time.sleep(sleepTime)
 
