@@ -809,13 +809,13 @@ class Charlie():
             revs (int): how long to turn the motor for
             port (int): which one of the motors should be used
         '''
-        speed = abs(speed) * 1.7 * 6  # speed to deg/s from %
+        speed = speed * 1.7 * 6  # speed to deg/s from %
         # turn motor 1
         if port == 1:
-            self.__aMotor1.run_time(speed, time * 1000, Stop.HOLD, True)
+            self.__aMotor1.run_time(speed, time * 1000, then=Stop.COAST, wait=False)
         # turm motor 2
         elif port == 2:
-            self.__aMotor2.run_time(speed, time * 1000, Stop.HOLD, True)
+            self.__aMotor2.run_time(speed, time * 1000, Stop.COAST, False)
 
     def turnLeftMotor(self, speed):
         '''
