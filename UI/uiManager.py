@@ -444,6 +444,7 @@ class UIManager:
 
     def runTesting(self, position):
         index = position[1]
+        self.profileHelper.loadProfiles()
         profileData = self.profileHelper.getProfileData(self.__config['profileNames'][index])
         time.sleep(0.3)
         self.os.robot.execute(profileData)
