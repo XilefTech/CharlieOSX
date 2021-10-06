@@ -93,3 +93,8 @@ body,
   border-width: 10px;
   border-color: #3333ff;
 }
+
+.connAlert{
+  color: red;
+  font-size: larger;
+}

@@ -157,6 +157,20 @@ function httpGet(theUrl, ignoreTimeout) {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", theUrl, true); // false for synchronous request
     xmlHttp.send(null);
+    xmlHttp.onload = function() {
+      let responseObj = xmlHttp.response;
+      console.warn(xmlHttp.status)
+      if(xmlHttp.status != "200"){
+        setTimeout(function(){
+          document.getElementById("connAlert").style.visibility = "block"
+        }, 200)
+        
+        console.log("!!!!!!!")
+      }else{
+        document.getElementById("connAlert").style.visibility = "hidden"
+        console.log("???????????")
+      }
+    };
     oldTime = time.getTime();
     return xmlHttp.responseText;
   }
