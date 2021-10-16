@@ -124,7 +124,7 @@ class Logger:
             self.__brick.screen.draw_image(26, 24, 'assets/graphics/notifications/warn.png', transparent = Color.RED)
             self.__brick.screen.draw_text(31, 34, msg, text_color = Color.BLACK)
 
-            if Font.text_width(Font(family = 'arial', size = 7), exception) <= 90:
+            if Font.text_width(Font(family = 'arial', size = 7), msg) <= 90:
                 self.__brick.screen.draw_text(32, 47, msg, text_color = Color.BLACK)
             elif len(exception) <= 30 * 2:
                 msg1, msg2 = msg[:27], msg[27:]

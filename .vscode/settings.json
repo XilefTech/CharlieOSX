@@ -3,5 +3,5 @@
 	"files.eol": "\n",
 	"debug.openDebug": "neverOpen",
 	"python.linting.enabled": false,
-	"ev3devBrowser.download.exclude": "{*.md,TODO,LICENSE,.github/*,.vscode/*,.gitignore,assets/*}"
+	"ev3devBrowser.download.exclude": "{*.md,TODO,LICENSE,.github/*,.vscode/*,.gitignore,.venv/*,assets/*}"
 }

@@ -4,6 +4,7 @@ Next:
     + add content to the main menu and 'unopened' sub-menu pages
     + add functionality to the side buttons during competition mode for action motor turning
     + replace array in step preview with string containing main information
+    + add float input for wait
 
     Robot:
     + add config entry for motor type

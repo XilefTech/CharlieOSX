@@ -40,7 +40,7 @@ class ProfileHelper():
                 with open('%s.dat' % k, 'r') as dat:
                     for line in dat:
                         l = line.split(', ')
-                        intList = [int(s) for s in l]
+                        intList = [float(s) for s in l]
                         self._data[k].append(intList)
             self.logger.info(self, 'Loaded profiles sucessfully')
         except Exception as exception:
@@ -85,7 +85,7 @@ class ProfileHelper():
         try:
             x = deepcopy(self._data[profile])
             return x
-        except KeyError as excpetion:
+        except KeyError as exception:
             self.logger.warn(self, 'Couldn\'t get profile data for %s: No such profile in data' % str(exception))
     
     def setProfileData(self, profile, data):

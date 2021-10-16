@@ -81,8 +81,12 @@ class UIManager:
             self.settingsMenu
         ]
         self.types = {
+            0: 'Brake Motors',
+            1: 'Wait',
+            3: 'AbsTurn',
             4: 'Turn',
             5: 'Action' if not self.__config['useGearing'] else 'Gearing',
+            6: 'Async Action',
             7: 'Straight',
             9: 'Intervall',
             11: 'Curve',
@@ -90,16 +94,24 @@ class UIManager:
             15: 'to Wall'
         }
         self.secondParam = {
+            0: 'none',
+            1: 'Time',
+            3: 'Angle',
             4: 'Angle',
             5: 'Revs',
+            6: 'Time',
             7: 'Distance',
             9: 'Distance',
             11: 'Distance',
             12: 'Color',
             15: 'none',
             'units': {
+                0: '',
+                1: 's',
+                3: '°',
                 4: '°',
                 5: 'Revs',
+                6: 's',
                 7: 'cm',
                 9: 'cm',
                 11: 'cm',
@@ -108,16 +120,24 @@ class UIManager:
             }
         }
         self.thirdParam = {
+            0: 'none',
+            1: 'none',
+            3: 'Port',
             4: 'Port',
             5: 'Port',
+            6: 'Port',
             7: 'none' if self.__config['robotType'] != 'MECANUM' else 'Angle',
             9: 'Amount',
             11: 'Angle',
             12: 'Side',
             15: 'none',
             'units': {
+                0: '',
+                1: '',
+                3: '',
                 4: '',
                 5: '',
+                6: '',
                 7: '°',
                 9: '',
                 11: '°',
@@ -127,8 +147,12 @@ class UIManager:
         }
         self.valueTypes = {
             1: {
+                0: 'none',
+                0: 'none',
+                3: 'percentage',
                 4: 'percentage',
                 5: 'percentage',
+                6: 'percentage',
                 7: 'percentage',
                 9: 'percentage',
                 11: 'percentage',
@@ -136,8 +160,12 @@ class UIManager:
                 15: 'percentage'
             },
             2: {
+                0: 'none',
+                0: 'percentage',
+                3: 'largeInt',
                 4: 'largeInt',
                 5: 'largeInt',
+                5: 'percentage',
                 7: 'largeInt',
                 9: 'largeInt',
                 11: 'largeInt',
@@ -145,7 +173,11 @@ class UIManager:
                 15: 'none'
             },
             3: {
+                0: 'none',
+                0: 'none',
+                3: 'side',
                 4: 'side',
+                5: 'port',
                 5: 'port',
                 7: 'none',
                 9: 'largeInt',
@@ -156,8 +188,8 @@ class UIManager:
         }
         self.valueRanges = {
             'percentage': range(0, 101),
-            'type': [7, 4, 5, 11, 9, 12, 15],
-            'largeInt': range(0, 10000),
+            'type': [7, 3, 0, 4, 5, 11, 9, 12, 15],
+            'largeInt': range(-10000, 10000),
             'side': [2, 3, 23],
             'bool': [0, 1],
             'port': range(0, 4),
@@ -412,6 +444,7 @@ class UIManager:
 
     def runTesting(self, position):
         index = position[1]
+        self.profileHelper.loadProfiles()
         profileData = self.profileHelper.getProfileData(self.__config['profileNames'][index])
         time.sleep(0.3)
         self.os.robot.execute(profileData)
