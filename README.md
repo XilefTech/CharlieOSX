@@ -45,7 +45,7 @@ If you then just want to start the Menu-Interface on the brick and use it, you h
 ```Python
 CharlieOSX.ui.mainLoop()
 ```
-Alternatively, if you want to write your own code inbetween lines and don't need the UI, you can use the drivin methods directly:
+Alternatively, if you want to write your own code inbetween lines and don't need the UI, you can use the driving methods directly:
 ```Python
 CharlieOSX.robot.straight(100, 20, 0) # drives in a straight line 20cm with 100% speed
 CharlieOSX.robot.turn(75, 90, 23)  # turns 90 deg using both motors with 75% speed
