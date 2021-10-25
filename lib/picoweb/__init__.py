@@ -305,7 +305,7 @@ class WebApp:
 
     def run(self, host="127.0.0.1", port=8081, debug=False, lazy_init=False, log=None):
         if log is None and debug >= 0:
-            import ulogging
+            import lib.ulogging as ulogging
             log = ulogging.getLogger("picoweb")
             if debug > 0:
                 log.setLevel(ulogging.DEBUG)
