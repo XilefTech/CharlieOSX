@@ -48,7 +48,8 @@ class LineFollower():
                     for line in file:
                         yield from resp.awrite(line)
                 
-                self.run_distance(int(speed), int(dist))
+                self.pid.tunings = (Kp, Ki, Kd)
+                self.run_distance(speed, dist)
 
 
     def run(self, speed, displayDebug=False):
