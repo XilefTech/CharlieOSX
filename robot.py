@@ -265,7 +265,7 @@ class Charlie():
                     self.turnLeftMotor(speed)
                     # slow down to not overshoot
                     if not self.__gyro.angle() - startValue < deg * 0.6:
-                        speed = speed - self._map(deg, 1, 360, 10, 0.1) if speed > self.min_speed else self.min_speed 
+                        speed = speed - self.map(deg, 1, 360, 10, 0.1) if speed > self.min_speed else self.min_speed 
 
                     #cancel if button pressed
                     if any(self.brick.buttons.pressed()):
@@ -275,7 +275,7 @@ class Charlie():
                     self.turnLeftMotor(-speed)
                     # slow down to not overshoot
                     if not self.__gyro.angle() - startValue > deg * 0.6:
-                        speed = speed - self._map(deg, 1, 360, 10, 0.1) if speed > self.min_speed else self.min_speed
+                        speed = speed - self.map(deg, 1, 360, 10, 0.1) if speed > self.min_speed else self.min_speed
                         
                     #cancel if button pressed
                     if any(self.brick.buttons.pressed()):
@@ -291,7 +291,7 @@ class Charlie():
                     self.turnRightMotor(-speed)
                     # slow down to not overshoot
                     if not self.__gyro.angle() - startValue < deg * 0.6:
-                        speed = speed - self._map(deg, 1, 360, 10, 0.1) if speed > self.min_speed else self.min_speed 
+                        speed = speed - self.map(deg, 1, 360, 10, 0.1) if speed > self.min_speed else self.min_speed 
 
                     #cancel if button pressed
                     if any(self.brick.buttons.pressed()):
@@ -301,7 +301,7 @@ class Charlie():
                     self.turnRightMotor(speed)
                     # slow down to not overshoot
                     if not self.__gyro.angle() - startValue > deg * 0.6:
-                        speed = speed - self._map(deg, 1, 360, 10, 0.1) if speed > self.min_speed else self.min_speed + 5
+                        speed = speed - self.map(deg, 1, 360, 10, 0.1) if speed > self.min_speed else self.min_speed + 5
                     
                     #cancel if button pressed
                     if any(self.brick.buttons.pressed()):
@@ -318,7 +318,7 @@ class Charlie():
                     self.turnRightMotor(-speed / 2)
                     # slow down to not overshoot
                     if not self.__gyro.angle() - startValue < deg * 0.6:
-                        speed = speed - self._map(deg, 1, 360, 10, 0.01) if speed - self._map(deg, 1, 360, 10, 0.01) > self.min_speed * 2 - dualMotorbonus else self.min_speed * 2 - dualMotorbonus
+                        speed = speed - self.map(deg, 1, 360, 10, 0.01) if speed - self.map(deg, 1, 360, 10, 0.01) > self.min_speed * 2 - dualMotorbonus else self.min_speed * 2 - dualMotorbonus
 
                     # cancel if button pressed
                     if any(self.brick.buttons.pressed()):
@@ -330,7 +330,7 @@ class Charlie():
                     self.turnRightMotor(speed / 2)
                     # slow down to not overshoot
                     if not self.__gyro.angle() - startValue > deg * 0.6:
-                        speed = speed - self._map(deg, 1, 360, 10, 0.01) if speed - self._map(deg, 1, 360, 10, 0.01) > self.min_speed * 2 - dualMotorbonus else self.min_speed * 2 - dualMotorbonus
+                        speed = speed - self.map(deg, 1, 360, 10, 0.01) if speed - self.map(deg, 1, 360, 10, 0.01) > self.min_speed * 2 - dualMotorbonus else self.min_speed * 2 - dualMotorbonus
 
                     # cancel if button pressed
                     if any(self.brick.buttons.pressed()):
@@ -359,7 +359,7 @@ class Charlie():
                     self.turnLeftMotor(speed)
                     # slow down to not overshoot
                     if not self.__gyro.angle() < deg * 0.6:
-                        speed = speed - self._map(deg, 1, 360, 10, 0.1) if speed > self.min_speed else self.min_speed
+                        speed = speed - self.map(deg, 1, 360, 10, 0.1) if speed > self.min_speed else self.min_speed
 
                     #cancel if button pressed
                     if any(self.brick.buttons.pressed()):
@@ -369,7 +369,7 @@ class Charlie():
                     self.turnLeftMotor(-speed)
                     # slow down to not overshoot
                     if not self.__gyro.angle() > deg * 0.6:
-                        speed = speed - self._map(deg, 1, 360, 10, 0.1) if speed > self.min_speed else self.min_speed
+                        speed = speed - self.map(deg, 1, 360, 10, 0.1) if speed > self.min_speed else self.min_speed
                         
                     #cancel if button pressed
                     if any(self.brick.buttons.pressed()):
@@ -387,7 +387,7 @@ class Charlie():
                         self.turnRightMotor(-speed)
                         # slow down to not overshoot
                         if not self.__gyro.angle() < deg * 0.6:
-                            speed = speed - self._map(deg, 1, 360, 10, 0.1) if speed > self.min_speed else self.min_speed 
+                            speed = speed - self.map(deg, 1, 360, 10, 0.1) if speed > self.min_speed else self.min_speed 
 
                         #cancel if button pressed
                         if any(self.brick.buttons.pressed()):
@@ -397,7 +397,7 @@ class Charlie():
                         self.turnRightMotor(speed)
                         # slow down to not overshoot
                         if not self.__gyro.angle() > deg * 0.6:
-                            speed = speed - self._map(deg, 1, 360, 10, 0.1) if speed > self.min_speed else self.min_speed 
+                            speed = speed - self.map(deg, 1, 360, 10, 0.1) if speed > self.min_speed else self.min_speed 
 
                     #cancel if button pressed
                     if any(self.brick.buttons.pressed()):
@@ -407,7 +407,7 @@ class Charlie():
                     self.turnRightMotor(speed)
                     # slow down to not overshoot
                     if not self.__gyro.angle() > deg * 0.6:
-                        speed = speed - self._map(deg, 1, 360, 10, 0.1) if speed > self.min_speed else self.min_speed + 5
+                        speed = speed - self.map(deg, 1, 360, 10, 0.1) if speed > self.min_speed else self.min_speed + 5
                     
                     #cancel if button pressed
                     if any(self.brick.buttons.pressed()):
@@ -426,7 +426,7 @@ class Charlie():
                         self.turnRightMotor(-speed / 2)
                         # slow down to not overshoot
                         if not self.__gyro.angle() < deg * 0.6:
-                            speed = speed - self._map(deg, 1, 360, 10, 0.01) if speed - self._map(deg, 1, 360, 10, 0.01) > self.min_speed * 2 - dualMotorbonus else self.min_speed * 2 - dualMotorbonus
+                            speed = speed - self.map(deg, 1, 360, 10, 0.01) if speed - self.map(deg, 1, 360, 10, 0.01) > self.min_speed * 2 - dualMotorbonus else self.min_speed * 2 - dualMotorbonus
 
                     # cancel if button pressed
                     if any(self.brick.buttons.pressed()):
@@ -437,7 +437,7 @@ class Charlie():
                         self.turnRightMotor(speed / 2)
                         # slow down to not overshoot
                         if not self.__gyro.angle() > deg * 0.6:
-                            speed = speed - self._map(deg, 1, 360, 10, 0.01) if speed - self._map(deg, 1, 360, 10, 0.01) > self.min_speed * 2 - dualMotorbonus else self.min_speed * 2 - dualMotorbonus
+                            speed = speed - self.map(deg, 1, 360, 10, 0.01) if speed - self.map(deg, 1, 360, 10, 0.01) > self.min_speed * 2 - dualMotorbonus else self.min_speed * 2 - dualMotorbonus
 
                         # cancel if button pressed
                         if any(self.brick.buttons.pressed()):
@@ -449,7 +449,7 @@ class Charlie():
                     self.turnRightMotor(speed / 2)
                     # slow down to not overshoot
                     if not self.__gyro.angle() > deg * 0.6:
-                        speed = speed - self._map(deg, 1, 360, 10, 0.01) if speed - self._map(deg, 1, 360, 10, 0.01) > self.min_speed * 2 - dualMotorbonus else self.min_speed * 2 - dualMotorbonus
+                        speed = speed - self.map(deg, 1, 360, 10, 0.01) if speed - self.map(deg, 1, 360, 10, 0.01) > self.min_speed * 2 - dualMotorbonus else self.min_speed * 2 - dualMotorbonus
 
                     # cancel if button pressed
                     if any(self.brick.buttons.pressed()):
@@ -478,20 +478,14 @@ class Charlie():
             rSpeed = speed
             lSpeed = speed
             steer = 0
+            accel = 100 # acceleration value in °/s^2
+            decel = 100 # deceleration value in °/s^2
 
             # drive
             motor.reset_angle(0)
             if revs > 0:
                 while revs > (motor.angle() / 360):
                     pidValue = int(self.pid(self.__gyro.angle()) * 0.125)
-                    #print("\t \t".join(map(str, [pidValue, self.__gyro.angle(), steer, lSpeed, rSpeed])))
-                    #if not driving staright correct it
-                    # if pidValue < 0:
-                    #     lSpeed = lSpeed - abs(pidValue) if lSpeed > 0 else 0
-                    #     rSpeed = rSpeed + abs(pidValue) * 2 if rSpeed < speed else speed
-                    # elif pidValue > 0:
-                    #     rSpeed = rSpeed - abs(pidValue) if rSpeed > 0 else 0
-                    #     lSpeed = lSpeed + abs(pidValue) * 2 if lSpeed < speed else speed
                     steer += pidValue
                     rSpeed = speed - steer if steer > 0 else speed
                     lSpeed = speed + steer if steer < 0 else speed
@@ -506,14 +500,6 @@ class Charlie():
             else:
                 while revs < motor.angle() / 360:
                     pidValue = int(self.pid(self.__gyro.angle()) * 0.125)
-                    # print("\t \t".join(map(str, [pidValue, self.__gyro.angle(), steer, lSpeed, rSpeed])))
-                    #if not driving staright correct it
-                    # if pidValue < 0:
-                    #     lSpeed = lSpeed - abs(pidValue) if lSpeed > 0 else 0
-                    #     rSpeed = rSpeed + abs(pidValue) * 2 if rSpeed < speed else speed
-                    # elif pidValue > 0:
-                    #     rSpeed = rSpeed - abs(pidValue) if rSpeed > 0 else 0
-                    #     lSpeed = lSpeed + abs(pidValue) * 2 if lSpeed < speed else speed
                     steer += pidValue
                     lSpeed = speed - steer if steer > 0 else speed
                     rSpeed = speed + steer if steer < 0 else speed
@@ -526,6 +512,7 @@ class Charlie():
                         return
                     time.sleep(0.05)
 
+        ## mecanum 
         else:
             self.__fRMotor.reset_angle(0)
             # convert the input (cm) to revs
@@ -534,49 +521,49 @@ class Charlie():
 
             # driving the robot into the desired direction
             if ang >= 0 and ang <= 45:
-                multiplier = _map(ang, 0, 45, 1, 0)
+                multiplier = map(ang, 0, 45, 1, 0)
                 self.__fRMotor.run_angle(speed, revs * 360, Stop.COAST, False)
                 self.__bRMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
                 self.__fLMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
                 self.__bLMotor.run_angle(speed, revs * 360, Stop.COAST, True)
             elif ang >= -45 and ang < 0:
-                multiplier = _map(ang, -45, 0, 0, 1)
+                multiplier = map(ang, -45, 0, 0, 1)
                 self.__fRMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
                 self.__bRMotor.run_angle(speed, revs * 360, Stop.COAST, False)
                 self.__bLMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
                 self.__fLMotor.run_angle(speed, revs * 360, Stop.COAST, True)
             elif ang > 45 and ang <= 90:
-                multiplier = _map(ang, 45, 90, 0, 1)
+                multiplier = map(ang, 45, 90, 0, 1)
                 self.__fRMotor.run_angle(speed, revs * 360, Stop.COAST, False)
                 self.__bRMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
                 self.__fLMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
                 self.__bLMotor.run_angle(speed, revs * 360, Stop.COAST, True)
             elif ang < -45 and ang >= -90:
-                multiplier = _map(ang, -45, -90, 0, 1)
+                multiplier = map(ang, -45, -90, 0, 1)
                 self.__fRMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
                 self.__bRMotor.run_angle(speed, revs * 360, Stop.COAST, False)
                 self.__bLMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
                 self.__fLMotor.run_angle(speed, revs * 360, Stop.COAST, True)
             elif ang > 90 and ang <= 135:
-                multiplier = _map(ang, 90, 135, 1, 0)
+                multiplier = map(ang, 90, 135, 1, 0)
                 self.__fRMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
                 self.__bRMotor.run_angle(speed, revs * -360, Stop.COAST, False)
                 self.__bLMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
                 self.__fLMotor.run_angle(speed, revs * -360, Stop.COAST, True)
             elif ang < -90 and ang >= -135:
-                multiplier = _map(ang, -90, -135, 1, 0)
+                multiplier = map(ang, -90, -135, 1, 0)
                 self.__fRMotor.run_angle(speed, revs * -360, Stop.COAST, False)
                 self.__bRMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
                 self.__fLMotor.run_angle(speed * multiplier + 1, revs * 360 * multiplier, Stop.COAST, False)
                 self.__bLMotor.run_angle(speed, revs * -360, Stop.COAST, True)
             elif ang > 135 and ang <= 180:
-                multiplier = _map(ang, 135, 180, 0, 1)
+                multiplier = map(ang, 135, 180, 0, 1)
                 self.__fRMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
                 self.__bRMotor.run_angle(speed, revs * -360, Stop.COAST, False)
                 self.__bLMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
                 self.__fLMotor.run_angle(speed, revs * -360, Stop.COAST, True)
             elif ang < -135 and ang >= -180:
-                multiplier = _map(ang, -135, -180, 0, 1)
+                multiplier = map(ang, -135, -180, 0, 1)
                 self.__fRMotor.run_angle(speed, revs * -360, Stop.COAST, False)
                 self.__bRMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
                 self.__fLMotor.run_angle(speed * multiplier + 1, revs * -360 * multiplier, Stop.COAST, False)
@@ -851,7 +838,7 @@ class Charlie():
         elif port == 2:
             self.__aMotor2.run_time(speed, time * 1000, Stop.COAST, False)
 
-    def turnLeftMotor(self, speed):
+    def turnLeftMotor(self, relativeSpeed):
         '''
         Sub-method for driving the left Motor(s)
 
@@ -859,13 +846,16 @@ class Charlie():
             speed (int): the speed to drive the motor at
         '''
 
-        if self.__config['robotType'] == 'NORMAL':
-            self.__lMotor.dc(speed)
-        else:
-            self.__fLMotor.dc(speed)
-            self.__bLMotor.dc(speed)
+        ## calculate speed in deg/s
+        speed = self.map(relativeSpeed, 0, 100, 0, 170*360)
 
-    def turnRightMotor(self, speed):
+        if self.__config['robotType'] == 'NORMAL':
+            self.__lMotor.run(speed)
+        else:
+            self.__fLMotor.run(speed)
+            self.__bLMotor.run(speed)
+
+    def turnRightMotor(self, relativeSpeed):
         '''
         Sub-method for driving the right Motor(s)
 
@@ -873,27 +863,34 @@ class Charlie():
             speed (int): the speed to drive the motor at
         '''
 
-        if self.__config['robotType'] == 'NORMAL':
-            self.__rMotor.dc(speed)
-        else:
-            self.__fRMotor.dc(speed)
-            self.__bRMotor.dc(speed)
+        ## calculate speed in deg/s
+        speed = self.map(relativeSpeed, 0, 100, 0, 170*360)
 
-    def turnBothMotors(self, speed):
+        if self.__config['robotType'] == 'NORMAL':
+            self.__rMotor.run(speed)
+        else:
+            self.__fRMotor.run(speed)
+            self.__bRMotor.run(speed)
+
+    def turnBothMotors(self, relativeSpeed):
         '''
-        Submethod for setting a motor.dc() to all motors
+        Submethod for setting a motor.run() to all motors
         
         Args:
             speed (int): the speed (in percent) to set the motors to
         '''
+
+        ## calculate speed in deg/s
+        speed = self.map(relativeSpeed, 0, 100, 0, 170*360)
+
         if self.__config['robotType'] == 'NORMAL':
-            self.__rMotor.dc(speed)
-            self.__lMotor.dc(speed)
+            self.__rMotor.run(speed)
+            self.__lMotor.run(speed)
         else:
-            self.__fRMotor.dc(speed)
-            self.__bRMotor.dc(speed)
-            self.__fLMotor.dc(speed)
-            self.__bLMotor.dc(speed)
+            self.__fRMotor.run(speed)
+            self.__bRMotor.run(speed)
+            self.__fLMotor.run(speed)
+            self.__bLMotor.run(speed)
 
     def breakMotors(self, coast=False):
         '''Sub-method for breaking all the motors'''
@@ -936,7 +933,7 @@ class Charlie():
     def wait(self, null1, sleepTime, null2):
         time.sleep(sleepTime)
 
-    def _map(self, x, in_min, in_max, out_min, out_max):
+    def map(self, x, in_min, in_max, out_min, out_max):
         '''
         Converts a given number in the range of two numbers to a number in the range of two other numbers
 
@@ -966,8 +963,8 @@ class Charlie():
             radius = int(math.sqrt(x**2 + y**2)) # distance from center
             ang = math.atan(y / x) # angle in radians
 
-            a = int(self._map(radius, 0, 180, 0, 100))
-            b = int(-1 * math.cos(2 * ang) * self._map(radius, 0, 180, 0, 100))
+            a = int(self.map(radius, 0, 180, 0, 100))
+            b = int(-1 * math.cos(2 * ang) * self.map(radius, 0, 180, 0, 100))
 
             if x < 0:
                 temp = a
@@ -979,8 +976,8 @@ class Charlie():
                 a = -b
                 b = -temp
 
-            self.turnLeftMotor(int(self._map(a, 0, 100, 0, data['maxSpeed'])))
-            self.turnRightMotor(int(self._map(b, 0, 100, 0, data['maxSpeed'])))
+            self.turnLeftMotor(int(self.map(a, 0, 100, 0, data['maxSpeed'])))
+            self.turnRightMotor(int(self.map(b, 0, 100, 0, data['maxSpeed'])))
 
         if data['a1'] == 0:
             self.__aMotor1.hold()
