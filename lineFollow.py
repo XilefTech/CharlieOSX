@@ -35,11 +35,11 @@ class LineFollower():
             
             elif req.method == "POST":
                 yield from req.read_form_data()
-                Kp = req.form["Kp"]
-                Kd = req.form["Kd"]
-                Ki = req.form["Ki"]
-                speed = req.form["speed"]
-                dist = req.form["dist"]
+                Kp = int(req.form["Kp"])
+                Kd = int(req.form["Kd"])
+                Ki = int(req.form["Ki"])
+                speed = int(req.form["speed"])
+                dist = int(req.form["dist"])
 
                 yield from picoweb.start_response(resp)
                 with open('site/lineFollowing/index.html') as file:
