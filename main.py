@@ -13,13 +13,19 @@ import time
 
 
 # example code to start CharlieOSX and it's menu-system
-os = CharlieOSX('config.cfg', 'settings.json', '')
-os.ui.mainLoop()
+#os = CharlieOSX('config.cfg', 'settings.json', '')
+#os.ui.mainLoop()
 
 # example for driving straight
-#os.robot.straight(100, 20, 0)
+#os.robot.straight(100, -50, 0)
 
 # x = UIManager('', '', EV3Brick(), '')
 # print(x)
 # time.sleep(10)
 
+import lineFollow
+
+lf = lineFollow.LineFollower(Port.A, Port.D, Port.S4, rDir=Direction.COUNTERCLOCKWISE, lDir=Direction.COUNTERCLOCKWISE)
+
+print ('running app')
+lf.app.run(host='192.168.178.60')
