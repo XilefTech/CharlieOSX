@@ -16,7 +16,7 @@ class LineFollower():
         self.lm = Motor(lPort, lDir)
         self.rm = Motor(rPort, rDir)
 
-        #self.cSensor = ColorSensor(csPort)
+        self.cSensor = ColorSensor(csPort)
 
         self.pid = PID(Kp = 3.5, Ki = 0, Kd = 5, setpoint = 28) #define the parameters for the 
         self.pid.sample_time = 0.01         #times the pid refreshes the output value
@@ -50,6 +50,14 @@ class LineFollower():
                 
                 self.pid.tunings = (Kp, Ki, Kd)
                 self.run_distance(speed, dist)
+
+        @self.app.route("/colorValues")
+        def getColorValues(req, resp):
+            yield from picoweb.start_response(resp, content_type = "text/html")
+
+            yield from resp.awrite("RGB: " + str(self.cSensor.rgb()))
+            yield from resp.awrite("<br>RGB-Middle: " + str(round(sum(self.cSensor.rgb()) / 3, 1)))
+            yield from resp.awrite("<br>Reflection: " + str(self.cSensor.reflection()))
 
 
     def run(self, speed, displayDebug=False):
@@ -87,13 +95,14 @@ class LineFollower():
             speed (int): the speed to drive at
             displayDebug (bool): wether Debug information should be displayed on the screen and in console
         '''
-
+        print('runDistance called')
         Limit = speed - 50 #the maximal/minimal output of the pid
         self.pid.output_limits = (-Limit, Limit)
 
-        revs = distance / (8.8 * math.pi)
+        revs = distance / (8.8 * math.pi) # convert distance from cm to revs for driving TODO: use config/parameter for this
 
-        while not any(self.brick.buttons.pressed()) and abs(self.lm.angle() / 360) > abs(revs):
+        self.lm.reset_angle(0)
+        while not any(self.brick.buttons.pressed()) and not abs(self.lm.angle() / 360) > abs(revs):
             self.brick.screen.clear()
 
             control = self.pid(self.cSensor.reflection())
@@ -107,3 +116,6 @@ class LineFollower():
 
                 self.brick.screen.draw_text(20, 20, speed - control, text_color=Color.BLACK, background_color=None)
                 self.brick.screen.draw_text(20, 40, speed + control, text_color=Color.BLACK, background_color=None)
+        self.lm.stop()
+        self.rm.stop()
+        print('runDistance done')
