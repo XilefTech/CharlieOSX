@@ -4,7 +4,7 @@ from pybricks.ev3devices import ColorSensor, Motor
 from pybricks.parameters import Port, Direction, Color
 from lib.simple_pid import PID
 import lib.picoweb as picoweb
-import math
+import math, time
 
 class LineFollower():
     '''Linefollower Class Contains functionality for PID-Controlled line following, as well as Web-Panel-Aided PID-Tuning'''
@@ -14,9 +14,9 @@ class LineFollower():
         self.debug = debug
 
         self.brick = EV3Brick()
-        self.brick.speaker.beep(200, 1000)
-        self.brick.speaker.beep(300, 1000)
-        self.brick.speaker.beep(400, 1000)
+        self.brick.speaker.beep(200, 500)
+        self.brick.speaker.beep(300, 500)
+        self.brick.speaker.beep(400, 500)
 
         self.lm = Motor(lPort, lDir)
         self.rm = Motor(rPort, rDir)
@@ -25,7 +25,7 @@ class LineFollower():
 
         self.pid = PID(Kp = 3.5, Ki = 0, Kd = 5, setpoint = 28) #define the parameters for the 
         self.pid.sample_time = 0.01         #times the pid refreshes the output value
-        self.pid.setpoint = 40              #the reflection value of the line - the sensor should rest above the middle of the line
+        self.pid.setpoint = 25              #the reflection value of the line - the sensor should rest above the middle of the line
 
         self.app = picoweb.WebApp("PID-Tuning-Server")
 
@@ -40,11 +40,11 @@ class LineFollower():
             
             elif req.method == "POST":
                 yield from req.read_form_data()
-                Kp = int(req.form["Kp"])
-                Kd = int(req.form["Kd"])
-                Ki = int(req.form["Ki"])
-                speed = int(req.form["speed"])
-                dist = int(req.form["dist"])
+                Kp = float(req.form["Kp"])
+                Kd = float(req.form["Kd"])
+                Ki = float(req.form["Ki"])
+                speed = float(req.form["speed"])
+                dist = float(req.form["dist"])
 
                 yield from picoweb.start_response(resp)
                 with open('site/lineFollowing/index.html') as file:
@@ -102,25 +102,26 @@ class LineFollower():
             displayDebug (bool): wether Debug information should be displayed on the screen and in console
         '''
         print('runDistance called')
-        Limit = speed - 50 #the maximal/minimal output of the pid
+        Limit = speed / 8 #- 50 #the maximal/minimal output of the pid
         self.pid.output_limits = (-Limit, Limit)
 
         revs = distance / (8.8 * math.pi) # convert distance from cm to revs for driving TODO: use config/parameter for this
 
         self.lm.reset_angle(0)
         while not any(self.brick.buttons.pressed()) and not abs(self.lm.angle() / 360) > abs(revs):
+            now = time.time()
             self.brick.screen.clear()
 
-            control = self.pid(self.cSensor.reflection())
+            control = self.pid(sum(self.cSensor.rgb()) / 3)
             
             self.lm.run(speed - control)
             self.rm.run(speed + control)
 
             if self.debug == 0:
-                print(speed, self.cSensor.reflection(), round(control, 1), round(speed - control, 1), round(speed + control, 1))
+                print(speed, round(sum(self.cSensor.rgb()) / 3, 2), round(control, 1), round(speed - control, 1), round(speed + control, 1))
 
                 if control == 0:
-                    self.brick.speaker.beep(200, -1)
+                    self.brick.speaker.beep(200, 100)
                 elif control > 0:
                     self.brick.speaker.beep(300, -1)
                 elif control < 0:
@@ -128,7 +129,11 @@ class LineFollower():
 
                 #self.brick.screen.draw_text(20, 20, speed - control, text_color=Color.BLACK, background_color=None)
                 #self.brick.screen.draw_text(20, 40, speed + control, text_color=Color.BLACK, background_color=None)
+            #print(time.time() - now)
+            while time.time() < (now + 0.05):
+                pass
+            #print(time.time() - now)
         self.lm.stop()
         self.rm.stop()
-        self.brick.speaker.beep(500, 1000)
+        self.brick.speaker.beep(500, 100)
         print('runDistance done')

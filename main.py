@@ -25,7 +25,7 @@ import time
 
 import lineFollow
 
-lf = lineFollow.LineFollower(Port.A, Port.D, Port.S4, rDir=Direction.COUNTERCLOCKWISE, lDir=Direction.COUNTERCLOCKWISE)
+lf = lineFollow.LineFollower(Port.D, Port.A, Port.S4, rDir=Direction.COUNTERCLOCKWISE, lDir=Direction.COUNTERCLOCKWISE)
 
 print ('running app')
 lf.app.run(host='192.168.178.60')
