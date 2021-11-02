@@ -9,9 +9,14 @@ import math
 class LineFollower():
     '''Linefollower Class Contains functionality for PID-Controlled line following, as well as Web-Panel-Aided PID-Tuning'''
 
-    def __init__(self, rPort: Port, lPort: Port, csPort: Port, rDir=Direction.CLOCKWISE, lDir=Direction.CLOCKWISE) -> None:
+    def __init__(self, rPort: Port, lPort: Port, csPort: Port, rDir=Direction.CLOCKWISE, lDir=Direction.CLOCKWISE, debug=0) -> None:
         '''init'''
+        self.debug = debug
+
         self.brick = EV3Brick()
+        self.brick.speaker.beep(200, 1000)
+        self.brick.speaker.beep(300, 1000)
+        self.brick.speaker.beep(400, 1000)
 
         self.lm = Motor(lPort, lDir)
         self.rm = Motor(rPort, rDir)
@@ -20,7 +25,7 @@ class LineFollower():
 
         self.pid = PID(Kp = 3.5, Ki = 0, Kd = 5, setpoint = 28) #define the parameters for the 
         self.pid.sample_time = 0.01         #times the pid refreshes the output value
-        self.pid.setpoint = 28              #the reflection value of the line - the sensor should rest above the middle of the line
+        self.pid.setpoint = 40              #the reflection value of the line - the sensor should rest above the middle of the line
 
         self.app = picoweb.WebApp("PID-Tuning-Server")
 
@@ -50,6 +55,7 @@ class LineFollower():
                 
                 self.pid.tunings = (Kp, Ki, Kd)
                 self.run_distance(speed, dist)
+                yield from resp.awrite("<br><br>finished driving")
 
         @self.app.route("/colorValues")
         def getColorValues(req, resp):
@@ -87,7 +93,7 @@ class LineFollower():
                 self.brick.screen.draw_text(20, 20, speed - control, text_color=Color.BLACK, background_color=None)
                 self.brick.screen.draw_text(20, 40, speed + control, text_color=Color.BLACK, background_color=None)
 
-    def run_distance(self, speed, distance, displayDebug=False):
+    def run_distance(self, speed, distance):
         '''
         Drives along a line as long as no brick-button is pressed.
         
@@ -110,12 +116,19 @@ class LineFollower():
             self.lm.run(speed - control)
             self.rm.run(speed + control)
 
-            if displayDebug:
-                print(speed - control)
-                print(speed + control)
+            if self.debug == 0:
+                print(speed, self.cSensor.reflection(), round(control, 1), round(speed - control, 1), round(speed + control, 1))
 
-                self.brick.screen.draw_text(20, 20, speed - control, text_color=Color.BLACK, background_color=None)
-                self.brick.screen.draw_text(20, 40, speed + control, text_color=Color.BLACK, background_color=None)
+                if control == 0:
+                    self.brick.speaker.beep(200, -1)
+                elif control > 0:
+                    self.brick.speaker.beep(300, -1)
+                elif control < 0:
+                    self.brick.speaker.beep(400, -1)
+
+                #self.brick.screen.draw_text(20, 20, speed - control, text_color=Color.BLACK, background_color=None)
+                #self.brick.screen.draw_text(20, 40, speed + control, text_color=Color.BLACK, background_color=None)
         self.lm.stop()
         self.rm.stop()
+        self.brick.speaker.beep(500, 1000)
         print('runDistance done')
