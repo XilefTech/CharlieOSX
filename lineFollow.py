@@ -102,13 +102,13 @@ class LineFollower():
             displayDebug (bool): wether Debug information should be displayed on the screen and in console
         '''
         print('runDistance called')
-        Limit = speed / 8 #- 50 #the maximal/minimal output of the pid
+        Limit = speed / 2 #- 50 #the maximal/minimal output of the pid
         self.pid.output_limits = (-Limit, Limit)
 
         revs = distance / (8.8 * math.pi) # convert distance from cm to revs for driving TODO: use config/parameter for this
 
         self.lm.reset_angle(0)
-        while not any(self.brick.buttons.pressed()) and not abs(self.lm.angle() / 360) > abs(revs):
+        while not abs(self.lm.angle() / 360) > abs(revs):
             now = time.time()
             self.brick.screen.clear()
 
@@ -118,18 +118,24 @@ class LineFollower():
             self.rm.run(speed + control)
 
             if self.debug == 0:
-                print(speed, round(sum(self.cSensor.rgb()) / 3, 2), round(control, 1), round(speed - control, 1), round(speed + control, 1))
+                #print(speed, round(sum(self.cSensor.rgb()) / 3, 2), round(control, 1), round(speed - control, 1), round(speed + control, 1))
 
                 if control == 0:
                     self.brick.speaker.beep(200, 100)
                 elif control > 0:
                     self.brick.speaker.beep(300, -1)
+                    print(speed, round(sum(self.cSensor.rgb()) / 3, 2), round(control, 1), round(speed - control, 1), round(speed + control, 1))
                 elif control < 0:
                     self.brick.speaker.beep(400, -1)
 
                 #self.brick.screen.draw_text(20, 20, speed - control, text_color=Color.BLACK, background_color=None)
                 #self.brick.screen.draw_text(20, 40, speed + control, text_color=Color.BLACK, background_color=None)
             #print(time.time() - now)
+            
+            #cancel if button pressed
+            if any(self.brick.buttons.pressed()):
+                break
+
             while time.time() < (now + 0.05):
                 pass
             #print(time.time() - now)
