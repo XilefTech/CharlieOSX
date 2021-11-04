@@ -847,7 +847,8 @@ class Charlie():
         '''
 
         ## calculate speed in deg/s
-        speed = self.map(relativeSpeed, 0, 100, 0, 170*360)
+        speed = self.map(relativeSpeed, 0, 100, 0, 170*6)
+
 
         if self.__config['robotType'] == 'NORMAL':
             self.__lMotor.run(speed)
@@ -864,7 +865,7 @@ class Charlie():
         '''
 
         ## calculate speed in deg/s
-        speed = self.map(relativeSpeed, 0, 100, 0, 170*360)
+        speed = self.map(relativeSpeed, 0, 100, 0, 170*6)
 
         if self.__config['robotType'] == 'NORMAL':
             self.__rMotor.run(speed)
