@@ -6,6 +6,7 @@ from pybricks.media.ev3dev import Image, ImageFile, Font, SoundFile
 
 from UI.UIObject import UIObject
 from UI.tools import Menu, Box, ProgrammingWindow
+from scripts import Scripts
 
 
 class UIManager:
@@ -13,7 +14,7 @@ class UIManager:
         Basicly a Menu
     """
 
-    def __init__(self, config, settings, brick, logger, settingsPath, charlieOSX):
+    def __init__(self, config, settings, brick, logger, settingsPath, charlieOSX, scripts: Scripts):
         # general variable setup
         logger.info(self, 'Starting UI initialisation')
         self.__config = config
@@ -24,6 +25,7 @@ class UIManager:
         self.brick = brick
         self.logger = logger
         self.os = charlieOSX
+        self.scripts = scripts
         self.profileHelper = ProfileHelper(self.logger, self.__config)
         self.__sound_lock = _thread.allocate_lock()
         self.__almostBigFont = Font(family='Arial', size=12, bold=False)
@@ -444,10 +446,14 @@ class UIManager:
 
     def runTesting(self, position):
         index = position[1]
-        self.profileHelper.loadProfiles()
-        profileData = self.profileHelper.getProfileData(self.__config['profileNames'][index])
-        time.sleep(0.3)
-        self.os.robot.execute(profileData)
+
+        if self.__config['useScriptProfiles']:
+            self.scripts.scriptList[index]()
+        else:
+            self.profileHelper.loadProfiles()
+            profileData = self.profileHelper.getProfileData(self.__config['profileNames'][index])
+            time.sleep(0.3)
+            self.os.robot.execute(profileData)
 
     def runWebremote(self):
         self.currentMenu.getObjectByName('startButton').setVisibility(False)
