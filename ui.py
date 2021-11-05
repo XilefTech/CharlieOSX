@@ -3,7 +3,6 @@ import _thread
 import time
 import json
 from profileHelper import ProfileHelper
-1
 
 
 class UI:

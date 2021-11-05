@@ -4,7 +4,7 @@ The only method in this file is parseConfig()
 '''
 
 
-def parseConfig(configPath, logger):
+def parseConfig(configPath, logger) -> dict:
     '''
         Loads the data from a config file based on my somewhat own syntax.
 
