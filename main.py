@@ -12,7 +12,13 @@ from pybricks.hubs import EV3Brick
 
 # example code to start CharlieOSX
 os = CharlieOSX('config.cfg', 'settings.json', '')
-os.scripts.runOne()
+#os.robot.__aMotor2.run_angle(1000000, -360 * 15)
+#os.scripts.runThree()
+#os.robot.straight(50, 70, 0)
+#os.robot.action(50, 1/8, 1)
+#os.robot.straight(30, 30, 0)
+os.scripts.scriptList[1]()
+
 
 
 #os.ui.mainLoop()
