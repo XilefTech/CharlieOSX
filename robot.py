@@ -673,32 +673,35 @@ class Charlie():
 
 
         # claculate revs for the second wheel
-        pathOutside = self.__config['wheelDiameter'] * math.pi * revs1
-        rad1 = pathOutside / (math.pi * (deg / 180))
-        rad2 = rad1 - self.__config['wheelDistance']
-        pathInside = rad2 * math.pi * (deg/180)
+        pathOutside = dist 
+        diam1 = pathOutside * abs(360 / deg) / math.pi
+        diam2 = diam1 - 2 * self.__config['wheelDistance']
+        pathInside = diam2 * math.pi * abs(deg / 360)
         revs2 = pathInside / (self.__config['wheelDiameter'] * math.pi)
 
         # claculate the speed for the second wheel
         relation = revs1 / revs2
-        speedSlow = speed / relation
+        speedSlow = speed / (1.3 * relation)
+        print("relation: " + str(relation))
+        
+        print(str(pathOutside) + "\t/\t " + str(pathInside) + "\t/\t " + str(diam1) + "\t/\t " + str(diam2) + "\t/\t " + str(speed) + "\t/\t " + str(speedSlow))
 
         if deg > 0:
             # asign higher speed to outer wheel
             lSpeed = speed
             rSpeed = speedSlow
             self.__rMotor.run_angle(rSpeed, revs2 * 360, Stop.COAST, False)
-            self.__lMotor.run_angle(lSpeed, revs1 * 360 + 5, Stop.COAST, False)
+            self.__lMotor.run_angle(lSpeed, revs1 * 360, Stop.COAST, False)
             #turn
             while self.__gyro.angle() - startValue < deg and not any(self.brick.buttons.pressed()):
                 pass
 
         else:
             # asign higher speed to outer wheel
-            lSpeed = speed
-            rSpeed = speedSlow
-            self.__rMotor.run_angle(rSpeed, revs2 * 360 + 15, Stop.COAST, False)
-            self.__lMotor.run_angle(lSpeed, revs1 * 360, Stop.COAST, False)
+            lSpeed = speedSlow
+            rSpeed = speed
+            self.__rMotor.run_angle(rSpeed, revs1 * 360, Stop.COAST, False)
+            self.__lMotor.run_angle(lSpeed, revs2 * 360, Stop.COAST, False)
             #turn
             while self.__gyro.angle() - startValue > deg and not any(self.brick.buttons.pressed()):
                 pass
