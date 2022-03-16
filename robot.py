@@ -727,20 +727,20 @@ class Charlie():
         if side == 2:
             # if drive to color black drive until back after white to not recognize colors on the field as lines
             if color == Color.BLACK:
-                while lLight.color() != Color.WHITE and not any(self.brick.buttons.pressed()):
+                while self.__lLight.color() != Color.WHITE and not any(self.brick.buttons.pressed()):
                     self.turnBothMotors(speed)
 
-            while lLight.color() != color and not any(self.brick.buttons.pressed()):
+            while self.__lLight.color() != color and not any(self.brick.buttons.pressed()):
                 self.turnBothMotors(speed)
 
         # only drive till right colorSensor
         elif side == 3:
             # if drive to color black drive until back after white to not recognize colors on the field as lines
             if color == Color.BLACK:
-                while rLight.color() != Color.WHITE and not any(self.brick.buttons.pressed()):
+                while self.__rLight.color() != Color.WHITE and not any(self.brick.buttons.pressed()):
                     self.turnBothMotors(speed)
 
-            while rLight.color() != color and not any(self.brick.buttons.pressed()):
+            while self.__rLight.color() != color and not any(self.brick.buttons.pressed()):
                 self.turnBothMotors(speed)
 
         # drive untill both colorSensors
