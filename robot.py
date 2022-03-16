@@ -657,11 +657,11 @@ class Charlie():
 
     def curve(self, speed, dist, deg):
         '''
-        Drives forwads and backwards x times.
+        Drives in a curve
 
         Args:
             speed (int): the speed to drive at
-            revs1 (int): the distance (in motor revolutions) for the outer wheel to drive
+            revs1 (int): the distance (in cm) for the outer wheel to drive
             deg (int): how much of a circle it should drive
         '''
         speed = speed * 1.7 * 6  # speed to deg/s from %
