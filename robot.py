@@ -2,6 +2,7 @@ import math, _thread, time, math, copy
 from pybricks.ev3devices import (Motor, TouchSensor, ColorSensor, InfraredSensor, UltrasonicSensor, GyroSensor)
 from pybricks.parameters import (Port, Direction, Color, Stop)
 from pybricks.media.ev3dev import Font
+from pybricks.iodevices import AnalogSensor
 from lib.simple_pid import PID
 
 
@@ -73,8 +74,13 @@ class Charlie():
         '''Sub-method for initializing Sensors.'''
         self.logger.debug(self, "Starting sensor initialisation...")
         try:
+            self.brick.light.on(Color.RED)
+            time.sleep(0.2)
+            AnalogSensor(Port.S2)
+            time.sleep(3)
             self.__gyro = GyroSensor(self.__conf2port[self.__config['gyroSensorPort']], Direction.CLOCKWISE if not self.__config['gyroInverted'] else Direction.COUNTERCLOCKWISE) if self.__config['gyroSensorPort'] != 0 else 0
             self.logger.debug(self, 'Gyrosensor initialized sucessfully on port %s' % self.__config['gyroSensorPort'])
+            self.brick.light.on(Color.GREEN)
         except Exception as exception:
             self.__gyro = 0
             self.logger.error(self, "Failed to initialize the Gyro-Sensor - Are u sure it's connected to Port %s?" % exception, exception)
