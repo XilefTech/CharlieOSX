@@ -29,9 +29,9 @@ class Charlie():
         self.__initSensors()
         self.__initMotors()
 
-        self.min_speed = 15 # lage motor 20, medium motor 40
-        self.pid = PID(Kp=0.88, Ki=0.11, Kd=0.3, setpoint=0)
-        self.pid.sample_time = 0.01
+        self.min_speed = 20 # lage motor 20, medium motor 40
+        self.pid = PID(Kp=0.9, Ki=0.12, Kd=0.3, setpoint=0)
+        self.pid.sample_time = 0.02
         
         self.__gyro.reset_angle(0) if self.__gyro != 0 else self.logger.error(self, "No gyro attached, robot movement will probably not work and you likely will receive crashs", None)
 
@@ -487,7 +487,7 @@ class Charlie():
         '''
         speed = 100 if speed > 100 else speed   # just in case someone gives faster than max speed
         if self.__config['robotType'] != 'MECANUM':
-            correctionStrength = 2.5  # how strongly the self will correct. 2 = default, 0 = nothing
+            correctionStrength = 0.125  ### how strongly the self will correct. 0.125 = default, 0 = nothing
             self.pid.setpoint = self.__gyro.angle()
             startValue = self.__gyro.angle()
 
@@ -506,7 +506,7 @@ class Charlie():
             motor.reset_angle(0)
             if revs > 0:
                 while revs > (motor.angle() / 360):
-                    pidValue = int(self.pid(self.__gyro.angle()) * 0.125)
+                    pidValue = int(self.pid(self.__gyro.angle()) * correctionStrength)
                     steer += pidValue
                     rSpeed = speed - steer if steer > 0 else speed
                     lSpeed = speed + steer if steer < 0 else speed
