@@ -360,7 +360,7 @@ class Charlie():
             # right motor off
             self.__rMotor.brake()
             # turn the angle
-            if deg > 0:     
+            if deg > self.__gyro.angle():     
                 while self.__gyro.angle() < deg:
                     self.turnLeftMotor(speed)
                     # slow down to not overshoot
@@ -432,8 +432,8 @@ class Charlie():
 
         # turn with both motors
         elif port == 23:
-            dualMotorbonus = 0
-            speed = speed * 1
+            dualMotorbonus = 8
+            speed = speed + dualMotorbonus
             # turn the angle
             # deg > 0
             print(deg, self.__gyro.angle())
@@ -445,7 +445,7 @@ class Charlie():
                     self.turnRightMotor(-speed / 2)
                     # slow down to not overshoot
                     if not self.__gyro.angle() < deg * 0.6:
-                        speed = speed - self.map(deg, 1, 360, 10, 0.01) if speed - self.map(deg, 1, 360, 10, 0.01) > self.min_speed * 2 - dualMotorbonus else self.min_speed * 2 - dualMotorbonus
+                        speed = speed - self.map(deg, 1, 360, 10, 0.01) if speed - self.map(deg, 1, 360, 10, 0.01) > self.min_speed + dualMotorbonus else self.min_speed + dualMotorbonus
 
                 # cancel if button pressed
                 if any(self.brick.buttons.pressed()):
