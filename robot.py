@@ -749,21 +749,21 @@ class Charlie():
             lSpeed = speed
             rWhite = False
             lWhite = False 
-            while (rLight.color() != color or lLight.color() != color) and not any(self.brick.buttons.pressed()):
+            while (self.__rLight.color() != color or self.__lLight.color() != color) and not any(self.brick.buttons.pressed()):
                 #if drive to color black drive until back after white to not recognize colors on the field as lines
                 if color == Color.BLACK:
-                    if rLight.color() == Color.WHITE:
+                    if self.__rLight.color() == Color.WHITE:
                         rWhite = True
-                    if lLight.color() == Color.WHITE:
+                    if self.__lLight.color() == Color.WHITE:
                         lWhite = True
 
                 self.__rMotor.dc(rSpeed)
                 self.__lMotor.dc(lSpeed)
                 # if right at color stop right Motor
-                if rLight.color() == color and rWhite:
+                if self.__rLight.color() == color and rWhite:
                     rSpeed = 0
                 # if left at color stop left Motor
-                if lLight.color() == color and lWhite:
+                if self.__lLight.color() == color and lWhite:
                     lSpeed = 0
 
     def toWall(self, speed, *args):
