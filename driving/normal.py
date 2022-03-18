@@ -39,6 +39,103 @@ class NormalDriving():
         self.pid = PID(Kp=0.88, Ki=0.11, Kd=0.3, setpoint=0)
         self.pid.sample_time = 0.01
         
+    def setAccel(self, acceleration):
+        '''
+        set the acceleration rate
+
+        Args:
+            acceleration (float): the acceleration value
+        '''
+        circ = self.wheelDiameter * pi
+        cmPerDeg = 360 / circ
+        acceleration = acceleration * cmPerDeg
+
+        self.robot.lMotor.control.limits(self.maxSpeed, acceleration, 100)
+        self.robot.rMotor.control.limits(self.maxSpeed, acceleration, 100)
+    
+    def enableAccel(self, doAccel: bool):
+        '''
+        Enable/Disable Acceleration for all Driving operations
+
+        Args:
+            doAccel (bool): the current state of acceleration
+        '''
+        self.doAccel = doAccel
+
+        # set motor acceleration accordingly
+        if doAccel:
+            self.setAccel(self.acceleration)
+        else:
+            self.robot.lMotor.control.limits(self.maxSpeed, 3000, 100)
+            self.robot.rMotor.control.limits(self.maxSpeed, 3000, 100)
+    
+    def enableDecel(self, doDecel: bool):
+        '''
+        Enable/Disable Deceleration for all Driving operations
+
+        Args:
+            doDecel (bool): the current state of deceleration
+        '''
+        self.doDecel = doDecel
+
+    def straight(self, speed, dist, ang):
+        '''
+        Steers the Robot in a straight line forwards/backwards.
+        Optional Acceletation & Deceleration (Enable/Disable with setAccel() & setDecel())
+
+        Args:
+            speed (int): the speed to drive at (in percent)
+            dist (int): the distance (in cm) to drive
+        '''
+        ## a bit of variable setup & math
+        speed = 100 if speed > 100 else abs(speed)   # cap the max speed at 100% and ensure it's positive
+        speed = self.map(speed, 0, 100, 0, self.maxSpeed)
+        rSpeed, lSpeed = speed, speed
+
+        revs = dist / (self.wheelDiameter * pi) # convert the input (cm) to revs
+
+        steer = 0
+        direction = 1 if revs > 0 else -1
+
+        ## deceleration
+        trueSpeed = (self.wheelDiameter * pi) / 360 * speed
+        decelTime = trueSpeed / self.deceleration
+        decelDistance = 0.5 * self.deceleration * decelTime**2
+        print(speed, "\t", trueSpeed, "\t", decelTime, "\t", decelDistance)
+
+
+        ## robot sensor readout & setup
+        self.pid.setpoint = self.robot.gyro.angle()
+        self.robot.rMotor.reset_angle(0)
+        startTime = time.perf_counter()
+
+        # drive
+        while abs(revs) > abs(self.robot.rMotor.angle() / 360):
+            timer = time.perf_counter() # get time for accurate loop-timing
+
+            ## line-correction
+            pidValue = int(self.pid(self.robot.gyro.angle()) * 0.125)
+            steer += pidValue
+
+            rSpeed = speed - steer if steer > 0 else speed
+            lSpeed = speed + steer if steer < 0 else speed
+
+            self.robot.lMotor.run(direction * lSpeed if lSpeed > 0 else 0)
+            self.robot.rMotor.run(direction * rSpeed if rSpeed > 0 else 0)
+            
+            ## deceleration
+            drivenDistance = abs(self.robot.rMotor.angle() / 360) * (self.wheelDiameter * pi)
+            if self.doDecel and drivenDistance >= dist - decelDistance:
+                decelDist = drivenDistance - (dist - decelDistance)
+                robotSpeed = trueSpeed - (2 * self.deceleration * decelDist)**0.5
+                speed = robotSpeed / (self.wheelDiameter * pi / 360) if robotSpeed / (self.wheelDiameter * pi / 360) > 20 else 20
+
+            ## cancel if button pressed
+            if any(self.robot.brick.buttons.pressed()):
+                return
+            
+            while time.perf_counter() - timer < 0.05:
+                pass
 
     def turnLeftMotor(self, relativeSpeed):
         '''
