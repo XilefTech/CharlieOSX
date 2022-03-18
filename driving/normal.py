@@ -78,7 +78,7 @@ class NormalDriving():
         '''
         self.doDecel = doDecel
 
-    def straight(self, speed, dist, ang):
+    def straight(self, speed, dist, ang, connect=False):
         '''
         Steers the Robot in a straight line forwards/backwards.
         Optional Acceletation & Deceleration (Enable/Disable with setAccel() & setDecel())
@@ -86,6 +86,8 @@ class NormalDriving():
         Args:
             speed (int): the speed to drive at (in percent)
             dist (int): the distance (in cm) to drive
+        kwArgs:
+            connect (bool): used for smooth connection to following driving actions, disables deceleration
         '''
         ## a bit of variable setup & math
         speed = 100 if speed > 100 else abs(speed)   # cap the max speed at 100% and ensure it's positive
@@ -107,7 +109,6 @@ class NormalDriving():
         ## robot sensor readout & setup
         self.pid.setpoint = self.robot.gyro.angle()
         self.robot.rMotor.reset_angle(0)
-        startTime = time.perf_counter()
 
         # drive
         while abs(revs) > abs(self.robot.rMotor.angle() / 360):
@@ -125,7 +126,7 @@ class NormalDriving():
             
             ## deceleration
             drivenDistance = abs(self.robot.rMotor.angle() / 360) * (self.wheelDiameter * pi)
-            if self.doDecel and drivenDistance >= dist - decelDistance:
+            if self.doDecel and drivenDistance >= dist - decelDistance and not connect:
                 decelDist = drivenDistance - (dist - decelDistance)
                 robotSpeed = trueSpeed - (2 * self.deceleration * decelDist)**0.5
                 speed = robotSpeed / (self.wheelDiameter * pi / 360) if robotSpeed / (self.wheelDiameter * pi / 360) > 20 else 20
