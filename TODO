@@ -22,11 +22,14 @@ Next:
 
     Logging:
     o cleanup of Logger
+    + better system for on-screen popups
 
     Webremote:
     + Add documentation on how to use the webremote
 
-    o fixe prefix typo for first 2 log entrys 
+    o fixe prefix typo for first 2 log entrys
+
+    o cleanup and summarize todos
 
 Far-Off:
     Robot:
