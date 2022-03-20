@@ -259,6 +259,19 @@ class NormalDriving():
                     ## ensure consistent loop timing
                     while time.perf_counter() - timer < 0.05:
                         pass
+
+    def absTurn(self, speed, deg, port):
+        '''
+        Used to turn the motor on the spot using either one
+        This method turns (in contrast to the normal turn() method) to an absolute ange (compared to starting point)
+
+        Args:
+            speed (int): the speed to drive at
+            deg (int): the angle to turn to
+            port (int): the motor(s) to turn with
+        '''
+        self.turn(speed, deg, port, absolute=True)
+
     def turnLeftMotor(self, relativeSpeed):
         '''
         converts the relative speed into absolute measurement in °/s for the motor to rotate at
