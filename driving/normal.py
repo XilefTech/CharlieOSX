@@ -139,9 +139,126 @@ class NormalDriving():
             ## ensure consistent loop timing
             while time.perf_counter() - timer < 0.05:
                 pass
-            while time.perf_counter() - timer < 0.05:
-                pass
 
+    def turn(self, speed, deg, port, absolute=False):
+        '''
+        Used to turn the robot on the spot using either one or both Motors for turning
+
+        Args:
+            speed (int): the speed to drive at
+            deg (int): the angle to turn
+            port (int): the motor(s) to turn with
+        '''
+        startValue = self.robot.gyro.angle() if not absolute else 0
+        speed = self.speedClean(speed)
+
+        # turn only with one motor
+        if port is 2 or port is 3:
+            # stop non-turning motor
+            self.robot.rMotor.hold() if port is 2 else self.robot.lMotor.hold()
+
+            dist = pi * self.wheelDistance * 2 * (deg/360)
+            trueSpeed, decelTime, decelDistance = self.getDecelValues(speed)
+            #print(speed, "\t", trueSpeed, "\t", decelTime, "\t", decelDistance)
+
+            turningMotor = self.robot.lMotor if port is 2 else self.robot.rMotor
+            direction = 1 if port is 2 else -1
+
+            # turn the angle
+            if deg > 0:     
+                while self.robot.gyro.angle() - startValue < deg:
+                    timer = time.perf_counter() # get time for accurate loop-timing
+
+                    turningMotor.run(speed * direction)
+
+                    ## deceleration
+                    drivenDistance = abs(turningMotor.angle() / 360) * (self.wheelDiameter * pi)
+                    if self.doDecel and drivenDistance >= dist - decelDistance:
+                        decelDist = drivenDistance - (dist - decelDistance)
+                        robotSpeed = trueSpeed - (2 * self.deceleration * decelDist)**0.5
+                        speed = robotSpeed / (self.wheelDiameter * pi / 360) if robotSpeed / (self.wheelDiameter * pi / 360) > 20 else 20
+
+                    ## cancel if button pressed
+                    if any(EV3Brick().buttons.pressed()):
+                        return
+
+                    ## ensure consistent loop timing
+                    while time.perf_counter() - timer < 0.05:
+                        pass
+            else:
+                while self.robot.gyro.angle() - startValue > deg:
+                    timer = time.perf_counter() # get time for accurate loop-timing
+
+                    turningMotor.run(-speed * direction)
+
+                    ## deceleration
+                    drivenDistance = abs(turningMotor.angle() / 360) * (self.wheelDiameter * pi)
+                    if self.doDecel and drivenDistance >= dist - decelDistance:
+                        decelDist = drivenDistance - (dist - decelDistance)
+                        robotSpeed = trueSpeed - (2 * self.deceleration * decelDist)**0.5
+                        speed = robotSpeed / (self.wheelDiameter * pi / 360) if robotSpeed / (self.wheelDiameter * pi / 360) > 20 else 20
+                        
+                    ## cancel if button pressed
+                    if any(EV3Brick().buttons.pressed()):
+                        return
+
+                    ## ensure consistent loop timing
+                    while time.perf_counter() - timer < 0.05:
+                        pass
+
+        # turn with both motors
+        elif port is 23:
+            dualMotorbonus = 4
+            speed = speed * 2
+
+            dist = pi * self.wheelDistance * (deg/360)
+            trueSpeed, decelTime, decelDistance = self.getDecelValues(speed)
+            #print(speed, "\t", trueSpeed, "\t", decelTime, "\t", decelDistance)
+
+            # turn the angle
+            if deg > 0:
+                while self.robot.gyro.angle() - startValue < deg:
+                    timer = time.perf_counter() # get time for accurate loop-timing
+
+                    self.robot.lMotor.run(speed / 1.5)
+                    self.robot.rMotor.run(-speed / 1.5)
+
+                    ## deceleration
+                    drivenDistance = abs(self.robot.rMotor.angle() / 360) * (self.wheelDiameter * pi)
+                    if self.doDecel and drivenDistance >= dist - decelDistance:
+                        decelDist = drivenDistance - (dist - decelDistance)
+                        robotSpeed = trueSpeed - (2 * self.deceleration * decelDist)**0.5
+                        speed = robotSpeed / (self.wheelDiameter * pi / 360) if robotSpeed / (self.wheelDiameter * pi / 360) > 20 else 20
+
+                    # cancel if button pressed
+                    if any(EV3Brick().buttons.pressed()):
+                        return
+
+                    ## ensure consistent loop timing
+                    while time.perf_counter() - timer < 0.05:
+                        pass
+
+            else:
+                while self.robot.gyro.angle() - startValue > deg:
+                    timer = time.perf_counter() # get time for accurate loop-timing
+
+                    self.robot.lMotor.run(speed / 1.5)
+                    self.robot.rMotor.run(-speed / 1.5)
+                    
+                    ## deceleration
+                    drivenDistance = abs(self.robot.rMotor.angle() / 360) * (self.wheelDiameter * pi)
+                    if self.doDecel and drivenDistance >= dist - decelDistance:
+                        decelDist = drivenDistance - (dist - decelDistance)
+                        robotSpeed = trueSpeed - (2 * self.deceleration * decelDist)**0.5
+                        speed = robotSpeed / (self.wheelDiameter * pi / 360) if robotSpeed / (self.wheelDiameter * pi / 360) > 20 else 20
+
+                    # cancel if button pressed
+                    if any(EV3Brick().buttons.pressed()):
+                        return
+
+                    ## ensure consistent loop timing
+                    while time.perf_counter() - timer < 0.05:
+                        pass
     def turnLeftMotor(self, relativeSpeed):
         '''
         converts the relative speed into absolute measurement in °/s for the motor to rotate at
