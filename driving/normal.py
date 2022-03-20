@@ -91,7 +91,7 @@ class NormalDriving():
         '''
         ## a bit of variable setup & math
         speed = 100 if speed > 100 else abs(speed)   # cap the max speed at 100% and ensure it's positive
-        speed = self.map(speed, 0, 100, 0, self.maxSpeed)
+        speed = self.map(speed, 0, 100, 0, self.maxSpeed) # convert speed to deg/s
         rSpeed, lSpeed = speed, speed
 
         revs = dist / (self.wheelDiameter * pi) # convert the input (cm) to revs
@@ -133,9 +133,12 @@ class NormalDriving():
                 speed = robotSpeed / (self.wheelDiameter * pi / 360) if robotSpeed / (self.wheelDiameter * pi / 360) > 20 else 20
 
             ## cancel if button pressed
-            if any(self.robot.brick.buttons.pressed()):
+            if any(EV3Brick().buttons.pressed()):
                 return
             
+            ## ensure consistent loop timing
+            while time.perf_counter() - timer < 0.05:
+                pass
             while time.perf_counter() - timer < 0.05:
                 pass
 
