@@ -323,6 +323,13 @@ class NormalDriving():
         decelTime = trueSpeed / self.deceleration
         decelDistance = 0.5 * self.deceleration * decelTime**2
         return trueSpeed, decelTime, decelDistance
+
+    def speedClean(self, speed):
+        '''converts the speed from percent to deg/s'''
+        speed = 100 if speed > 100 else abs(speed)   # cap the max speed at 100% and ensure it's positive
+        speed = self.map(speed, 0, 100, 0, self.maxSpeed) # convert speed to deg/s
+        return speed
+
     def map(self, x, in_min, in_max, out_min, out_max) -> float:
         '''
         Converts a given number in the range of two numbers to a number in the range of two other numbers
