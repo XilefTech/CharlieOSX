@@ -76,7 +76,7 @@ class Charlie():
         try:
             self.brick.light.on(Color.RED)
             time.sleep(0.2)
-            AnalogSensor(Port.S2)
+            AnalogSensor(self.__conf2port[self.__config['gyroSensorPort']])
             time.sleep(3)
             self.__gyro = GyroSensor(self.__conf2port[self.__config['gyroSensorPort']], Direction.CLOCKWISE if not self.__config['gyroInverted'] else Direction.COUNTERCLOCKWISE) if self.__config['gyroSensorPort'] != 0 else 0
             self.logger.debug(self, 'Gyrosensor initialized sucessfully on port %s' % self.__config['gyroSensorPort'])
@@ -250,7 +250,7 @@ class Charlie():
 
     def turn(self, speed, deg, port):
         '''
-        Used to turn the motor on the spot using either one or both Motors for turning (2 or 4 in case of ALLWHEEL and MECANUM)
+        Used to turn the robot on the spot using either one or both Motors for turning (2 or 4 in case of ALLWHEEL and MECANUM)
 
         Args:
             speed (int): the speed to drive at
