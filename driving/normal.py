@@ -100,10 +100,11 @@ class NormalDriving():
         direction = 1 if revs > 0 else -1
 
         ## deceleration
-        trueSpeed = (self.wheelDiameter * pi) / 360 * speed
-        decelTime = trueSpeed / self.deceleration
-        decelDistance = 0.5 * self.deceleration * decelTime**2
-        print(speed, "\t", trueSpeed, "\t", decelTime, "\t", decelDistance)
+        trueSpeed, decelTime, decelDistance = self.getDecelValues(speed)
+        #trueSpeed = (self.wheelDiameter * pi) / 360 * speed
+        #decelTime = trueSpeed / self.deceleration
+        #decelDistance = 0.5 * self.deceleration * decelTime**2
+        #print(speed, "\t", trueSpeed, "\t", decelTime, "\t", decelDistance)
 
 
         ## robot sensor readout & setup
@@ -162,6 +163,12 @@ class NormalDriving():
 
         self.robot.rMotor.run(speed)
 
+    def getDecelValues(self, speed):
+        '''calculates trueSpeed, decelTime and decelDistance from given speed'''
+        trueSpeed = (self.wheelDiameter * pi) / 360 * speed
+        decelTime = trueSpeed / self.deceleration
+        decelDistance = 0.5 * self.deceleration * decelTime**2
+        return trueSpeed, decelTime, decelDistance
     def map(self, x, in_min, in_max, out_min, out_max) -> float:
         '''
         Converts a given number in the range of two numbers to a number in the range of two other numbers
