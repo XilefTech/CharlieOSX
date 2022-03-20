@@ -163,6 +163,27 @@ class NormalDriving():
 
         self.robot.rMotor.run(speed)
 
+    def breakMotors(self, coast=False):
+        '''Sub-method for breaking all the motors'''
+        if not coast:
+            self.__lMotor.hold()
+            self.__rMotor.hold()
+
+            if self.__aMotor1:
+                self.__aMotor1.hold()
+            if self.__aMotor2:
+                self.__aMotor2.hold()
+
+            time.sleep(0.1)
+        else:
+            self.__lMotor.stop()
+            self.__rMotor.stop()
+
+            if self.__aMotor1:
+                self.__aMotor1.stop()
+            if self.__aMotor2:
+                self.__aMotor2.stop()
+
     def getDecelValues(self, speed):
         '''calculates trueSpeed, decelTime and decelDistance from given speed'''
         trueSpeed = (self.wheelDiameter * pi) / 360 * speed
