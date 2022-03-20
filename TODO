@@ -19,6 +19,9 @@ Next:
     + Acoustic Feedback while driving
     + add custom PID input
     + errorhandling for webremote without motors attached
+    + proper turn-deceleration
+    + add deceleration option to breakMotors
+    + fix deceleration with distance < decelDist
 
     Logging:
     o cleanup of Logger
