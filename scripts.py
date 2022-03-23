@@ -68,53 +68,53 @@ class Scripts():
         self.robot.__gyro.reset_angle(-45)
         time.sleep(0.5)
 
-        ## push LKW to bridge
-        self.robot.straight(40, 38, 0)
-        self.robot.turn(30, 45, 23)
-        self.robot.breakMotors()
-        self.robot.brick.speaker.beep()
-        self.robot.straight(30, 10, 0)
-        self.robot.breakMotors()
-        time.sleep(0.2)
-
         ## to the crane
-        self.robot.straight(40, -35, 2)
-        self.robot.breakMotors()
-        self.robot.absTurn(30, -10, 23)
+        self.robot.straight(45, 65, 0)
+        self.robot.absTurn(20, -5, 23)
         self.robot.breakMotors()
         self.robot.brick.speaker.beep()
-        self.robot.straight(40, 72, 0)
-        self.robot.absTurn(30, 0, 23)
+        time.sleep(0.5)
+
+        # push crane over
+        self.robot.straight(40, 58, 0)
         self.robot.breakMotors()
         self.robot.brick.speaker.beep()
 
-        ## push crane over
-        self.robot.straight(30, 25, 0)
+        ## manuver around crane
+        self.robot.straight(20, -10, 0)
+        self.robot.absTurn(40, 45, 23)
         self.robot.breakMotors()
-        self.robot.brick.speaker.beep()
-
-        ## to the ladevorrichtung
-        self.robot.absTurn(30, 45, 3)
+        time.sleep(0.3)
+        self.robot.straight(35, 10, 0)
+        self.robot.absTurn(50, 0, 23)
         self.robot.breakMotors()
-        self.robot.straight(30, 16, 0)
-        self.robot.absTurn(25, 0, 23)
-        self.robot.breakMotors()
-        self.robot.straight(30, 50, 0)
+        time.sleep(0.3)
+        self.robot.straight(35, 16, 0)
 
         ## backwards to wall
-        self.robot.absTurn(25, 90, 23)
-        self.robot.__aMotor2.run_angle(360, -4 * 360, then=Stop.COAST, wait=False)
-        self.robot.straight(40, -55, 0)
+        self.robot.absTurn(50, 110, 23)
+        self.robot.breakMotors()
+        time.sleep(0.3)
+        self.robot.straight(20, -20, 0)
+        self.robot.absTurn(20, 90, 23)
+        self.robot.breakMotors()
+
+        self.robot.__aMotor2.run_angle(300, 0.9 * 360, then=Stop.COAST, wait=False) # extend side arm
+        '''self.robot.turnBothMotors(-50)
+        time.sleep(3)
         self.robot.breakMotors()
         self.robot.brick.speaker.beep()
-        time.sleep(0.2)
+        time.sleep(1)
+        self.robot.__gyro.reset_angle(90)
+        time.sleep(1)'''
 
         ## go to work
-        self.robot.__aMotor1.run_angle(360, -270, then=Stop.COAST, wait=False)
-        self.robot.straight(30, 60, 0)
+        self.robot.__aMotor1.run_angle(800, 600 * 3, then=Stop.HOLD, wait=True) # put down fork
+        time.sleep(0.3)
+        self.robot.straight(30, 22, 0)
         self.robot.breakMotors()
-        self.robot.__aMotor2.run_angle(960, -4 * 360, then=Stop.COAST, wait=False)
-        self.robot.__aMotor1.run_angle(270, 270, then=Stop.HOLD, wait=True)
+        self.robot.__aMotor2.run_angle(300, -0.8 * 360, then=Stop.COAST, wait=False) # flip rail-piece
+        self.robot.__aMotor1.run_angle(700, -500 * 3, then=Stop.HOLD, wait=True) # lift up containers
         time.sleep(0.3)
 
         self.robot.straight(40, -50, 0)
@@ -123,78 +123,54 @@ class Scripts():
 
     def runThree(self):
         '''the third script'''
-        self.robot.__gyro.reset_angle(-45)
+        self.robot.__gyro.reset_angle(-90)
 
-        ## blue container knockout
-        self.robot.straight(50, 40, 0)
-        self.robot.absTurn(30, 0, 23)
+        ## to the container station
+        self.robot.straight(20, 12, 0)
+        self.robot.absTurn(20, -45, 3)
+        self.robot.breakMotors()
+        self.robot.straight(40, 73, 0)
         self.robot.breakMotors()
         self.robot.brick.speaker.beep()
 
-        ## drive away and to wall
-        self.robot.straight(50, -70, 0)
-        self.robot.absTurn(40, -90, 23)
+        self.robot.absTurn(20, 0, 2)
         self.robot.breakMotors()
-        self.robot.straight(50, -40, 0)
+        self.robot.straight(20, 5, 0) # 29? 19?
+        self.robot.toColor(20, 0, 2) 
         self.robot.breakMotors()
+        self.robot.absTurn(20, -90, 3)
+        self.robot.breakMotors()
+        self.robot.straight(20, 7, 0)
+        self.robot.breakMotors()
+        self.robot.brick.speaker.beep()
+        time.sleep(0.3)
 
-        ## from wall to container station on ship
-        self.robot.straight(50, 55, 0)
+        ## to the train line
+        self.robot.straight(30, -20, 0)
+        self.robot.absTurn(30, -10, 23)
         self.robot.breakMotors()
-        self.robot.absTurn(50, 0, 2)
+        self.robot.straight(35, 15, 0)
+        self.robot.absTurn(40, 105, 23)
         self.robot.breakMotors()
-        self.robot.straight(50, 40, 0)
-        self.robot.breakMotors()
-        self.robot.absTurn(40, -90, 23)
-        self.robot.straight(40, 40, 0)
+        self.robot.straight(35, -35, 0)
+        self.robot.absTurn(20, 91, 23)
         self.robot.breakMotors()
         time.sleep(1)
+        self.robot.straight(50, 40, 0)
+        self.robot.breakMotors()
         self.robot.brick.speaker.beep()
+        time.sleep(0.5)
 
-        ## from crane to platform
+        ## back to home
         self.robot.straight(50, -20, 0)
         self.robot.breakMotors()
-        self.robot.turn(40, -120, 23)
+        self.robot.absTurn(40, 180, 23)
         self.robot.breakMotors()
-        self.robot.straight(50, -10, 0)
+        self.robot.straight(65, 55, 0)
+        self.robot.curve(65, 40, -40)
+        self.robot.curve(65, 40, 30)
+        self.robot.straight(65, 40, 0)
         self.robot.breakMotors()
-        self.robot.absTurn(30, -90, 23)
-        self.robot.breakMotors()
-        self.robot.straight(50, 20, 0)
-        self.robot.breakMotors()
-
-
-
-        self.robot.breakMotors()
-        time.sleep(2)
-        # self.robot.absTurn(15, 0, 23)
-        # self.robot.breakMotors()
-        # time.sleep(0.3)
-        # self.robot.brick.speaker.beep()
-        # self.robot.straight(40, 95, 0)
-        # self.robot.breakMotors()
-        # self.robot.brick.speaker.beep()
-        # self.robot.absTurn(20, -90, 23)
-        # self.robot.straight(40, 22, 0)
-        # self.robot.breakMotors()
-        # time.sleep(0.3)
-
-        ## push over the crane
-        self.robot.straight(20, -20, 0)
-        self.robot.absTurn(20, -40, 23)
-        self.robot.breakMotors()
-        self.robot.straight(20, 22, 0)
-        self.robot.absTurn(20, 0, 2)
-        self.robot.straight(20, 15, 0)
-
-        ## train wagon push
-        self.robot.absTurn(20, 140, 3)
-        self.robot.straight(20, -20, 0)
-        self.robot.absTurn(20, 90, 20)
-        self.robot.straight(40, 20, 0)
-
-        ## way home
-        # TODO
 
     def runFour(self):
         '''the fourth script'''
