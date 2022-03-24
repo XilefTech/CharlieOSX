@@ -41,6 +41,7 @@ class CharlieOSX:
 
         self.legacyRobot = Charlie(self.__config, self.brick, self.logger)
         self.robot = Robot(self.__config, EV3Brick(), self.logger)
+        self.scripts = Scripts(self.robot, self.__config, self.legacyRobot)
         self.webremote = Webremote(self.__config, self.legacyRobot, self.brick, self.logger)
         self.ui = UIManager(self.__config, self.__settings, self.brick, self.logger, settingsPath, self, self.scripts)
 

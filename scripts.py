@@ -7,10 +7,11 @@ import time
 class Scripts():
     '''runs'''
 
-    def __init__(self, robot: Charlie, config: dict):
+    def __init__(self, robot: Robot, config: dict, legacyRobot: Charlie):
         '''init'''
         print('init scripts')
         self.robot = robot
+        self.legacyRobot = legacyRobot
         self.config = config
 
         self.scriptList = [
