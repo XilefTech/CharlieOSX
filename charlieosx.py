@@ -9,6 +9,7 @@ from lib.configParser import parseConfig
 from collections import OrderedDict
 from webremote import Webremote
 from UI.uiManager import UIManager
+from driving.robot import Robot
 
 
 
@@ -38,9 +39,9 @@ class CharlieOSX:
         self.__config = parseConfig(configPath, self.logger)
         self.versionMan = VersionManagment(self.__settings, self.brick, self.__config, self.logger)
 
-        self.robot = Charlie(self.__config, self.brick, self.logger)
-        self.scripts = Scripts(self.robot, self.__config)
-        self.webremote = Webremote(self.__config, self.robot, self.brick, self.logger)
+        self.legacyRobot = Charlie(self.__config, self.brick, self.logger)
+        self.robot = Robot(self.__config, EV3Brick(), self.logger)
+        self.webremote = Webremote(self.__config, self.legacyRobot, self.brick, self.logger)
         self.ui = UIManager(self.__config, self.__settings, self.brick, self.logger, settingsPath, self, self.scripts)
 
         self.applySettings(self.__settings)
