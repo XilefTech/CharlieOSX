@@ -1,4 +1,3 @@
-from numpy import absolute
 from lib.logging import Logger
 from driving.robot import Robot
 import time
@@ -20,6 +19,7 @@ class NormalDriving():
         self.doAccel = doAccel
         self.doDecel = doDecel
         self.maxSpeed = self.robot.lMotor.control.limits()[0]
+        self.config = config
 
         self.wheelDiameter = config["wheelDiameter"]
         self.wheelDistance = config["wheelDistance"]
