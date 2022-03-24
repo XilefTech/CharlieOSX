@@ -40,6 +40,10 @@ class Robot():
         ### TODO: Find something better than this
         self.gyro.reset_angle(0) if self.gyro != 0 else self.logger.error(self, "No gyro attached, robot movement will probably not work and you likely will receive crashes", None)
         
+        if self.type == "NORMAL":
+            from driving.normal import NormalDriving
+            self.driving = NormalDriving(self, logger, config)
+
         self.logger.info(self, 'Robot initialized')
 
     def __repr__(self):
