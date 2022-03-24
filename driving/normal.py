@@ -179,13 +179,13 @@ class NormalDriving():
             rSpeed = speed - steer if steer > 0 else speed
             lSpeed = speed + steer if steer < 0 else speed
 
-            self.robot.lMotor.run(direction * lSpeed if lSpeed > 0 else 0)
-            self.robot.rMotor.run(direction * rSpeed if rSpeed > 0 else 0)
+            self.robot.lMotor.run(direction * lSpeed if lSpeed > 0 else 10)
+            self.robot.rMotor.run(direction * rSpeed if rSpeed > 0 else 10)
             
             ## deceleration
             drivenDistance = abs(self.robot.rMotor.angle() / 360) * (self.wheelDiameter * pi)
-            if self.doDecel and drivenDistance >= dist - decelDistance and not connect:
-                decelDist = drivenDistance - (dist - decelDistance)
+            if self.doDecel and drivenDistance >= abs(dist) - decelDistance and not connect:
+                decelDist = drivenDistance - (abs(dist) - decelDistance)
                 robotSpeed = trueSpeed - (2 * self.deceleration * decelDist)**0.5
                 speed = robotSpeed / (self.wheelDiameter * pi / 360) if robotSpeed / (self.wheelDiameter * pi / 360) > 20 else 20
 
