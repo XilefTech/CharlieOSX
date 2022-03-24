@@ -80,6 +80,61 @@ class NormalDriving():
         '''
         self.doDecel = doDecel
 
+
+    def execute(self, params):
+        '''
+        This function interprets the number codes from the given array and executes the driving methods accordingly
+
+        Args:
+            params (array): The array of number code arrays to be executed
+        '''
+
+        if EV3Brick().battery.voltage() <= self.config['batteryWarningVoltage'] * 1000 and not self.config['disableBatteryCheck']:
+            if self.config['ignoreBatteryWarning']:
+                self.logger.warn("Please charge the battery. Only %sV left. ignoreBatteryWarning IS SET TO True, THIS WILL BE IGNORED!!!" % EV3Brick().battery.voltage() * 0.001)
+                pass
+            else:
+                self.logger.warn("Please charge the battery. Only %sV left." % float(EV3Brick.battery.voltage() * 0.001))
+                return
+
+        if self.robot.gyro is 0:
+            self.logger.error(self, "Cannot drive without gyro", '')
+            return
+
+        methods = {
+            #0: self.stopMotors,
+            1: time.sleep,
+            3: self.absTurn,
+            4: self.turn,
+            #5: self.action,
+            #6: self.asyncActionTime,
+            7: self.straight,
+            #8: self.straightPureAsyncTime,
+            9: self.intervall,
+            #11: self.curve,
+            #12: self.toColor,
+            #15: self.toWall,
+            #96: self.setMins,
+            #97: self.setMinDefaults,
+            #98: self.setPids,
+            #99: self.setPidDefaults
+        }
+
+        self.robot.gyro.reset_angle(0)
+        time.sleep(0.2)
+
+        while params != [] and not any(self.brick.buttons.pressed()):
+            currentParams = params.pop(0)
+            mode = currentParams.pop(0)
+            arg1, arg2, arg3 = currentParams.pop(0), currentParams.pop(0), currentParams.pop(0)
+
+            methods[mode](arg1, arg2, arg3)
+
+        self.breakMotors()
+        time.sleep(0.3)
+        #self.setPidDefaults()
+
+
     def straight(self, speed, dist, ang, connect=False):
         '''
         Steers the Robot in a straight line forwards/backwards.
