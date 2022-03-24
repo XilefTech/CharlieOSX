@@ -222,7 +222,7 @@ class NormalDriving():
             direction = 1 if port is 2 else -1
 
             # turn the angle
-            if deg > 0:     
+            if deg - startValue > 0:     
                 while self.robot.gyro.angle() - startValue < deg:
                     timer = time.perf_counter() # get time for accurate loop-timing
 
@@ -273,7 +273,8 @@ class NormalDriving():
             #print(speed, "\t", trueSpeed, "\t", decelTime, "\t", decelDistance)
 
             # turn the angle
-            if deg > 0:
+            condition = (deg > 0) if not absolute else (deg > self.robot.gyro.angle())
+            if condition:
                 while self.robot.gyro.angle() - startValue < deg:
                     timer = time.perf_counter() # get time for accurate loop-timing
 
@@ -282,8 +283,8 @@ class NormalDriving():
 
                     ## deceleration
                     drivenDistance = abs(self.robot.rMotor.angle() / 360) * (self.wheelDiameter * pi)
-                    if self.doDecel and drivenDistance >= dist - decelDistance:
-                        decelDist = drivenDistance - (dist - decelDistance)
+                    if self.doDecel and drivenDistance >= abs(dist) - decelDistance:
+                        decelDist = drivenDistance - (abs(dist) - decelDistance)
                         robotSpeed = trueSpeed - (2 * self.deceleration * decelDist)**0.5
                         speed = robotSpeed / (self.wheelDiameter * pi / 360) if robotSpeed / (self.wheelDiameter * pi / 360) > 20 else 20
 
@@ -299,13 +300,13 @@ class NormalDriving():
                 while self.robot.gyro.angle() - startValue > deg:
                     timer = time.perf_counter() # get time for accurate loop-timing
 
-                    self.robot.lMotor.run(speed / 1.5)
-                    self.robot.rMotor.run(-speed / 1.5)
+                    self.robot.lMotor.run(-speed / 1.5)
+                    self.robot.rMotor.run(speed / 1.5)
                     
                     ## deceleration
                     drivenDistance = abs(self.robot.rMotor.angle() / 360) * (self.wheelDiameter * pi)
-                    if self.doDecel and drivenDistance >= dist - decelDistance:
-                        decelDist = drivenDistance - (dist - decelDistance)
+                    if self.doDecel and drivenDistance >= abs(dist) - decelDistance:
+                        decelDist = drivenDistance - (abs(dist) - decelDistance)
                         robotSpeed = trueSpeed - (2 * self.deceleration * decelDist)**0.5
                         speed = robotSpeed / (self.wheelDiameter * pi / 360) if robotSpeed / (self.wheelDiameter * pi / 360) > 20 else 20
 
