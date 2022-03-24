@@ -274,6 +274,20 @@ class NormalDriving():
         '''
         self.turn(speed, deg, port, absolute=True)
 
+    def intervall(self, speed, dist, count):
+        '''
+        Drives forwads and backwards count times.
+
+        Args:
+            speed (int): the speed to drive at (percent)
+            revs (int): the distance (in cm) to drive
+            count (int): how many times it should repeat the driving
+        '''
+        for i in range(count + 1):
+            self.straight(self.speedClean(speed), dist, 0)
+            self.straight(self.speedClean(speed), -dist, 0)
+
+
     def turnLeftMotor(self, relativeSpeed):
         '''
         converts the relative speed into absolute measurement in °/s for the motor to rotate at
