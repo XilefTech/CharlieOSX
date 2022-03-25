@@ -197,7 +197,7 @@ class NormalDriving():
             while time.perf_counter() - timer < 0.05:
                 pass
 
-    def turn(self, speed, deg, port, absolute=False):
+    def turn(self, speed, deg, port, absolute=False, min_speed=20):
         '''
         Used to turn the robot on the spot using either one or both Motors for turning
 
@@ -233,7 +233,7 @@ class NormalDriving():
                     if self.doDecel and drivenDistance >= dist - decelDistance:
                         decelDist = drivenDistance - (dist - decelDistance)
                         robotSpeed = trueSpeed - (2 * self.deceleration * decelDist)**0.5
-                        speed = robotSpeed / (self.wheelDiameter * pi / 360) if robotSpeed / (self.wheelDiameter * pi / 360) > 20 else 20
+                        speed = robotSpeed / (self.wheelDiameter * pi / 360) if robotSpeed / (self.wheelDiameter * pi / 360) > min_speed else min_speed
 
                     ## cancel if button pressed
                     if any(EV3Brick().buttons.pressed()):
@@ -253,7 +253,7 @@ class NormalDriving():
                     if self.doDecel and drivenDistance >= dist - decelDistance:
                         decelDist = drivenDistance - (dist - decelDistance)
                         robotSpeed = trueSpeed - (2 * self.deceleration * decelDist)**0.5
-                        speed = robotSpeed / (self.wheelDiameter * pi / 360) if robotSpeed / (self.wheelDiameter * pi / 360) > 20 else 20
+                        speed = robotSpeed / (self.wheelDiameter * pi / 360) if robotSpeed / (self.wheelDiameter * pi / 360) > min_speed else min_speed
                         
                     ## cancel if button pressed
                     if any(EV3Brick().buttons.pressed()):
@@ -286,7 +286,7 @@ class NormalDriving():
                     if self.doDecel and drivenDistance >= abs(dist) - decelDistance:
                         decelDist = drivenDistance - (abs(dist) - decelDistance)
                         robotSpeed = trueSpeed - (2 * self.deceleration * decelDist)**0.5
-                        speed = robotSpeed / (self.wheelDiameter * pi / 360) if robotSpeed / (self.wheelDiameter * pi / 360) > 20 else 20
+                        speed = robotSpeed / (self.wheelDiameter * pi / 360) if robotSpeed / (self.wheelDiameter * pi / 360) > min_speed else min_speed
 
                     # cancel if button pressed
                     if any(EV3Brick().buttons.pressed()):
@@ -308,7 +308,7 @@ class NormalDriving():
                     if self.doDecel and drivenDistance >= abs(dist) - decelDistance:
                         decelDist = drivenDistance - (abs(dist) - decelDistance)
                         robotSpeed = trueSpeed - (2 * self.deceleration * decelDist)**0.5
-                        speed = robotSpeed / (self.wheelDiameter * pi / 360) if robotSpeed / (self.wheelDiameter * pi / 360) > 20 else 20
+                        speed = robotSpeed / (self.wheelDiameter * pi / 360) if robotSpeed / (self.wheelDiameter * pi / 360) > min_speed else min_speed
 
                     # cancel if button pressed
                     if any(EV3Brick().buttons.pressed()):
