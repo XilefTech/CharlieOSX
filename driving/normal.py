@@ -214,7 +214,7 @@ class NormalDriving():
             # stop non-turning motor
             self.robot.rMotor.hold() if port is 2 else self.robot.lMotor.hold()
 
-            dist = pi * self.wheelDistance * 2 * (deg/360)
+            dist = pi * self.wheelDistance * 2 * (deg/360) if not absolute else pi * self.wheelDistance * 2 * ((self.robot.gyro.angle() - deg)/360)
             trueSpeed, decelTime, decelDistance = self.getDecelValues(speed)
             #print(speed, "\t", trueSpeed, "\t", decelTime, "\t", decelDistance)
 
@@ -222,7 +222,8 @@ class NormalDriving():
             direction = 1 if port is 2 else -1
 
             # turn the angle
-            if deg - startValue > 0:     
+            condition = (deg > 0) if not absolute else (deg > self.robot.gyro.angle())
+            if condition:    
                 while self.robot.gyro.angle() - startValue < deg:
                     timer = time.perf_counter() # get time for accurate loop-timing
 
@@ -230,8 +231,8 @@ class NormalDriving():
 
                     ## deceleration
                     drivenDistance = abs(turningMotor.angle() / 360) * (self.wheelDiameter * pi)
-                    if self.doDecel and drivenDistance >= dist - decelDistance:
-                        decelDist = drivenDistance - (dist - decelDistance)
+                    if self.doDecel and drivenDistance >= abs(dist) - decelDistance:
+                        decelDist = drivenDistance - (abs(dist) - decelDistance)
                         robotSpeed = trueSpeed - (2 * self.deceleration * decelDist)**0.5
                         speed = robotSpeed / (self.wheelDiameter * pi / 360) if robotSpeed / (self.wheelDiameter * pi / 360) > min_speed else min_speed
 
@@ -250,8 +251,8 @@ class NormalDriving():
 
                     ## deceleration
                     drivenDistance = abs(turningMotor.angle() / 360) * (self.wheelDiameter * pi)
-                    if self.doDecel and drivenDistance >= dist - decelDistance:
-                        decelDist = drivenDistance - (dist - decelDistance)
+                    if self.doDecel and drivenDistance >= abs(dist) - decelDistance:
+                        decelDist = drivenDistance - (abs(dist) - decelDistance)
                         robotSpeed = trueSpeed - (2 * self.deceleration * decelDist)**0.5
                         speed = robotSpeed / (self.wheelDiameter * pi / 360) if robotSpeed / (self.wheelDiameter * pi / 360) > min_speed else min_speed
                         
@@ -265,10 +266,10 @@ class NormalDriving():
 
         # turn with both motors
         elif port is 23:
-            dualMotorbonus = 4
             speed = speed * 2
 
-            dist = pi * self.wheelDistance * (deg/360)
+            dist = pi * self.wheelDistance * (deg/360) if not absolute else pi * self.wheelDistance * ((self.robot.gyro.angle() - deg)/360)
+            print(dist, self.robot.gyro.angle(), deg)
             trueSpeed, decelTime, decelDistance = self.getDecelValues(speed)
             #print(speed, "\t", trueSpeed, "\t", decelTime, "\t", decelDistance)
 
