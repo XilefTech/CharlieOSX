@@ -319,7 +319,7 @@ class NormalDriving():
                     while time.perf_counter() - timer < 0.05:
                         pass
 
-    def absTurn(self, speed, deg, port):
+    def absTurn(self, speed, deg, port, min_speed=20):
         '''
         Used to turn the motor on the spot using either one
         This method turns (in contrast to the normal turn() method) to an absolute ange (compared to starting point)
@@ -329,7 +329,7 @@ class NormalDriving():
             deg (int): the angle to turn to
             port (int): the motor(s) to turn with
         '''
-        self.turn(speed, deg, port, absolute=True)
+        self.turn(speed, deg, port, absolute=True, min_speed=min_speed)
 
     def intervall(self, speed, dist, count):
         '''
