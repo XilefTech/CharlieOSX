@@ -7,6 +7,7 @@ from pybricks.media.ev3dev import Image, ImageFile, Font, SoundFile
 from UI.UIObject import UIObject
 from UI.tools import Menu, Box, ProgrammingWindow
 from scripts import Scripts
+import traceback
 
 
 class UIManager:
@@ -446,14 +447,25 @@ class UIManager:
 
     def runTesting(self, position):
         index = position[1]
+        time.sleep(0.5)
 
         if self.__config['useScriptProfiles']:
-            self.scripts.scriptList[index]()
+            try:
+                self.scripts.scriptList[index]()
+            except ValueError as e:
+                print("Probably aborted with brick buttons")
+                print(e)
         else:
             self.profileHelper.loadProfiles()
             profileData = self.profileHelper.getProfileData(self.__config['profileNames'][index])
             time.sleep(0.3)
-            self.os.robot.execute(profileData)
+            try:
+                self.os.robot.execute(profileData)
+            except ValueError as e:
+                print("Probably aborted with brick buttons")
+                print(e)
+
+        self.os.robot.driving.breakMotors(coast=True)
 
     def runWebremote(self):
         self.currentMenu.getObjectByName('startButton').setVisibility(False)

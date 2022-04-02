@@ -191,7 +191,7 @@ class NormalDriving():
 
             ## cancel if button pressed
             if any(EV3Brick().buttons.pressed()):
-                return
+                raise ValueError
             
             ## ensure consistent loop timing
             while time.perf_counter() - timer < 0.05:
@@ -238,7 +238,7 @@ class NormalDriving():
 
                     ## cancel if button pressed
                     if any(EV3Brick().buttons.pressed()):
-                        return
+                        raise ValueError
 
                     ## ensure consistent loop timing
                     while time.perf_counter() - timer < 0.05:
@@ -258,7 +258,7 @@ class NormalDriving():
                         
                     ## cancel if button pressed
                     if any(EV3Brick().buttons.pressed()):
-                        return
+                        raise ValueError
 
                     ## ensure consistent loop timing
                     while time.perf_counter() - timer < 0.05:
@@ -288,10 +288,11 @@ class NormalDriving():
                         decelDist = drivenDistance - (abs(dist) - decelDistance)
                         robotSpeed = trueSpeed - (2 * self.deceleration * decelDist)**0.5
                         speed = robotSpeed / (self.wheelDiameter * pi / 360) if robotSpeed / (self.wheelDiameter * pi / 360) > min_speed else min_speed
+                        print(speed, dist, decelDist, decelDistance)
 
                     # cancel if button pressed
                     if any(EV3Brick().buttons.pressed()):
-                        return
+                        raise ValueError
 
                     ## ensure consistent loop timing
                     while time.perf_counter() - timer < 0.05:
@@ -310,10 +311,11 @@ class NormalDriving():
                         decelDist = drivenDistance - (abs(dist) - decelDistance)
                         robotSpeed = trueSpeed - (2 * self.deceleration * decelDist)**0.5
                         speed = robotSpeed / (self.wheelDiameter * pi / 360) if robotSpeed / (self.wheelDiameter * pi / 360) > min_speed else min_speed
+                        print(speed, decelDist, decelDistance)
 
                     # cancel if button pressed
                     if any(EV3Brick().buttons.pressed()):
-                        return
+                        raise ValueError
 
                     ## ensure consistent loop timing
                     while time.perf_counter() - timer < 0.05:
